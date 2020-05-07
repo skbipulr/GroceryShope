@@ -1,0 +1,69 @@
+<resources>
+    <string name="app_name">Grocery Shope</string>
+
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="selected_item">Selected item</string>
+
+
+    <string-array name="all_title">
+        <item>Mujib</item>
+        <item>Celebration</item>
+        <item>Resources</item>
+        <item>Events</item>
+        <item>Media &amp; News</item>
+        <item>Committee</item>
+        <item>Wishes</item>
+        <item>Contact Us</item>
+        <item>Settings</item>
+    </string-array>
+
+
+    <string-array name="events"> <!--event-->
+        <item>Today Events</item>
+        <item>Up Coming Event</item>
+        <item>International Celebrations</item>
+    </string-array>
+
+
+    <string-array name="celebration">
+        <item>Media Gallery</item>
+        <item>Stamp</item>
+    </string-array>
+
+    <string-array name="resources">
+        <item>Books &amp; Publications</item>
+        <item>Documentaries</item>
+        <item>Letters</item>
+        <item>Logo &amp; Guideline</item>
+        <item>Posters &amp; Publications</item>
+        <item>Committee Action Plan</item>
+
+    </string-array>
+
+
+    <string-array name="mujib">
+        <item>Timeline</item>
+        <item>Speeches</item>
+        <item>Recognitions</item>
+        <item>Photo Archive</item>
+        <item>Graphic Novel "\"Mujib\""</item>
+    </string-array>
+
+    <string-array name="media_and_news"><!--//media-->
+        <item>Press Release</item>
+        <item>Notice</item>
+    </string-array>
+
+
+    <string-array name="committee" /> <!--committee-->
+
+
+    <string-array name="wishes" /> <!--committee-->
+
+    <string-array name="contact_us" /> <!--committee-->
+
+
+    <string-array name="settings" /> <!--committee-->
+
+</resources>
