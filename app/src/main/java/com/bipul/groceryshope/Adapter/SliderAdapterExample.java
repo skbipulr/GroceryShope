@@ -29,15 +29,18 @@ public class SliderAdapterExample extends SliderViewAdapter<SliderAdapterExample
 
         switch (position) {
             case 0:
-               viewHolder.imageViewBackground.setImageResource(R.drawable.sider4);
+               viewHolder.imageViewBackground.setImageResource(R.drawable.gooo);
                 break;
             case 1:
-                viewHolder.imageViewBackground.setImageResource(R.drawable.slider3);
+                viewHolder.imageViewBackground.setImageResource(R.drawable.slider2);
+                break;
+            case 2:
+                viewHolder.imageViewBackground.setImageResource(R.drawable.slider1);
+                break;
+            case 3:
+                viewHolder.imageViewBackground.setImageResource(R.drawable.slider5);
                 break;
 
-            default:
-                viewHolder.imageViewBackground.setImageResource(R.drawable.slider3);
-                break;
         }
 
     }
@@ -45,7 +48,7 @@ public class SliderAdapterExample extends SliderViewAdapter<SliderAdapterExample
     @Override
     public int getCount() {
         //slider view count could be dynamic size
-        return 3;
+        return 4;
     }
 
     class SliderAdapterVH extends SliderViewAdapter.ViewHolder {

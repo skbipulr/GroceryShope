@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:background="@android:color/white"
+    android:elevation="3dp"
+
+    android:minHeight="?attr/actionBarSize">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:id="@+id/linear1"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:weightSum="8"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_weight=".7"
+                android:id="@+id/backBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:onClick="backBtn"
+                android:paddingBottom="10dp"
+
+                android:src="@drawable/ic_arrow_back_black_24dp" />
+
+
+            <TextView
+                android:visibility="visible"
+                android:layout_weight="6"
+                android:layout_width="0dp"
+                android:textSize="18dp"
+                android:textColor="@color/black"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+               android:text="Product Details"
+                />
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:src="@drawable/shapping_bag" />
+        </LinearLayout>
+
+
+
+
+
+    </RelativeLayout>
+
+</androidx.appcompat.widget.Toolbar>

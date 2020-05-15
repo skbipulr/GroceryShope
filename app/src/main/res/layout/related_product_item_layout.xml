@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="180dp"
+
+    android:padding="10dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginBottom="8dp"
+    app:cardCornerRadius="5dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/imageProduct"
+            android:layout_width="wrap_content"
+            android:layout_height="130dp"
+            android:src="@drawable/boiler_murgi" />
+
+        <LinearLayout
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:lines="2"
+                android:id="@+id/productNameTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
+                android:gravity="center"
+                android:textColor="@android:color/black"
+                android:paddingBottom="8dp"
+                android:text="2.3L large Capacity Double wal"
+                android:textSize="14sp" />
+
+            <LinearLayout
+
+                android:layout_weight="10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/productQuantityTV"
+                    android:layout_weight="8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1 kg"/>
+                <TextView
+                    android:id="@+id/productPriceTV"
+                    android:textSize="16dp"
+                    android:textColor="@color/main_color"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tk.850"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"/>
+
+            <LinearLayout
+                android:layout_marginBottom="16dp"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:visibility="visible"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18dp"
+                    android:layout_marginRight="30dp"
+                    android:textColor="@color/main_color"
+                    android:text="Add to beg"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+
+
+                    <ImageView
+                        android:visibility="gone"
+                        android:id="@+id/reduceQuantity"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:tint="#454040"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/circle_addto_beg_shape"
+                        app:layout_constraintBottom_toBottomOf="@id/increaseQuantity"
+                        app:layout_constraintEnd_toStartOf="@id/itemQuantity"
+                        app:layout_constraintTop_toTopOf="@id/increaseQuantity"
+                        app:srcCompat="@drawable/ic_remove_white_24dp" />
+
+                    <TextView
+                        android:visibility="gone"
+                        android:id="@+id/itemQuantity"
+                        android:layout_width="40dp"
+                        android:layout_height="30dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textSize="15sp" />
+
+
+
+                    <ImageView
+                        android:id="@+id/increaseQuantity"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:tint="#807878"
+                        android:background="@drawable/circle_addto_beg_shape"
+                        app:srcCompat="@drawable/ic_add_white_24dp" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</androidx.cardview.widget.CardView>

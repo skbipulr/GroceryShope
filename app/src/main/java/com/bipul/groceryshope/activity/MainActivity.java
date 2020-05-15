@@ -1,4 +1,4 @@
-package com.bipul.groceryshope;
+package com.bipul.groceryshope.activity;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,13 +8,12 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Color;
+
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
+
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -26,9 +25,14 @@ import android.widget.Toast;
 
 import com.bipul.groceryshope.Adapter.CategoryAdapter;
 import com.bipul.groceryshope.Adapter.CustomExpandableListAdapter;
+import com.bipul.groceryshope.Adapter.GroceriesAdapter;
+import com.bipul.groceryshope.Adapter.SecondCategoryAdapter;
 import com.bipul.groceryshope.Adapter.SliderAdapterExample;
+import com.bipul.groceryshope.R;
 import com.bipul.groceryshope.datasource.ExpandableListDataSource;
 import com.bipul.groceryshope.model.Category;
+import com.bipul.groceryshope.model.Groceries;
+import com.bipul.groceryshope.model.SecondCategory;
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
@@ -62,6 +66,13 @@ public class MainActivity extends AppCompatActivity implements CustomExpandableL
     private ArrayList<Category> categories = new ArrayList<>();
     private CategoryAdapter categoryAdapter;
 
+    private RecyclerView secondCategoryRecyclerView;
+    private ArrayList<SecondCategory> secondCategories = new ArrayList<>();
+    private SecondCategoryAdapter secondCategoryAdapter;
+
+    private RecyclerView groceriesRecyclerView;
+    private ArrayList<Groceries> groceriesList = new ArrayList<>();
+    private GroceriesAdapter groceriesAdapter;
 
 
     @Override
@@ -79,7 +90,61 @@ public class MainActivity extends AppCompatActivity implements CustomExpandableL
         loadCategory();
         getAllCategory();
 
+        loadSecondCategory();
+        getAllSecondCategory();
 
+        loadGroceries();
+        getAllGroceries();
+
+
+
+    }
+
+    private void getAllGroceries() {
+        groceriesList.add(new Groceries(R.drawable.meat,"Meat"));
+        groceriesList.add(new Groceries(R.drawable.oil,"Oil & Ghee"));
+        groceriesList.add(new Groceries(R.drawable.pulese,"Pulses"));
+        groceriesList.add(new Groceries(R.drawable.sugar,"Sugar"));
+        groceriesList.add(new Groceries(R.drawable.meat,"Meat"));
+        groceriesList.add(new Groceries(R.drawable.oil,"Oil & Ghee"));
+        groceriesList.add(new Groceries(R.drawable.pulese,"Pulses"));
+        groceriesList.add(new Groceries(R.drawable.sugar,"Sugar"));
+
+    }
+
+    private void loadGroceries() {
+        groceriesRecyclerView = findViewById(R.id.groceriesRecyclerView);
+        LinearLayoutManager layoutManager
+                = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        groceriesAdapter = new GroceriesAdapter(this, groceriesList);
+        groceriesRecyclerView.setLayoutManager(layoutManager);
+        groceriesRecyclerView.setAdapter(groceriesAdapter);
+    }
+
+    private void getAllSecondCategory() {
+        secondCategories.add(new SecondCategory(R.drawable.boiler_murgi,"Broiler Murgi",
+                "1 KG","Tk.260"));
+        secondCategories.add(new SecondCategory(R.drawable.writing_drawing,"Writing & Drawing",
+                "1 pisces","Tk.2050"));
+        secondCategories.add(new SecondCategory(R.drawable.lights_electrical,"Lights & Electrical",
+                "1 pisces","Tk.2050"));
+        secondCategories.add(new SecondCategory(R.drawable.fruits_vegetables,"Fruits & Vegetables",
+                "1 pisces","Tk.2050"));
+        secondCategories.add(new SecondCategory(R.drawable.frozen_canned,"Frozen Canned",
+                "1 pisces","Tk.2050"));
+        secondCategories.add(new SecondCategory(R.drawable.cleaning_supplies,"Cleaning & Supplies",
+                "1 pisces","Tk.2050"));
+        secondCategories.add(new SecondCategory(R.drawable.bread_bakery,"Cleaning & Supplies",
+                "1 pisces","Tk.2050"));
+    }
+
+    private void loadSecondCategory() {
+        secondCategoryRecyclerView = findViewById(R.id.secondCategoryRecyclerView);
+        LinearLayoutManager layoutManager
+                = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        secondCategoryAdapter = new SecondCategoryAdapter(this, secondCategories);
+        secondCategoryRecyclerView.setLayoutManager(layoutManager);
+        secondCategoryRecyclerView.setAdapter(secondCategoryAdapter);
     }
 
     public void initImageSlider() {
@@ -91,8 +156,8 @@ public class MainActivity extends AppCompatActivity implements CustomExpandableL
         sliderView.setIndicatorAnimation(IndicatorAnimations.WORM); //set indicator animation by using SliderLayout.IndicatorAnimations. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!
         sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
         sliderView.setAutoCycleDirection(SliderView.AUTO_CYCLE_DIRECTION_BACK_AND_FORTH);
-        sliderView.setIndicatorSelectedColor(Color.WHITE);
-        sliderView.setIndicatorUnselectedColor(Color.GRAY);
+        sliderView.setIndicatorSelectedColor(R.color.main_color);
+        sliderView.setIndicatorUnselectedColor(R.color.main_color);
         sliderView.setScrollTimeInSec(3); //set scroll delay in seconds :
         sliderView.startAutoCycle();
         /*-------------initBanner---end----------*/
@@ -242,13 +307,13 @@ public class MainActivity extends AppCompatActivity implements CustomExpandableL
                     Toast.makeText(this, "1", Toast.LENGTH_SHORT).show();
                   break;
                 case 1:
-                    Toast.makeText(this, "1", Toast.LENGTH_SHORT).show();  break;
+                    Toast.makeText(this, "2", Toast.LENGTH_SHORT).show();  break;
                 case 2:
-                    Toast.makeText(this, "1", Toast.LENGTH_SHORT).show();    break;
+                    Toast.makeText(this, "3", Toast.LENGTH_SHORT).show();    break;
                 case 3:
-                    Toast.makeText(this, "1", Toast.LENGTH_SHORT).show();   break;
+                    Toast.makeText(this, "4", Toast.LENGTH_SHORT).show();   break;
                 case 4:
-                    Toast.makeText(this, "1", Toast.LENGTH_SHORT).show();  break;
+                    Toast.makeText(this, "5", Toast.LENGTH_SHORT).show();  break;
                 default:
                     return false;
             }

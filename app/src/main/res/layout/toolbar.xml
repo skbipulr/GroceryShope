@@ -24,6 +24,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
+                android:visibility="invisible"
                 android:layout_weight="6"
                 android:layout_width="0dp"
                 android:layout_height="37dp"
