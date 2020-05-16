@@ -5,7 +5,7 @@
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/white"
+    android:background="@color/main_color"
     android:elevation="3dp"
     app:layout_scrollFlags="scroll|enterAlways|snap"
     android:fitsSystemWindows="true"
@@ -16,26 +16,27 @@
         android:layout_height="wrap_content">
 
         <LinearLayout
-            android:layout_marginTop="10dp"
+
             android:id="@+id/linear1"
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:weightSum="7"
             android:layout_height="wrap_content">
 
             <ImageView
-                android:visibility="invisible"
-                android:layout_weight="6"
-                android:layout_width="0dp"
-                android:layout_height="37dp"
-                android:layout_centerVertical="true"
-                android:src="@drawable/gooo"
+                android:tint="@color/white"
+                android:visibility="visible"
+                android:layout_marginLeft="200dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_centerVertical="false"
+                android:src="@drawable/ic_search_black_24dp"
                />
 
             <ImageView
-                android:layout_weight="1"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:tint="@color/white"
+                android:layout_width="35dp"
+                android:layout_height="25dp"
                 android:layout_gravity="center"
                 android:layout_centerVertical="true"
                 android:src="@drawable/shapping_bag"

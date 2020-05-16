@@ -2,7 +2,8 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="160dp"
-    android:padding="0dp"
+
+    android:padding="10dp"
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
     android:layout_marginBottom="8dp"
@@ -22,7 +23,7 @@
             android:id="@+id/imageProduct"
             android:layout_width="wrap_content"
             android:layout_height="130dp"
-            android:src="@drawable/frozen_canned" />
+            android:src="@drawable/dairy" />
 
         <LinearLayout
             android:layout_marginRight="8dp"
@@ -85,23 +86,24 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:visibility="visible"
+                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="18dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginRight="30dp"
                     android:textColor="@color/main_color"
                     android:text="Add to beg"/>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
 
 
                     <ImageView
-                        android:visibility="gone"
+                        android:visibility="visible"
                         android:id="@+id/reduceQuantity"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
@@ -114,12 +116,12 @@
                         app:srcCompat="@drawable/ic_remove_white_24dp" />
 
                     <TextView
-                        android:visibility="gone"
+                        android:visibility="visible"
                         android:id="@+id/itemQuantity"
                         android:layout_width="40dp"
                         android:layout_height="30dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginLeft="20dp"
                         android:gravity="center"
                         android:text="2"
                         android:textSize="15sp" />

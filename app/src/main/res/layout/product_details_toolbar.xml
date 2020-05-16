@@ -5,7 +5,7 @@
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
-    android:background="@android:color/white"
+    android:background="@color/main_color"
     android:elevation="3dp"
 
     android:minHeight="?attr/actionBarSize">
@@ -25,6 +25,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
+                android:tint="@color/white"
                 android:layout_weight=".7"
                 android:id="@+id/backBtn"
                 android:layout_width="wrap_content"
@@ -41,13 +42,14 @@
                 android:layout_weight="6"
                 android:layout_width="0dp"
                 android:textSize="18dp"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                android:text="Product Details"
                 />
 
             <ImageView
+                android:tint="@color/white"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
 

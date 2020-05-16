@@ -383,7 +383,7 @@ public class MainActivity extends AppCompatActivity implements CustomExpandableL
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(getResources().getColor(R.color.white));
+            window.setStatusBarColor(getResources().getColor(R.color.main_color));
         }
     }
 

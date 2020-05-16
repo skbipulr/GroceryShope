@@ -9,12 +9,13 @@ import android.view.WindowManager;
 
 import com.bipul.groceryshope.R;
 
-public class ProductDetailsActivity extends AppCompatActivity {
+public class OrderListActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_product);
+        setContentView(R.layout.activity_order_list);
+
         colorChangeStatusBar();
     }
 

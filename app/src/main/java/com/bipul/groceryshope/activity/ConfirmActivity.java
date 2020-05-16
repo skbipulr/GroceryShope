@@ -9,15 +9,15 @@ import android.view.WindowManager;
 
 import com.bipul.groceryshope.R;
 
-public class ProductDetailsActivity extends AppCompatActivity {
+public class ConfirmActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_product);
+        setContentView(R.layout.activity_confirm);
+
         colorChangeStatusBar();
     }
-
     public void colorChangeStatusBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();

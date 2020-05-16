@@ -12,7 +12,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/white"
+        android:background="@color/main_color"
         android:elevation="3dp">
 
         <RelativeLayout
@@ -30,10 +30,10 @@
                 android:paddingRight="15dp"
                 android:paddingBottom="10dp"
                 android:src="@drawable/ic_keyboard_backspace_black_24dp"
-                android:tint="@color/black" />
+                android:tint="@color/white" />
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/backBtn"
@@ -45,7 +45,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="50dp"
                     android:text="Verification"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:textSize="18sp" />
 
             </LinearLayout>

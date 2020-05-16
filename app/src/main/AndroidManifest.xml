@@ -9,28 +9,50 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.AddToCartActivity">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+        <activity android:name=".activity.CategoryActivity">
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-    </activity>
-        <activity android:name=".activity.ChangePasswordActivity" />
-        <activity android:name=".activity.EditPersonalInfoActivity" />
+
+        </activity>
+        <activity android:name=".activity.ConfirmActivity">
+
+        </activity>
+        <activity android:name=".activity.OrderListActivity">
+
+        </activity>
+        <activity android:name=".activity.AddToCartActivity">
+
+        </activity>
+        <activity android:name=".activity.ChangePasswordActivity">
+
+        </activity>
+        <activity android:name=".activity.EditPersonalInfoActivity">
+
+        </activity>
         <activity android:name=".activity.AccountActivity">
+
+        </activity>
+        <activity android:name=".activity.VerifyActivity">
+
+        </activity>
+        <activity android:name=".activity.PhoneLoginActivity">
+
+        </activity>
+        <activity android:name=".activity.SignUpActivity">
+
+        </activity>
+        <activity android:name=".activity.SignInActivity">
+
+        </activity>
+        <activity android:name=".activity.ProductDetailsActivity">
+
+        </activity>
+        <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.VerifyActivity" />
-        <activity android:name=".activity.PhoneLoginActivity" />
-        <activity android:name=".activity.SignUpActivity" />
-        <activity android:name=".activity.SignInActivity" />
-        <activity android:name=".activity.ProductDetailsActivity" />
-        <activity android:name=".activity.MainActivity" />
     </application>
 
 </manifest>
