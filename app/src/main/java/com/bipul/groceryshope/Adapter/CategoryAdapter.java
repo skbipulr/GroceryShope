@@ -1,6 +1,7 @@
 package com.bipul.groceryshope.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bipul.groceryshope.R;
+import com.bipul.groceryshope.activity.CategoryActivity;
 import com.bipul.groceryshope.model.Category;
 
 import java.util.ArrayList;
@@ -43,6 +45,14 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         Category category = categories.get(position);
         holder.categoryName.setText(category.getCategoryName());
         holder.categoryImage.setImageResource(category.getCategoryImage());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, CategoryActivity.class);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override

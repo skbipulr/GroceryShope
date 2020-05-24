@@ -2,8 +2,10 @@ package com.bipul.groceryshope.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -15,7 +17,7 @@ public class SignInActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
-       // colorChangeStatusBar();
+        colorChangeStatusBar();
     }
 
     public void colorChangeStatusBar() {
@@ -24,5 +26,23 @@ public class SignInActivity extends AppCompatActivity {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(getResources().getColor(R.color.main_color));
         }
+    }
+
+    public void backBtn(View view) {
+        onBackPressed();
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        finish();
+    }
+
+    public void goSignUpActivity(View view) {
+        Intent intent = new Intent(SignInActivity.this, SignUpActivity.class);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        startActivity(intent);
+    }
+
+    public void goToMainAct(View view) {
+        Intent intent = new Intent(this,MainActivity.class);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        startActivity(intent);
     }
 }

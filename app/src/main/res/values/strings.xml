@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Grocery Shope</string>
+    <string name="app_name">Go Bazaar</string>
 
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
@@ -7,59 +7,69 @@
 
 
     <string-array name="all_title">
-        <item>Mujib</item>
-        <item>Celebration</item>
-        <item>Resources</item>
-        <item>Events</item>
-        <item>Media &amp; News</item>
-        <item>Committee</item>
-        <item>Wishes</item>
-        <item>Contact Us</item>
-        <item>Settings</item>
+        <item>পানীয়</item>
+        <item>মুদিখানা কেনাকাটা</item>
+        <item>ব্যক্তিগত যত্ন</item>
+        <item>Household</item>
+        <item>পরিবার</item>
+        <item>মাংস</item>
+        <item>মাছ </item>
+        <item>মিষ্ট সামগ্রী</item>
+        <item>সেটিংস</item>
     </string-array>
 
 
+
+
     <string-array name="events"> <!--event-->
-        <item>Today Events</item>
-        <item>Up Coming Event</item>
-        <item>International Celebrations</item>
+        <item>ধোপাখানা আনুষাঙ্গিক</item>
+        <item>ব্যাটারি এবং ইলেকট্রনিক্স</item>
+        <item>টিস্যু এবং ন্যাপকিনস</item>
+        <item>পার্টি আনুষাঙ্গিক</item>
+        <item>ধূপ লাঠি</item>
     </string-array>
 
 
     <string-array name="celebration">
-        <item>Media Gallery</item>
-        <item>Stamp</item>
+        <item>চাল</item>
+        <item>ডাল</item>
+        <item>তেল ও ঘি</item>
     </string-array>
 
     <string-array name="resources">
-        <item>Books &amp; Publications</item>
-        <item>Documentaries</item>
-        <item>Letters</item>
-        <item>Logo &amp; Guideline</item>
-        <item>Posters &amp; Publications</item>
-        <item>Committee Action Plan</item>
+        <item>স্বাস্থ্য</item>
+        <item>সৌন্দর্য</item>
+        <item>স্যানিটারি ন্যাপকিন</item>
+        <item>দাঁতের যত্ন</item>
+
 
     </string-array>
 
 
     <string-array name="mujib">
-        <item>Timeline</item>
-        <item>Speeches</item>
-        <item>Recognitions</item>
-        <item>Photo Archive</item>
-        <item>Graphic Novel "\"Mujib\""</item>
+        <item>চা ও কফি</item>
+        <item>সফট ড্রিঙ্কস</item>
+        <item>এনার্জি ড্রিঙ্কস</item>
+        <item>পানি</item>
+        <item>সিগারেট এবং তামাক</item>
     </string-array>
 
     <string-array name="media_and_news"><!--//media-->
-        <item>Press Release</item>
-        <item>Notice</item>
+        <item>ফল</item>
+        <item>শাকসবজি</item>
     </string-array>
 
 
-    <string-array name="committee" /> <!--committee-->
+    <string-array name="committee">
+        <item>পোল্ট্রি</item>
+        <item>গরুর মাংস এবং মাটন</item>
+    </string-array> <!--committee-->
 
 
-    <string-array name="wishes" /> <!--committee-->
+    <string-array name="wishes">
+        <item>ড্রাই </item>
+        <item>তাজা এবং সজীব </item>
+    </string-array> <!--committee-->
 
     <string-array name="contact_us" /> <!--committee-->
 

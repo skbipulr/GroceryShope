@@ -69,6 +69,7 @@
                     />
 
                 <ImageView
+                    android:onClick="goToCart"
                     android:tint="@color/white"
                     android:layout_width="35dp"
                     android:layout_height="25dp"

@@ -2,7 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
-    android:theme="@style/AppThe"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -61,7 +61,7 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="130dp"
+                        android:layout_height="150dp"
                         android:orientation="vertical">
 
                         <com.smarteist.autoimageslider.SliderView
@@ -136,7 +136,7 @@
                         android:id="@+id/secondCategoryRecyclerView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp" />
+                        android:layout_marginTop="16dp" />
 
                 </LinearLayout>
 
@@ -182,7 +182,7 @@
                         android:id="@+id/groceriesRecyclerView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp" />
+                        android:layout_marginTop="16dp" />
 
                 </LinearLayout>
 
@@ -195,7 +195,6 @@
 
     <!-- Side navigation drawer UI -->
     <ExpandableListView
-        android:visibility="gone"
         android:id="@+id/navList"
         android:layout_width="@dimen/nav_drawer_width"
         android:layout_height="match_parent"
@@ -205,9 +204,11 @@
         app:itemIconTint="@color/white"
         app:itemTextColor="@color/white"
         android:choiceMode="singleChoice"
-        android:divider="@android:color/white"
+        android:divider="@android:color/darker_gray"
         android:dividerHeight="0dp"
-        android:groupIndicator="@null" />
+        android:groupIndicator="@null"/>
+
+
 
 
 </androidx.drawerlayout.widget.DrawerLayout>

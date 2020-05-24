@@ -10,6 +10,7 @@
         fontPath="fonts/solaiman_lipi.ttf"
         android:id="@+id/listTitle"
         android:layout_width="0dp"
+        android:textSize="16sp"
         android:layout_weight="1"
         android:text="amar sonar bangla"
         android:layout_height="wrap_content"
@@ -20,7 +21,7 @@
         android:textColor="#000"
         tools:ignore="MissingPrefix" />
 
-    <TextView
+    <ImageView
         android:id="@+id/addIV"
         android:layout_marginRight="40dp"
         android:layout_gravity="center_vertical"

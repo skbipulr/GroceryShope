@@ -34,25 +34,24 @@
             >
 
             <TextView
-                android:lines="2"
+                android:lines="1"
+                android:layout_marginBottom="3dp"
                 android:id="@+id/productNameTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="3dp"
                 android:textColor="@android:color/black"
-
-                android:text="2.3L large Capacity Double wal"
+                android:text="2.3L large Capacity"
                 android:textSize="14sp" />
             <TextView
-                android:layout_marginTop="3dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginTop="4dp"
                 android:visibility="visible"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="[1.00EA]"/>
+                android:text=" [1.00EA]"/>
 
             <LinearLayout
-
+                android:layout_marginTop="4dp"
                 android:layout_weight="10"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -68,9 +67,9 @@
                     android:text="1 pices"/>
                 <TextView
                     android:id="@+id/productPriceTV"
-                    android:textSize="14dp"
+                    android:textSize="16dp"
                     android:textStyle="bold"
-                    android:drawableLeft="@drawable/taka_icona_20"
+                    android:drawableLeft="@drawable/taka_icona_16"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="850"/>
@@ -78,6 +77,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:layout_marginTop="6dp"
                 android:layout_marginBottom="16dp"
                 android:gravity="center"
                 android:layout_width="match_parent"
@@ -91,7 +91,7 @@
                     android:textSize="18dp"
                     android:layout_marginRight="20dp"
                     android:textColor="@color/main_color"
-                    android:text="Add to beg"/>
+                    android:text="Add to bag"/>
 
                 <LinearLayout
                     android:layout_width="wrap_content"

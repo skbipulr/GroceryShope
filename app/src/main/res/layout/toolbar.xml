@@ -34,13 +34,13 @@
                />
 
             <ImageView
-                android:tint="@color/white"
                 android:layout_width="35dp"
                 android:layout_height="25dp"
-                android:layout_gravity="center"
                 android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:onClick="CheckOut"
                 android:src="@drawable/shapping_bag"
-                 />
+                android:tint="@color/white" />
         </LinearLayout>
 
 

@@ -52,7 +52,7 @@ public class AccountActivity extends AppCompatActivity {
     }
 
     public void clickOnChangePassword(View view) {
-        startActivity(new Intent(this,VerifyActivity.class));
+        startActivity(new Intent(this,ChangePasswordActivity.class));
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
@@ -65,4 +65,27 @@ public class AccountActivity extends AppCompatActivity {
         }
     }
 
+    public void goToEdit(View view) {
+        startActivity(new Intent(this,ConfirmActivity.class));
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+    }
+
+    public void goToOrderList(View view) {
+        Intent intent = new Intent(this,OrderListActivity.class);
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        startActivity(intent);
+    }
+
+    public void backBtn(View view) {
+        onBackPressed();
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        finish();
+    }
+
+    public void goTo(View view) {
+        Intent intent = new Intent(this,EditPersonalInfoActivity.class);
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        startActivity(intent);
+
+    }
 }

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 
@@ -21,7 +22,9 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
     private Map<String, List<String>> mExpandableListDetail;
     private LayoutInflater mLayoutInflater;
     private OnExpandableListener listener;
-    static  public TextView addImage;
+    static  public ImageView addImage;
+
+    public int[] iconList= {R.drawable.fresh_product,R.drawable.furniture};
 
     public CustomExpandableListAdapter(Context context, List<String> expandableListTitle,
                                        Map<String, List<String>> expandableListDetail, OnExpandableListener listener) {
@@ -38,7 +41,7 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
     @Override
     public Object getChild(int listPosition, int expandedListPosition) {
         return mExpandableListDetail.get(mExpandableListTitle.get(listPosition))
-            .get(expandedListPosition);
+                .get(expandedListPosition);
     }
 
     @Override
@@ -54,7 +57,7 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
             convertView = mLayoutInflater.inflate(R.layout.list_item, null);
         }
         TextView expandedListTextView = (TextView) convertView
-            .findViewById(R.id.expandedListItem);
+                .findViewById(R.id.expandedListItem);
         expandedListTextView.setText(expandedListText);
 
         convertView.setOnClickListener(new View.OnClickListener() {
@@ -73,7 +76,7 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
     @Override
     public int getChildrenCount(int listPosition) {
         return mExpandableListDetail.get(mExpandableListTitle.get(listPosition))
-            .size();
+                .size();
     }
 
     @Override
@@ -95,20 +98,23 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int listPosition, boolean isExpanded,
                              View convertView, ViewGroup parent) {
         String listTitle = (String) getGroup(listPosition);
+
         if (convertView == null) {
             convertView = mLayoutInflater.inflate(R.layout.list_group, null);
         }
         TextView listTitleTextView = (TextView) convertView
-            .findViewById(R.id.listTitle);
+                .findViewById(R.id.listTitle);
         listTitleTextView.setTypeface(null, Typeface.BOLD);
         listTitleTextView.setText(listTitle);
-         addImage = convertView.findViewById(R.id.addIV);
 
-         if (isExpanded) {
-             addImage.setText("-");
-         } else {
-             addImage.setText("+");
-         }
+        addImage = convertView.findViewById(R.id.addIV);
+
+        if (isExpanded) {
+            //addImage.setText("-");
+            addImage.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp);
+        } else {
+            addImage.setImageResource(R.drawable.ic_keyboard_arrow_right_black_24dp);
+        }
 
         if (getChildrenCount(listPosition) > 0) {
             addImage.setVisibility(View.VISIBLE);

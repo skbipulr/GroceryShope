@@ -8,6 +8,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 
 import android.os.Build;
@@ -100,6 +101,12 @@ public class MainActivity extends AppCompatActivity implements CustomExpandableL
 
     }
 
+    public void CheckOut(View view) {
+        Intent intent = new Intent(this,OrderListActivity.class);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        startActivity(intent);
+    }
+
     private void getAllGroceries() {
         groceriesList.add(new Groceries(R.drawable.meat,"Meat"));
         groceriesList.add(new Groceries(R.drawable.oil,"Oil & Ghee"));
@@ -123,19 +130,19 @@ public class MainActivity extends AppCompatActivity implements CustomExpandableL
 
     private void getAllSecondCategory() {
         secondCategories.add(new SecondCategory(R.drawable.boiler_murgi,"Broiler Murgi",
-                "1 KG","Tk.260"));
+                "1 KG","260"));
         secondCategories.add(new SecondCategory(R.drawable.writing_drawing,"Writing & Drawing",
-                "1 pisces","Tk.2050"));
+                "1 pisces","2050"));
         secondCategories.add(new SecondCategory(R.drawable.lights_electrical,"Lights & Electrical",
-                "1 pisces","Tk.2050"));
+                "1 pisces","2050"));
         secondCategories.add(new SecondCategory(R.drawable.fruits_vegetables,"Fruits & Vegetables",
-                "1 pisces","Tk.2050"));
+                "1 pisces","2050"));
         secondCategories.add(new SecondCategory(R.drawable.frozen_canned,"Frozen Canned",
-                "1 pisces","Tk.2050"));
+                "1 pisces","2050"));
         secondCategories.add(new SecondCategory(R.drawable.cleaning_supplies,"Cleaning & Supplies",
-                "1 pisces","Tk.2050"));
+                "1 pisces","2050"));
         secondCategories.add(new SecondCategory(R.drawable.bread_bakery,"Cleaning & Supplies",
-                "1 pisces","Tk.2050"));
+                "1 pisces","2050"));
     }
 
     private void loadSecondCategory() {
@@ -212,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements CustomExpandableL
                 if (groupPosition == 5) {
 
                 } else if (groupPosition == 6) {
-            } else if (groupPosition == 7) {
+                } else if (groupPosition == 7) {
 
                 } else if (groupPosition == 8) {
 
@@ -305,7 +312,7 @@ public class MainActivity extends AppCompatActivity implements CustomExpandableL
             switch (childPosition) {
                 case 0:
                     Toast.makeText(this, "1", Toast.LENGTH_SHORT).show();
-                  break;
+                    break;
                 case 1:
                     Toast.makeText(this, "2", Toast.LENGTH_SHORT).show();  break;
                 case 2:
@@ -338,35 +345,35 @@ public class MainActivity extends AppCompatActivity implements CustomExpandableL
         } else if (groupPosition == 2) {
             switch (childPosition) {
                 case 0:
-                  break;
+                    break;
                 case 1:
-                 break;
+                    break;
                 case 2:
-                  break;
+                    break;
                 case 3:
-                   break;
+                    break;
                 case 4:
-                   break;
+                    break;
                 case 5:
-                  break;
+                    break;
 
             }
         } else if (groupPosition == 3) {
             switch (childPosition) {
                 case 0:
-                   break;
+                    break;
                 case 1:
-                   break;
+                    break;
                 case 2:
-                 break;
+                    break;
 
             }
         } else if (groupPosition == 4) {
             switch (childPosition) {
                 case 0:
-                   break;
+                    break;
                 case 1:
-                   break;
+                    break;
             }
 
 

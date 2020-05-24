@@ -21,6 +21,7 @@ public class SecondCategoryAdapter extends RecyclerView.Adapter<SecondCategoryAd
 
     private Context context;
     private List<SecondCategory>categoryList;
+    int count=0;
 
     public SecondCategoryAdapter(Context context, List<SecondCategory> categoryList) {
         this.context = context;
@@ -39,7 +40,7 @@ public class SecondCategoryAdapter extends RecyclerView.Adapter<SecondCategoryAd
         SecondCategory secondCategory = categoryList.get(position);
         holder.productNameTV.setText(secondCategory.getProductName());
         holder.productPriceTV.setText(secondCategory.getProductPrice());
-        holder.productQuantityTV.setText(secondCategory.getProductQuantity());
+        //holder.productQuantityTV.setText(secondCategory.getProductQuantity());
         holder.productImageIV.setImageResource(secondCategory.getProductImage());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,15 +57,48 @@ public class SecondCategoryAdapter extends RecyclerView.Adapter<SecondCategoryAd
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView productImageIV;
-        TextView productNameTV, productQuantityTV,productPriceTV;
-        public ViewHolder(@NonNull View itemView) {
+        ImageView productImageIV,increaseQuantity,reduceQuantity;
+        TextView productNameTV, productQuantityTV,productPriceTV,itemQuantity,addtobag;
+        public ViewHolder(@NonNull final View itemView) {
             super(itemView);
 
             productImageIV  = itemView.findViewById(R.id.imageProduct);
             productNameTV = itemView.findViewById(R.id.productNameTV);
             productPriceTV = itemView.findViewById(R.id.productPriceTV);
-            productQuantityTV = itemView.findViewById(R.id.productQuantityTV);
+            //productQuantityTV = itemView.findViewById(R.id.productQuantityTV);
+            increaseQuantity = itemView.findViewById(R.id.increaseQuantity);
+            itemQuantity = itemView.findViewById(R.id.itemQuantity);
+            reduceQuantity = itemView.findViewById(R.id.reduceQuantity);
+            addtobag = itemView.findViewById(R.id.addtobag);
+
+
+            increaseQuantity.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    count++;
+                    itemQuantity.setVisibility(View.VISIBLE);
+                    reduceQuantity.setVisibility(View.VISIBLE);
+                    addtobag.setVisibility(View.GONE);
+                    itemQuantity.setText(String.valueOf(count));
+
+                }
+            });
+
+            reduceQuantity.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    count--;
+                    itemQuantity.setText(String.valueOf(count));
+                    if (count==0){
+                        addtobag.setVisibility(View.VISIBLE);
+                        itemQuantity.setVisibility(View.GONE);
+                        reduceQuantity.setVisibility(View.GONE);
+                    }
+
+
+                }
+            });
+
         }
     }
 }

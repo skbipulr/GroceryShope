@@ -3,11 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/white"
     android:orientation="vertical">
 
 
     <LinearLayout
         android:layout_marginTop="6dp"
+        android:layout_marginLeft="16dp"
         android:layout_width="wrap_content"
         android:layout_height="120dp"
         android:orientation="horizontal"
@@ -15,8 +17,8 @@
 
         <ImageView
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
             android:src="@drawable/boiler_murgi" />
 
         <LinearLayout
@@ -49,18 +51,19 @@
                 android:orientation="horizontal">
 
                 <ImageView
-
+                    android:visibility="gone"
                     android:backgroundTint="@color/main_color"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/taka_icona_20"/>
+                    android:src="@drawable/taka_icona_16"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16dp"
+                    android:drawableLeft="@drawable/taka_icona_16"
                     android:gravity="center_vertical"
-                    android:text="259"
+                    android:text="518"
                     android:textStyle="bold" />
 
             </LinearLayout>

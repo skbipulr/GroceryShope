@@ -43,11 +43,40 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="50dp"
                     android:text="Order List"
                     android:textColor="@color/white"
                     android:textSize="18sp" />
 
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginLeft="70dp"
+                android:layout_marginTop="10dp"
+                android:id="@+id/linear1"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:tint="@color/white"
+                    android:visibility="visible"
+                    android:layout_marginLeft="200dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_centerVertical="false"
+                    android:src="@drawable/ic_search_black_24dp"
+                    />
+
+                <ImageView
+                    android:onClick="goToCart"
+                    android:tint="@color/white"
+                    android:layout_width="35dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/shapping_bag"
+                    />
             </LinearLayout>
 
 
@@ -55,11 +84,33 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <include layout="@layout/order_list_item_layout"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-    <include layout="@layout/order_list_item_layout"/>
-    <include layout="@layout/order_list_item_layout"/>
-    <include layout="@layout/order_list_item_layout"/>
-    <include layout="@layout/order_list_item_layout"/>
-    <include layout="@layout/order_list_item_layout"/>
+            <include layout="@layout/order_list_item_layout"/>
+
+            <include layout="@layout/order_list_item_layout"/>
+            <include layout="@layout/order_list_item_layout"/>
+            <include layout="@layout/order_list_item_layout"/>
+            <include layout="@layout/order_list_item_layout"/>
+            <include layout="@layout/order_list_item_layout"/>
+
+            <include layout="@layout/order_list_item_layout"/>
+
+            <include layout="@layout/order_list_item_layout"/>
+            <include layout="@layout/order_list_item_layout"/>
+            <include layout="@layout/order_list_item_layout"/>
+            <include layout="@layout/order_list_item_layout"/>
+            <include layout="@layout/order_list_item_layout"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+
+
 </LinearLayout>

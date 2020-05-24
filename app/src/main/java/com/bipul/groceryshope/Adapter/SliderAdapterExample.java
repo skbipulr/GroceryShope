@@ -29,7 +29,7 @@ public class SliderAdapterExample extends SliderViewAdapter<SliderAdapterExample
 
         switch (position) {
             case 0:
-               viewHolder.imageViewBackground.setImageResource(R.drawable.gooo);
+               viewHolder.imageViewBackground.setImageResource(R.drawable.go_bazer_logo);
                 break;
             case 1:
                 viewHolder.imageViewBackground.setImageResource(R.drawable.slider2);
