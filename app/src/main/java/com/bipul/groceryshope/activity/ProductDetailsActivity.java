@@ -1,12 +1,15 @@
 package com.bipul.groceryshope.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -32,6 +35,9 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
     int count=0;
 
+    Toolbar toolbar;
+    SearchView searchView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,9 +46,19 @@ public class ProductDetailsActivity extends AppCompatActivity {
         loadSecondCategory();
         getAllSecondCategory();
 
+        toolbar = findViewById(R.id.toolbar);
+
+
         init();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu_at_to_cart, menu);
+        searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+
+        return true;
+    }
     private void init() {
         productImageIV  = findViewById(R.id.imageProduct);
         productNameTV = findViewById(R.id.productNameTV);
