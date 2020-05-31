@@ -1,223 +1,226 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark"
     tools:context=".activity.ProductDetailsActivity">
 
-    <include layout="@layout/product_details_toolbar"/>
+    <include layout="@layout/product_details_toolbar" />
 
     <ScrollView
 
-        android:layout_marginBottom="60dp"
         android:id="@+id/scrollView"
-       android:layout_width="match_parent"
-       android:layout_height="match_parent">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="60dp">
 
-       <LinearLayout
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:background="@color/bg_color"
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:orientation="vertical">
+            android:orientation="vertical">
 
 
-           <LinearLayout
+            <LinearLayout
 
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-               <ImageView
-                   android:background="@color/white"
-                   android:layout_width="match_parent"
-                   android:layout_height="300dp"
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:background="@color/white"
 
-                   android:src="@drawable/murgi3"/>
+                    android:src="@drawable/murgi3" />
 
-               <LinearLayout
-                   android:background="@color/white"
-                   android:layout_width="match_parent"
-                   android:layout_height="wrap_content"
-                   android:orientation="vertical">
-
-
-                   <LinearLayout
-                       android:layout_marginRight="16dp"
-                       android:layout_marginLeft="16dp"
-                       android:layout_width="match_parent"
-                       android:layout_height="wrap_content"
-                       android:orientation="vertical">
-                       <LinearLayout
-                           android:layout_width="match_parent"
-                           android:layout_height="wrap_content"
-                           android:orientation="horizontal">
-
-                           <ImageView
-                               android:backgroundTint="@color/black"
-                               android:layout_marginTop="3dp"
-                               android:layout_width="wrap_content"
-                               android:layout_height="wrap_content"
-                               android:src="@drawable/taka_icona_20"/>
-                           <TextView
-                               android:layout_width="wrap_content"
-                               android:layout_height="wrap_content"
-                               android:textColor="@color/black"
-                               android:textSize="20dp"
-
-                               android:textStyle="bold"
-                               android:text="260"/>
-                       </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="vertical">
 
 
-                       <TextView
-                           android:layout_marginTop="5dp"
-                           android:layout_width="wrap_content"
-                           android:layout_height="wrap_content"
-                           android:textSize="18sp"
-                           android:maxLines="2"
-                           android:textColor="#CB000000"
-                           android:textStyle="bold"
-                           android:text="Premium Broiler chicken (Skinless)"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:orientation="vertical">
 
-                       <LinearLayout
-                           android:layout_marginTop="12dp"
-                           android:layout_width="match_parent"
-                           android:layout_height="wrap_content"
-                           android:orientation="horizontal">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
 
-                           <TextView
-                               android:layout_weight=".6"
-                               android:textSize="18sp"
-                               android:textColor="#CB000000"
-                               android:layout_width="wrap_content"
-                               android:layout_height="wrap_content"
-                               android:text="[ 1.00KG ]"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="&#2547;"
+                                android:textColor="@color/main_color"
+                                android:textSize="24dp"
+                                android:textStyle="bold" />
 
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="260"
+                                android:textColor="@color/main_color"
 
-                       </LinearLayout>
-
-                       <LinearLayout
-                           android:layout_marginTop="16dp"
-                           android:layout_width="match_parent"
-                           android:layout_height="wrap_content"
-                           android:orientation="horizontal">
-
-                           <TextView
-                               android:layout_weight=".9"
-                               android:layout_marginTop="8dp"
-                               android:textSize="18sp"
-                               android:textColor="#CB000000"
-                               android:layout_width="wrap_content"
-                               android:layout_height="wrap_content"
-                               android:text="Description"/>
-
-                           <ImageView
-                               android:visibility="visible"
-                               android:layout_marginTop="7dp"
-                               android:textColor="#CB000000"
-                               android:layout_width="wrap_content"
-                               android:layout_height="wrap_content"
-                               android:src="@drawable/ic_keyboard_arrow_up_black_24dp"/>
-
-                           <ImageView
-                               android:visibility="gone"
-                               android:layout_marginTop="7dp"
-                               android:textColor="#CB000000"
-                               android:layout_width="wrap_content"
-                               android:layout_height="wrap_content"
-                               android:src="@drawable/ic_keyboard_arrow_up_black_24dp"/>
+                                android:textSize="20dp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
 
 
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:maxLines="2"
+                            android:text="Premium Broiler chicken (Skinless)"
+                            android:textColor="#CB000000"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
 
-                       </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:orientation="horizontal">
 
-                       <TextView
-                           android:layout_marginBottom="16dp"
-                           android:layout_weight=".9"
-                           android:layout_marginTop="16dp"
-                           android:textSize="17sp"
-                           android:maxLines="4"
-                           android:lineSpacingExtra="5dp"
-                           android:textColor="#CB000000"
-                           android:layout_width="wrap_content"
-                           android:layout_height="wrap_content"
-                           android:text="In a period of just five short weeks, the chickens that are commonly known as broilers can weigh around 4-5 pounds and by the time they are 10 weeks old, they can easily reach 10 pounds."/>
-                   </LinearLayout>
-
-               </LinearLayout>
-           </LinearLayout>
-
-
-           <LinearLayout
-               android:layout_marginLeft="16dp"
-               android:layout_marginRight="16dp"
-               android:layout_weight="10"
-
-               android:layout_marginTop="16dp"
-               android:gravity="center"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:orientation="horizontal">
-
-               <TextView
-                   android:layout_weight="7"
-                   android:text="Related Products"
-                   android:textSize="18dp"
-                   android:textColor="@android:color/black"
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"/>
-
-               <TextView
-                   android:text="see all"
-                   android:background="@drawable/see_all_shape"
-                   android:textColor="@color/main_color"
-                   android:layout_width="wrap_content"
-                   android:paddingLeft="7dp"
-                   android:paddingRight="7dp"
-                   android:paddingTop="2dp"
-                   android:paddingBottom="2dp"
-                   android:layout_height="wrap_content"/>
-
-           </LinearLayout>
-
-           <androidx.recyclerview.widget.RecyclerView
-               android:id="@+id/relatedProductRecyclerView"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:layout_marginLeft="8dp"
-               android:layout_marginTop="12dp"
-               android:layout_marginRight="8dp" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight=".6"
+                                android:text="[ 1.00KG ]"
+                                android:textColor="#CB000000"
+                                android:textSize="18sp" />
 
 
-       </LinearLayout>
-   </ScrollView>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:layout_weight=".9"
+                                android:text="Description"
+                                android:textColor="#CB000000"
+                                android:textSize="18sp" />
+
+                            <ImageView
+
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="7dp"
+                                android:src="@drawable/ic_keyboard_arrow_up_black_24dp"
+                                android:textColor="#CB000000"
+                                android:visibility="gone" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="7dp"
+                                android:src="@drawable/ic_keyboard_arrow_up_black_24dp"
+                                android:textColor="#CB000000"
+                                android:visibility="gone" />
+
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginBottom="16dp"
+                            android:layout_weight=".9"
+                            android:lineSpacingExtra="5dp"
+                            android:maxLines="4"
+                            android:text="In a period of just five short weeks, the chickens that are commonly known as broilers can weigh around 4-5 pounds and by the time they are 10 weeks old, they can easily reach 10 pounds."
+                            android:textColor="#CB000000"
+                            android:textSize="17sp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_weight="10"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="7"
+                    android:text="Related Products"
+                    android:textColor="@android:color/black"
+                    android:textSize="18dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/see_all_shape"
+                    android:paddingLeft="7dp"
+                    android:paddingTop="2dp"
+                    android:paddingRight="7dp"
+                    android:paddingBottom="2dp"
+                    android:text="see all"
+                    android:textColor="@color/main_color" />
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/relatedProductRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginRight="8dp" />
+
+
+        </LinearLayout>
+    </ScrollView>
 
     <LinearLayout
 
-        android:background="@color/main_color"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:background="@color/main_color">
 
         <LinearLayout
-           android:layout_marginTop="8dp"
-            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <TextView
-                android:visibility="visible"
                 android:id="@+id/addtobag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
                 android:layout_marginRight="30dp"
+                android:text="Add to beg"
                 android:textColor="@color/white"
-                android:text="Add to beg"/>
+                android:textSize="20dp"
+                android:visibility="visible" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -240,26 +243,25 @@
                     app:srcCompat="@drawable/ic_remove_white_24dp" />
 
                 <TextView
-                    android:visibility="gone"
                     android:id="@+id/itemQuantity"
                     android:layout_width="20dp"
                     android:layout_height="40dp"
-                    android:layout_marginRight="30dp"
                     android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
                     android:gravity="center"
                     android:text="1"
                     android:textColor="@color/white"
-                    android:textSize="30sp" />
-
+                    android:textSize="30sp"
+                    android:visibility="gone" />
 
 
                 <ImageView
                     android:id="@+id/increaseQuantity"
-                    android:layout_marginTop="5dp"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:tint="@color/white"
+                    android:layout_marginTop="5dp"
                     android:background="@drawable/circle_white_addto_beg_shape"
+                    android:tint="@color/white"
                     app:srcCompat="@drawable/ic_add_white_24dp" />
 
             </LinearLayout>

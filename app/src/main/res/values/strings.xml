@@ -4,13 +4,14 @@
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="selected_item">Selected item</string>
+    <string name="hintSearchMess" />
 
 
     <string-array name="all_title">
         <item>পানীয়</item>
         <item>মুদিখানা কেনাকাটা</item>
         <item>ব্যক্তিগত যত্ন</item>
-        <item>Household</item>
+        <item>পরিবার</item>
         <item>পরিবার</item>
         <item>মাংস</item>
         <item>মাছ </item>

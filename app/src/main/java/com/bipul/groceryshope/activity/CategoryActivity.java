@@ -1,10 +1,13 @@
 package com.bipul.groceryshope.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -19,15 +22,29 @@ public class CategoryActivity extends AppCompatActivity {
     ImageView productImageIV,increaseQuantity,reduceQuantity;
     TextView productNameTV, productQuantityTV,productPriceTV,itemQuantity,addtobag;
 
+    Toolbar toolbar;
+
+    SearchView searchView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category);
 
         colorChangeStatusBar();
-
+        init();
 
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu_at_to_cart, menu);
+        searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+
+        return true;
+    }
+
+
 
     public void colorChangeStatusBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -36,6 +53,8 @@ public class CategoryActivity extends AppCompatActivity {
             window.setStatusBarColor(getResources().getColor(R.color.main_color));
         }
     }
+
+
 
     public void goToCart(View view){
         Intent intent = new Intent(this,AddToCartActivity.class);
@@ -57,6 +76,9 @@ public class CategoryActivity extends AppCompatActivity {
         itemQuantity = findViewById(R.id.itemQuantity);
         reduceQuantity = findViewById(R.id.reduceQuantity);
         addtobag = findViewById(R.id.addtobag);
+
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         increaseQuantity.setOnClickListener(new View.OnClickListener() {
             @Override

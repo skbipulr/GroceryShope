@@ -2,6 +2,7 @@ package com.bipul.groceryshope.activity;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -15,6 +16,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -34,6 +36,7 @@ import com.bipul.groceryshope.datasource.ExpandableListDataSource;
 import com.bipul.groceryshope.model.Category;
 import com.bipul.groceryshope.model.Groceries;
 import com.bipul.groceryshope.model.SecondCategory;
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
@@ -76,6 +79,9 @@ public class MainActivity extends AppCompatActivity implements CustomExpandableL
     private GroceriesAdapter groceriesAdapter;
 
 
+   SearchView searchView;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,6 +105,15 @@ public class MainActivity extends AppCompatActivity implements CustomExpandableL
 
 
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+
+
+        searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        return true;
     }
 
     public void CheckOut(View view) {
@@ -176,6 +191,9 @@ public class MainActivity extends AppCompatActivity implements CustomExpandableL
         mExpandableListView = (ExpandableListView) findViewById(R.id.navList);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
 
+        setSupportActionBar(toolbar);
+
+
         LayoutInflater inflater = getLayoutInflater();
         View listHeaderView = inflater.inflate(R.layout.nav_header, null, false);
         mExpandableListView.addHeaderView(listHeaderView);
@@ -183,6 +201,8 @@ public class MainActivity extends AppCompatActivity implements CustomExpandableL
         mExpandableListData = ExpandableListDataSource.getData(this);
         mExpandableListTitle = new ArrayList(mExpandableListData.keySet());
         mExpandableTitle = new ArrayList(mExpandableListData.keySet());
+
+
 
     }
 

@@ -40,7 +40,7 @@ public class RelatedProductAdapter extends RecyclerView.Adapter<RelatedProductAd
         RelatedProduct relatedProduct = relatedProducts.get(position);
         holder.productNameTV.setText(relatedProduct.getProductName());
         holder.productPriceTV.setText(relatedProduct.getProductPrice());
-        holder.productQuantityTV.setText(relatedProduct.getProductQuantity());
+       // holder.productQuantityTV.setText(relatedProduct.getProductQuantity());
         holder.productImageIV.setImageResource(relatedProduct.getProductImage());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,7 +65,7 @@ public class RelatedProductAdapter extends RecyclerView.Adapter<RelatedProductAd
             productImageIV  = itemView.findViewById(R.id.imageProduct);
             productNameTV = itemView.findViewById(R.id.productNameTV);
             productPriceTV = itemView.findViewById(R.id.productPriceTV);
-            productQuantityTV = itemView.findViewById(R.id.productQuantityTV);
+           // productQuantityTV = itemView.findViewById(R.id.productQuantityTV);
         }
     }
 }

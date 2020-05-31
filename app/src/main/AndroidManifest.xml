@@ -19,8 +19,14 @@
         <activity android:name=".activity.OrderListActivity">
 
         </activity>
-        <activity android:name=".activity.AddToCartActivity">
+        <activity android:name=".activity.AddToCartActivity"
+            android:theme="@style/AppThemWhite">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.SEARCH" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".activity.ChangePasswordActivity">
 
@@ -49,11 +55,7 @@
         </activity>
 
         <activity android:name=".activity.SplashActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".activity.MainActivity"
             android:screenOrientation="fullSensor"

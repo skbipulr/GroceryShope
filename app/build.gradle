@@ -40,4 +40,6 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:3.0.1'
     //for password icon
     implementation 'com.github.anshulagarwal06:PasswordEditText:v1.0'
+
+    compile 'com.miguelcatalan:materialsearchview:1.4.0'
 }
