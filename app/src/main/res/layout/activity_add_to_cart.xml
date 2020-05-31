@@ -68,13 +68,12 @@
                     />
 
                 <ImageView
-                    android:tint="@color/white"
                     android:layout_width="35dp"
-                    android:layout_height="25dp"
-                    android:layout_gravity="center"
+                    android:layout_height="33dp"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/shapping_bag"
-                    />
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_shopping_cart_white_24dp"
+                    android:tint="@color/white" />
             </LinearLayout>
 
 
