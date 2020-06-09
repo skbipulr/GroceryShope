@@ -414,4 +414,9 @@ public class MainActivity extends AppCompatActivity implements CustomExpandableL
         }
     }
 
+    public void goSignIn(View view) {
+        Intent intent = new Intent(this,SignInActivity.class);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        startActivity(intent);
+    }
 }

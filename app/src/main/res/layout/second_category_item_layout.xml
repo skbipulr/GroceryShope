@@ -58,7 +58,6 @@
                 android:orientation="horizontal">
 
                 <TextView
-
                     android:textSize="18dp"
                     android:textStyle="bold"
                     android:layout_width="wrap_content"

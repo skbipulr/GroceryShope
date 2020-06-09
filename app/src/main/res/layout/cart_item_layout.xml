@@ -39,6 +39,7 @@
 
 
             <TextView
+                android:textColor="@color/gray_white"
                 android:layout_marginTop="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -50,18 +51,19 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <ImageView
-                    android:visibility="gone"
-                    android:backgroundTint="@color/main_color"
+                <TextView
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/gray_white"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/taka_icona_16"/>
+                    android:text="&#2547;"/>
 
                 <TextView
+                    android:textColor="@color/gray_white"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16dp"
-                    android:drawableLeft="@drawable/taka_icona_16"
                     android:gravity="center_vertical"
                     android:text="518"
                     android:textStyle="bold" />
@@ -99,6 +101,7 @@
                         app:srcCompat="@drawable/ic_remove_white_24dp" />
 
                     <TextView
+                        android:textColor="@color/black"
                         android:visibility="visible"
                         android:id="@+id/itemQuantity"
                         android:layout_width="40dp"

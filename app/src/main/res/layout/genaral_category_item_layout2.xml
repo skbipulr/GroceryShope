@@ -2,8 +2,7 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="160dp"
-
-    android:padding="10dp"
+    android:padding="0dp"
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
     android:layout_marginBottom="8dp"
@@ -23,7 +22,7 @@
             android:id="@+id/imageProduct"
             android:layout_width="wrap_content"
             android:layout_height="130dp"
-            android:src="@drawable/fruits_vegetables" />
+            android:src="@drawable/frozen_canned" />
 
         <LinearLayout
             android:layout_marginRight="8dp"
@@ -45,6 +44,7 @@
                 android:text="2.3L large Capacity"
                 android:textSize="14sp" />
             <TextView
+                android:textColor="@color/gray_white"
                 android:layout_marginTop="4dp"
                 android:visibility="visible"
                 android:layout_width="wrap_content"
@@ -67,10 +67,17 @@
                     android:drawableLeft="@drawable/right"
                     android:text="1 pices"/>
                 <TextView
-                    android:id="@+id/productPriceTV"
-                    android:textSize="14dp"
+                    android:textColor="@color/gray_white"
+                    android:textSize="18dp"
                     android:textStyle="bold"
-                    android:drawableLeft="@drawable/taka_icona_16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="&#2547;"/>
+                <TextView
+                    android:textColor="@color/gray_white"
+                    android:id="@+id/productPriceTV"
+                    android:textSize="16dp"
+                    android:textStyle="bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="850"/>
@@ -86,12 +93,10 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@id/addtobag"
                     android:visibility="visible"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="18dp"
-                    android:textStyle="bold"
                     android:layout_marginRight="20dp"
                     android:textColor="@color/main_color"
                     android:text="Add to bag"/>

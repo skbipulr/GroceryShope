@@ -65,11 +65,18 @@
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/right"
                     android:text="1 pices"/>
+
+                <TextView
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="&#2547;"/>
+
                 <TextView
                     android:id="@+id/productPriceTV"
                     android:textSize="16dp"
                     android:textStyle="bold"
-                    android:drawableLeft="@drawable/taka_icona_16"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="850"/>
