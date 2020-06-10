@@ -8,14 +8,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bipul.groceryshope.R;
+
+import com.bipul.groceryshope.modelFodSlider.SliderProduct;
 import com.smarteist.autoimageslider.SliderViewAdapter;
+import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 public class SliderAdapterExample extends SliderViewAdapter<SliderAdapterExample.SliderAdapterVH> {
 
     private Context context;
+    private List<SliderProduct> sliderList;
 
-    public SliderAdapterExample(Context context) {
+    public SliderAdapterExample(Context context, List<SliderProduct> sliderList) {
         this.context = context;
+        this.sliderList = sliderList;
     }
 
     @Override
@@ -27,7 +34,7 @@ public class SliderAdapterExample extends SliderViewAdapter<SliderAdapterExample
     @Override
     public void onBindViewHolder(SliderAdapterVH viewHolder, int position) {
 
-        switch (position) {
+    /*    switch (position) {
             case 0:
                viewHolder.imageViewBackground.setImageResource(R.drawable.go_bazer_logo);
                 break;
@@ -41,14 +48,19 @@ public class SliderAdapterExample extends SliderViewAdapter<SliderAdapterExample
                 viewHolder.imageViewBackground.setImageResource(R.drawable.slider5);
                 break;
 
-        }
+        }*/
+
+
+        SliderProduct slider = sliderList.get(position);
+        Picasso.get().load("http://gobazaar.com.bd/public/upload/product/"+slider.getPicture())
+                .into(viewHolder.imageViewBackground);
 
     }
 
     @Override
     public int getCount() {
         //slider view count could be dynamic size
-        return 4;
+        return sliderList.size();
     }
 
     class SliderAdapterVH extends SliderViewAdapter.ViewHolder {

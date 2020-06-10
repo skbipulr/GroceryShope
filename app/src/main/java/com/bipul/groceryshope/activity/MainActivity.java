@@ -32,11 +32,14 @@ import com.bipul.groceryshope.Adapter.GroceriesAdapter;
 import com.bipul.groceryshope.Adapter.SecondCategoryAdapter;
 import com.bipul.groceryshope.Adapter.SliderAdapterExample;
 import com.bipul.groceryshope.R;
+import com.bipul.groceryshope.modelFodSlider.SliderResponse;
 import com.bipul.groceryshope.datasource.ExpandableListDataSource;
+import com.bipul.groceryshope.interfaces.ApiInterface;
 import com.bipul.groceryshope.model.Category;
 import com.bipul.groceryshope.model.Groceries;
 import com.bipul.groceryshope.model.SecondCategory;
-import com.miguelcatalan.materialsearchview.MaterialSearchView;
+import com.bipul.groceryshope.modelFodSlider.SliderProduct;
+import com.bipul.groceryshope.webApi.RetrofitClient;
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
@@ -45,7 +48,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements CustomExpandableListAdapter.OnExpandableListener{
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class MainActivity extends AppCompatActivity implements CustomExpandableListAdapter.OnExpandableListener {
 
 
     private DrawerLayout mDrawerLayout;
@@ -65,7 +72,9 @@ public class MainActivity extends AppCompatActivity implements CustomExpandableL
     // for image Slider
     private SliderView sliderView;
     private SliderAdapterExample sliderAdapterExample;
+    private List<SliderProduct> sliderProducts = new ArrayList<>();
 
+    //Category
     private RecyclerView categoryRecyclerView;
     private ArrayList<Category> categories = new ArrayList<>();
     private CategoryAdapter categoryAdapter;
@@ -78,8 +87,10 @@ public class MainActivity extends AppCompatActivity implements CustomExpandableL
     private ArrayList<Groceries> groceriesList = new ArrayList<>();
     private GroceriesAdapter groceriesAdapter;
 
+    SearchView searchView;
 
-   SearchView searchView;
+    private ApiInterface apiInterface;
+
 
 
     @Override
@@ -103,6 +114,7 @@ public class MainActivity extends AppCompatActivity implements CustomExpandableL
         loadGroceries();
         getAllGroceries();
 
+        getAllSlider();
 
 
     }
@@ -117,20 +129,20 @@ public class MainActivity extends AppCompatActivity implements CustomExpandableL
     }
 
     public void CheckOut(View view) {
-        Intent intent = new Intent(this,OrderListActivity.class);
+        Intent intent = new Intent(this, OrderListActivity.class);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         startActivity(intent);
     }
 
     private void getAllGroceries() {
-        groceriesList.add(new Groceries(R.drawable.meat,"Meat"));
-        groceriesList.add(new Groceries(R.drawable.oil,"Oil & Ghee"));
-        groceriesList.add(new Groceries(R.drawable.pulese,"Pulses"));
-        groceriesList.add(new Groceries(R.drawable.sugar,"Sugar"));
-        groceriesList.add(new Groceries(R.drawable.meat,"Meat"));
-        groceriesList.add(new Groceries(R.drawable.oil,"Oil & Ghee"));
-        groceriesList.add(new Groceries(R.drawable.pulese,"Pulses"));
-        groceriesList.add(new Groceries(R.drawable.sugar,"Sugar"));
+        groceriesList.add(new Groceries(R.drawable.meat, "Meat"));
+        groceriesList.add(new Groceries(R.drawable.oil, "Oil & Ghee"));
+        groceriesList.add(new Groceries(R.drawable.pulese, "Pulses"));
+        groceriesList.add(new Groceries(R.drawable.sugar, "Sugar"));
+        groceriesList.add(new Groceries(R.drawable.meat, "Meat"));
+        groceriesList.add(new Groceries(R.drawable.oil, "Oil & Ghee"));
+        groceriesList.add(new Groceries(R.drawable.pulese, "Pulses"));
+        groceriesList.add(new Groceries(R.drawable.sugar, "Sugar"));
 
     }
 
@@ -144,20 +156,20 @@ public class MainActivity extends AppCompatActivity implements CustomExpandableL
     }
 
     private void getAllSecondCategory() {
-        secondCategories.add(new SecondCategory(R.drawable.boiler_murgi,"Broiler Murgi",
-                "1 KG","260"));
-        secondCategories.add(new SecondCategory(R.drawable.writing_drawing,"Writing & Drawing",
-                "1 pisces","2050"));
-        secondCategories.add(new SecondCategory(R.drawable.lights_electrical,"Lights & Electrical",
-                "1 pisces","2050"));
-        secondCategories.add(new SecondCategory(R.drawable.fruits_vegetables,"Fruits & Vegetables",
-                "1 pisces","2050"));
-        secondCategories.add(new SecondCategory(R.drawable.frozen_canned,"Frozen Canned",
-                "1 pisces","2050"));
-        secondCategories.add(new SecondCategory(R.drawable.cleaning_supplies,"Cleaning & Supplies",
-                "1 pisces","2050"));
-        secondCategories.add(new SecondCategory(R.drawable.bread_bakery,"Cleaning & Supplies",
-                "1 pisces","2050"));
+        secondCategories.add(new SecondCategory(R.drawable.boiler_murgi, "Broiler Murgi",
+                "1 KG", "260"));
+        secondCategories.add(new SecondCategory(R.drawable.writing_drawing, "Writing & Drawing",
+                "1 pisces", "2050"));
+        secondCategories.add(new SecondCategory(R.drawable.lights_electrical, "Lights & Electrical",
+                "1 pisces", "2050"));
+        secondCategories.add(new SecondCategory(R.drawable.fruits_vegetables, "Fruits & Vegetables",
+                "1 pisces", "2050"));
+        secondCategories.add(new SecondCategory(R.drawable.frozen_canned, "Frozen Canned",
+                "1 pisces", "2050"));
+        secondCategories.add(new SecondCategory(R.drawable.cleaning_supplies, "Cleaning & Supplies",
+                "1 pisces", "2050"));
+        secondCategories.add(new SecondCategory(R.drawable.bread_bakery, "Cleaning & Supplies",
+                "1 pisces", "2050"));
     }
 
     private void loadSecondCategory() {
@@ -171,15 +183,15 @@ public class MainActivity extends AppCompatActivity implements CustomExpandableL
 
     public void initImageSlider() {
         sliderView = findViewById(R.id.imageSlider);
-        sliderAdapterExample = new SliderAdapterExample(this);
+        /*sliderAdapterExample = new SliderAdapterExample(MainActivity.this,sliderProducts);
         sliderView.setSliderAdapter(sliderAdapterExample);
-
+*/
         /*-------------initBanner---start----------*/
         sliderView.setIndicatorAnimation(IndicatorAnimations.WORM); //set indicator animation by using SliderLayout.IndicatorAnimations. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!
         sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
         sliderView.setAutoCycleDirection(SliderView.AUTO_CYCLE_DIRECTION_BACK_AND_FORTH);
-        sliderView.setIndicatorSelectedColor(R.color.main_color);
-        sliderView.setIndicatorUnselectedColor(R.color.main_color);
+      /*  sliderView.setIndicatorSelectedColor(R.color.main_color);
+        sliderView.setIndicatorUnselectedColor(R.color.main_color);*/
         sliderView.setScrollTimeInSec(3); //set scroll delay in seconds :
         sliderView.startAutoCycle();
         /*-------------initBanner---end----------*/
@@ -202,7 +214,29 @@ public class MainActivity extends AppCompatActivity implements CustomExpandableL
         mExpandableListTitle = new ArrayList(mExpandableListData.keySet());
         mExpandableTitle = new ArrayList(mExpandableListData.keySet());
 
+        apiInterface = RetrofitClient.getRetrofit().create(ApiInterface.class);
+    }
 
+
+    private void getAllSlider() {
+
+        apiInterface.getSliderResponse("A1b1C2d32564kjhkjadu").enqueue(new Callback<SliderResponse>() {
+            @Override
+            public void onResponse(Call<SliderResponse> call, Response<SliderResponse> response) {
+                SliderResponse sliderResponse = response.body();
+                sliderProducts = sliderResponse.getData().getSliderProduct();
+                Toast.makeText(MainActivity.this, ""+sliderProducts.size(), Toast.LENGTH_SHORT).show();
+                SliderAdapterExample adapter = new SliderAdapterExample(MainActivity.this, sliderProducts);
+                sliderView.setSliderAdapter(adapter);
+
+            }
+
+            @Override
+            public void onFailure(Call<SliderResponse> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "failed"+t.getMessage(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
 
     }
 
@@ -220,13 +254,13 @@ public class MainActivity extends AppCompatActivity implements CustomExpandableL
         categoryRecyclerView.setAdapter(categoryAdapter);
     }
 
-    private void getAllCategory(){
-        categories.add(new Category(R.drawable.general_grocery,"General Grocery"));
-        categories.add(new Category(R.drawable.fresh_product,"Fresh Product"));
-        categories.add(new Category(R.drawable.meat_fish,"Meat & Fish"));
-        categories.add(new Category(R.drawable.beverages,"Beverages"));
-        categories.add(new Category(R.drawable.furniture,"Personal Care"));
-        categories.add(new Category(R.drawable.pet_food,"Pet Food"));
+    private void getAllCategory() {
+        categories.add(new Category(R.drawable.general_grocery, "General Grocery"));
+        categories.add(new Category(R.drawable.fresh_product, "Fresh Product"));
+        categories.add(new Category(R.drawable.meat_fish, "Meat & Fish"));
+        categories.add(new Category(R.drawable.beverages, "Beverages"));
+        categories.add(new Category(R.drawable.furniture, "Personal Care"));
+        categories.add(new Category(R.drawable.pet_food, "Pet Food"));
     }
 
     private void addDrawerItems() {
@@ -306,7 +340,6 @@ public class MainActivity extends AppCompatActivity implements CustomExpandableL
     }
 
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -334,13 +367,17 @@ public class MainActivity extends AppCompatActivity implements CustomExpandableL
                     Toast.makeText(this, "1", Toast.LENGTH_SHORT).show();
                     break;
                 case 1:
-                    Toast.makeText(this, "2", Toast.LENGTH_SHORT).show();  break;
+                    Toast.makeText(this, "2", Toast.LENGTH_SHORT).show();
+                    break;
                 case 2:
-                    Toast.makeText(this, "3", Toast.LENGTH_SHORT).show();    break;
+                    Toast.makeText(this, "3", Toast.LENGTH_SHORT).show();
+                    break;
                 case 3:
-                    Toast.makeText(this, "4", Toast.LENGTH_SHORT).show();   break;
+                    Toast.makeText(this, "4", Toast.LENGTH_SHORT).show();
+                    break;
                 case 4:
-                    Toast.makeText(this, "5", Toast.LENGTH_SHORT).show();  break;
+                    Toast.makeText(this, "5", Toast.LENGTH_SHORT).show();
+                    break;
                 default:
                     return false;
             }
@@ -415,7 +452,7 @@ public class MainActivity extends AppCompatActivity implements CustomExpandableL
     }
 
     public void goSignIn(View view) {
-        Intent intent = new Intent(this,SignInActivity.class);
+        Intent intent = new Intent(this, SignInActivity.class);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         startActivity(intent);
     }

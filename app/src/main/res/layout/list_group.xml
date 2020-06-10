@@ -6,7 +6,6 @@
               android:orientation="horizontal">
 
     <TextView
-
         fontPath="fonts/solaiman_lipi.ttf"
         android:id="@+id/listTitle"
         android:layout_width="0dp"
