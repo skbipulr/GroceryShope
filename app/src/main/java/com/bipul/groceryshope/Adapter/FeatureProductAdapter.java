@@ -1,7 +1,6 @@
 package com.bipul.groceryshope.Adapter;
 
 import android.content.Context;
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,36 +12,40 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bipul.groceryshope.R;
 import com.bipul.groceryshope.model.Groceries;
+import com.bipul.groceryshope.modelForFeatureProduct.FeatureProduct;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class GroceriesAdapter  extends RecyclerView.Adapter<GroceriesAdapter.ViewHolder> {
+public class FeatureProductAdapter extends RecyclerView.Adapter<FeatureProductAdapter.ViewHolder> {
     private Context context;
-    private List<Groceries> groceriesList;
+    private List<FeatureProduct> featureProducts;
 
-    public GroceriesAdapter(Context context, List<Groceries> groceriesList) {
+    public FeatureProductAdapter(Context context, List<FeatureProduct> featureProducts) {
         this.context = context;
-        this.groceriesList = groceriesList;
+        this.featureProducts = featureProducts;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.grocries_item_layout,parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.feature_product_item_layout,parent,false);
 
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Groceries groceries = groceriesList.get(position);
-        holder.groceriesTitleTV.setText(groceries.getGroceriesTitle());
-        holder.groceriesImage.setImageResource(groceries.getGroceriesImage());
+        FeatureProduct featureProduct = featureProducts.get(position);
+        holder.groceriesTitleTV.setText(featureProduct.getName());
+
+        Picasso.get().load("http://gobazaar.com.bd/public/upload/product/"+featureProduct.getPicture())
+                .into(holder.groceriesImage);
     }
 
     @Override
     public int getItemCount() {
-        return groceriesList.size();
+        return featureProducts.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

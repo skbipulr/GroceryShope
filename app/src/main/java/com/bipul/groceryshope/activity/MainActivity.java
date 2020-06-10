@@ -28,7 +28,7 @@ import android.widget.Toast;
 
 import com.bipul.groceryshope.Adapter.CategoryAdapter;
 import com.bipul.groceryshope.Adapter.CustomExpandableListAdapter;
-import com.bipul.groceryshope.Adapter.GroceriesAdapter;
+import com.bipul.groceryshope.Adapter.FeatureProductAdapter;
 import com.bipul.groceryshope.Adapter.SecondCategoryAdapter;
 import com.bipul.groceryshope.Adapter.SliderAdapterExample;
 import com.bipul.groceryshope.R;
@@ -39,6 +39,8 @@ import com.bipul.groceryshope.model.Category;
 import com.bipul.groceryshope.model.Groceries;
 import com.bipul.groceryshope.model.SecondCategory;
 import com.bipul.groceryshope.modelFodSlider.SliderProduct;
+import com.bipul.groceryshope.modelForFeatureProduct.FeatureProduct;
+import com.bipul.groceryshope.modelForFeatureProduct.FeatureProductResponse;
 import com.bipul.groceryshope.webApi.RetrofitClient;
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderAnimations;
@@ -84,8 +86,8 @@ public class MainActivity extends AppCompatActivity implements CustomExpandableL
     private SecondCategoryAdapter secondCategoryAdapter;
 
     private RecyclerView groceriesRecyclerView;
-    private ArrayList<Groceries> groceriesList = new ArrayList<>();
-    private GroceriesAdapter groceriesAdapter;
+    private List<FeatureProduct> featureProducts = new ArrayList<>();
+    private FeatureProductAdapter featureProductAdapter;
 
     SearchView searchView;
 
@@ -112,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements CustomExpandableL
         getAllSecondCategory();
 
         loadGroceries();
-        getAllGroceries();
+        getAllFeatureProducts();
 
         getAllSlider();
 
@@ -134,25 +136,37 @@ public class MainActivity extends AppCompatActivity implements CustomExpandableL
         startActivity(intent);
     }
 
-    private void getAllGroceries() {
-        groceriesList.add(new Groceries(R.drawable.meat, "Meat"));
-        groceriesList.add(new Groceries(R.drawable.oil, "Oil & Ghee"));
-        groceriesList.add(new Groceries(R.drawable.pulese, "Pulses"));
-        groceriesList.add(new Groceries(R.drawable.sugar, "Sugar"));
-        groceriesList.add(new Groceries(R.drawable.meat, "Meat"));
-        groceriesList.add(new Groceries(R.drawable.oil, "Oil & Ghee"));
-        groceriesList.add(new Groceries(R.drawable.pulese, "Pulses"));
-        groceriesList.add(new Groceries(R.drawable.sugar, "Sugar"));
+    private void getAllFeatureProducts() {
 
     }
 
     private void loadGroceries() {
         groceriesRecyclerView = findViewById(R.id.groceriesRecyclerView);
-        LinearLayoutManager layoutManager
-                = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        groceriesAdapter = new GroceriesAdapter(this, groceriesList);
-        groceriesRecyclerView.setLayoutManager(layoutManager);
-        groceriesRecyclerView.setAdapter(groceriesAdapter);
+        apiInterface.getFeatureProduct("A1b1C2d32564kjhkjadu").enqueue(new Callback<FeatureProductResponse>() {
+            @Override
+            public void onResponse(Call<FeatureProductResponse> call, Response<FeatureProductResponse> response) {
+
+                FeatureProductResponse featureProductResponse = response.body();
+                if (response.code()==200){
+                    featureProducts = featureProductResponse.getData().getFeatureProduct();
+                    featureProductAdapter = new FeatureProductAdapter(MainActivity.this, featureProducts);
+
+                    LinearLayoutManager layoutManager
+                            = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
+                    groceriesRecyclerView.setLayoutManager(layoutManager);
+                    groceriesRecyclerView.setAdapter(featureProductAdapter);
+                    featureProductAdapter.notifyDataSetChanged();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<FeatureProductResponse> call, Throwable t) {
+
+            }
+        });
+
     }
 
     private void getAllSecondCategory() {
