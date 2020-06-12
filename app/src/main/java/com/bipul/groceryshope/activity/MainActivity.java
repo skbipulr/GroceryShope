@@ -1,5 +1,6 @@
 package com.bipul.groceryshope.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
@@ -24,6 +25,7 @@ import android.view.WindowManager;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bipul.groceryshope.Adapter.CategoryAdapter;
@@ -32,16 +34,21 @@ import com.bipul.groceryshope.Adapter.FeatureProductAdapter;
 import com.bipul.groceryshope.Adapter.SecondCategoryAdapter;
 import com.bipul.groceryshope.Adapter.SliderAdapterExample;
 import com.bipul.groceryshope.R;
+import com.bipul.groceryshope.Utils.Common;
 import com.bipul.groceryshope.modelFodSlider.SliderResponse;
 import com.bipul.groceryshope.datasource.ExpandableListDataSource;
 import com.bipul.groceryshope.interfaces.ApiInterface;
-import com.bipul.groceryshope.model.Category;
-import com.bipul.groceryshope.model.Groceries;
+
 import com.bipul.groceryshope.model.SecondCategory;
 import com.bipul.groceryshope.modelFodSlider.SliderProduct;
-import com.bipul.groceryshope.modelForFeatureProduct.FeatureProduct;
+import com.bipul.groceryshope.modelForFeatureProduct.Category;
 import com.bipul.groceryshope.modelForFeatureProduct.FeatureProductResponse;
+import com.bipul.groceryshope.modelForProducts.Data;
+import com.bipul.groceryshope.modelForProducts.Product;
+import com.bipul.groceryshope.modelForProducts.ProductList;
+import com.bipul.groceryshope.modelForProducts.ProductsResponse;
 import com.bipul.groceryshope.webApi.RetrofitClient;
+import com.google.android.material.navigation.NavigationView;
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
@@ -54,7 +61,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements CustomExpandableListAdapter.OnExpandableListener {
+public class MainActivity extends AppCompatActivity
+        implements CustomExpandableListAdapter.OnExpandableListener,
+     NavigationView.OnNavigationItemSelectedListener
+{
 
 
     private DrawerLayout mDrawerLayout;
@@ -78,7 +88,8 @@ public class MainActivity extends AppCompatActivity implements CustomExpandableL
 
     //Category
     private RecyclerView categoryRecyclerView;
-    private ArrayList<Category> categories = new ArrayList<>();
+    private List<Product> categories = new ArrayList<>();
+    private List<ProductList> productLists = new ArrayList<>();
     private CategoryAdapter categoryAdapter;
 
     private RecyclerView secondCategoryRecyclerView;
@@ -86,13 +97,15 @@ public class MainActivity extends AppCompatActivity implements CustomExpandableL
     private SecondCategoryAdapter secondCategoryAdapter;
 
     private RecyclerView groceriesRecyclerView;
-    private List<FeatureProduct> featureProducts = new ArrayList<>();
+    private List<Category> featureProducts = new ArrayList<>();
     private FeatureProductAdapter featureProductAdapter;
+
+    private int categoryId;
+    private int productCategoryId;
 
     SearchView searchView;
 
     private ApiInterface apiInterface;
-
 
 
     @Override
@@ -108,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements CustomExpandableL
         colorChangeStatusBar();
 
         loadCategory();
-        getAllCategory();
+
 
         loadSecondCategory();
         getAllSecondCategory();
@@ -145,10 +158,9 @@ public class MainActivity extends AppCompatActivity implements CustomExpandableL
         apiInterface.getFeatureProduct("A1b1C2d32564kjhkjadu").enqueue(new Callback<FeatureProductResponse>() {
             @Override
             public void onResponse(Call<FeatureProductResponse> call, Response<FeatureProductResponse> response) {
-
-                FeatureProductResponse featureProductResponse = response.body();
-                if (response.code()==200){
-                    featureProducts = featureProductResponse.getData().getFeatureProduct();
+                if (response.code() == 200) {
+                    FeatureProductResponse featureProductResponse = response.body();
+                    featureProducts = featureProductResponse.getData().getCategories();
                     featureProductAdapter = new FeatureProductAdapter(MainActivity.this, featureProducts);
 
                     LinearLayoutManager layoutManager
@@ -157,8 +169,6 @@ public class MainActivity extends AppCompatActivity implements CustomExpandableL
                     groceriesRecyclerView.setAdapter(featureProductAdapter);
                     featureProductAdapter.notifyDataSetChanged();
                 }
-
-
             }
 
             @Override
@@ -212,6 +222,16 @@ public class MainActivity extends AppCompatActivity implements CustomExpandableL
     }
 
     private void init() {
+
+       /* ExpandableListView navigationView = (ExpandableListView) findViewById(R.id.navList);
+        //navigationView.setSelectionAfterHeaderView();
+        navigationView.getHeaderViewsCount();
+
+        View headerView=navigationView.getRootView();
+        TextView nameTV = headerView.findViewById(R.id.nameTV);
+        nameTV.setText(Common.currentUser);
+*/
+
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerLayout.closeDrawers();
         mExpandableListView = (ExpandableListView) findViewById(R.id.navList);
@@ -238,8 +258,8 @@ public class MainActivity extends AppCompatActivity implements CustomExpandableL
             @Override
             public void onResponse(Call<SliderResponse> call, Response<SliderResponse> response) {
                 SliderResponse sliderResponse = response.body();
-                sliderProducts = sliderResponse.getData().getSliderProduct();
-                Toast.makeText(MainActivity.this, ""+sliderProducts.size(), Toast.LENGTH_SHORT).show();
+                sliderProducts = sliderResponse.getData().getSliderProducts();
+                //Toast.makeText(MainActivity.this, "" + sliderProducts.size(), Toast.LENGTH_SHORT).show();
                 SliderAdapterExample adapter = new SliderAdapterExample(MainActivity.this, sliderProducts);
                 sliderView.setSliderAdapter(adapter);
 
@@ -247,7 +267,7 @@ public class MainActivity extends AppCompatActivity implements CustomExpandableL
 
             @Override
             public void onFailure(Call<SliderResponse> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "failed"+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "failed" + t.getMessage(), Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -260,22 +280,43 @@ public class MainActivity extends AppCompatActivity implements CustomExpandableL
     }
 
     private void loadCategory() {
-        categoryRecyclerView = findViewById(R.id.categoryRecyclerView);
-        LinearLayoutManager layoutManager
-                = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        categoryAdapter = new CategoryAdapter(this, categories);
-        categoryRecyclerView.setLayoutManager(layoutManager);
-        categoryRecyclerView.setAdapter(categoryAdapter);
+        apiInterface.getProducts("A1b1C2d32564kjhkjadu").enqueue(new Callback<ProductsResponse>() {
+            @Override
+            public void onResponse(Call<ProductsResponse> call, Response<ProductsResponse> response) {
+                ProductsResponse productsResponse = response.body();
+
+                categoryRecyclerView = findViewById(R.id.categoryRecyclerView);
+
+                Data data = new Data(productsResponse.getData().getProducts());
+                categories = data.getProducts();
+               // productLists = categories.get(1).getProductList();
+              /*  for (Product product: categories) {
+                    productLists = categories.get().getProductList();
+                }*/
+               for (int i = 0; i<5; i++){
+                   productLists = categories.get(i).getProductList();
+
+                }
+
+
+
+                categoryAdapter = new CategoryAdapter(MainActivity.this, categories,productLists);
+
+                LinearLayoutManager layoutManager
+                        = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
+                categoryRecyclerView.setLayoutManager(layoutManager);
+                categoryRecyclerView.setAdapter(categoryAdapter);
+            }
+
+            @Override
+            public void onFailure(Call<ProductsResponse> call, Throwable t) {
+
+            }
+        });
+
+
     }
 
-    private void getAllCategory() {
-        categories.add(new Category(R.drawable.general_grocery, "General Grocery"));
-        categories.add(new Category(R.drawable.fresh_product, "Fresh Product"));
-        categories.add(new Category(R.drawable.meat_fish, "Meat & Fish"));
-        categories.add(new Category(R.drawable.beverages, "Beverages"));
-        categories.add(new Category(R.drawable.furniture, "Personal Care"));
-        categories.add(new Category(R.drawable.pet_food, "Pet Food"));
-    }
 
     private void addDrawerItems() {
         mExpandableListAdapter = new CustomExpandableListAdapter(this, mExpandableListTitle, mExpandableListData, this);
@@ -469,5 +510,10 @@ public class MainActivity extends AppCompatActivity implements CustomExpandableL
         Intent intent = new Intent(this, SignInActivity.class);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         startActivity(intent);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        return false;
     }
 }

@@ -11,17 +11,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bipul.groceryshope.R;
-import com.bipul.groceryshope.model.Groceries;
-import com.bipul.groceryshope.modelForFeatureProduct.FeatureProduct;
+import com.bipul.groceryshope.modelForFeatureProduct.Category;
+import com.bipul.groceryshope.modelForFeatureProduct.Data;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class FeatureProductAdapter extends RecyclerView.Adapter<FeatureProductAdapter.ViewHolder> {
     private Context context;
-    private List<FeatureProduct> featureProducts;
+    private List<Category> featureProducts;
 
-    public FeatureProductAdapter(Context context, List<FeatureProduct> featureProducts) {
+    public FeatureProductAdapter(Context context, List<Category> featureProducts) {
         this.context = context;
         this.featureProducts = featureProducts;
     }
@@ -36,7 +36,7 @@ public class FeatureProductAdapter extends RecyclerView.Adapter<FeatureProductAd
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        FeatureProduct featureProduct = featureProducts.get(position);
+        Category featureProduct = featureProducts.get(position);
         holder.groceriesTitleTV.setText(featureProduct.getName());
 
         Picasso.get().load("http://gobazaar.com.bd/public/upload/product/"+featureProduct.getPicture())

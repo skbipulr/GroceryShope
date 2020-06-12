@@ -1,5 +1,5 @@
 
-package com.bipul.groceryshope.modelForFeatureProduct;
+package com.bipul.groceryshope.modelForcategories;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;

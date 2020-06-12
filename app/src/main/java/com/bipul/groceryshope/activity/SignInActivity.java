@@ -2,23 +2,117 @@ package com.bipul.groceryshope.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.bipul.groceryshope.R;
+import com.bipul.groceryshope.Utils.Common;
+import com.bipul.groceryshope.interfaces.ApiInterface;
+import com.bipul.groceryshope.modelForLogin.LoginResponse;
+import com.bipul.groceryshope.registrationModel.RegistrationResponse;
+import com.bipul.groceryshope.webApi.RetrofitClient;
+import com.google.android.material.textfield.TextInputEditText;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SignInActivity extends AppCompatActivity {
+
+    private TextInputEditText edtPhone, edtPassword;
+    private String phone, password;
+
+    public static final String MyPREFERENCES = "MyPrefs";
+    private SharedPreferences sharedpreferences;
+    public static final String ASSESS_TOKEN = "assessToken";
+
+    private ApiInterface apiInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
         colorChangeStatusBar();
+
+        init();
+
     }
+
+    private void init() {
+        edtPhone = findViewById(R.id.edtPhone);
+        edtPassword = findViewById(R.id.edtPassword);
+        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        apiInterface = RetrofitClient.getRetrofitWithoutHome().create(ApiInterface.class);
+    }
+
+    private void createLogin() {
+        phone = edtPhone.getText().toString().trim();
+        password = edtPassword.getText().toString().trim();
+
+        if (phone.isEmpty()) {
+            edtPhone.setError("Please Enter Your Mobile No.");
+            edtPhone.requestFocus();
+            return;
+        } else if (password.isEmpty()) {
+            edtPassword.setError("Please Enter Your Password.");
+            edtPassword.requestFocus();
+        } else {
+            final ProgressDialog mDialog = new ProgressDialog(SignInActivity.this);
+            mDialog.setMessage("Please waiting...");
+            mDialog.show();
+
+            Call<LoginResponse> call = apiInterface.setUserInfoForLogin(phone, password, "A1b1C2d32564kjhkjadu");
+
+            call.enqueue(new Callback<LoginResponse>() {
+                @Override
+                public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+
+                    if (response.code() == 200) {
+                        LoginResponse meg = response.body();
+                        String assessToken = meg.getToken();
+
+                        SharedPreferences.Editor editor = sharedpreferences.edit();
+                        editor.putString(ASSESS_TOKEN, assessToken);
+                        editor.commit();
+
+                        sharedpreferences = getSharedPreferences(MyPREFERENCES,
+                                Context.MODE_PRIVATE);
+                       String userAssessToken =  sharedpreferences.getString(ASSESS_TOKEN, "");
+
+                        Toast.makeText(SignInActivity.this, ""+userAssessToken, Toast.LENGTH_LONG).show();
+                        Toast.makeText(SignInActivity.this, "Congratulations!! "+meg.getMessage(), Toast.LENGTH_LONG).show();
+
+                        mDialog.dismiss();
+
+                        Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                        startActivity(intent);
+                        finish();
+
+                    } else if (response.code() == 404) {
+                        Toast.makeText(SignInActivity.this, "404" + response.message(), Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+
+                @Override
+                public void onFailure(Call<LoginResponse> call, Throwable t) {
+
+                    Toast.makeText(SignInActivity.this, "Failed "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+
 
     public void colorChangeStatusBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -40,9 +134,8 @@ public class SignInActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void goToMainAct(View view) {
-        Intent intent = new Intent(this,MainActivity.class);
-        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-        startActivity(intent);
+
+    public void OnLogin(View view) {
+        createLogin();
     }
 }

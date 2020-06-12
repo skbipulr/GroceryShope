@@ -13,8 +13,14 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bipul.groceryshope.R;
+import com.bipul.groceryshope.modelForProducts.Product;
+import com.bipul.groceryshope.modelForProducts.ProductList;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CategoryActivity extends AppCompatActivity {
 
@@ -26,13 +32,23 @@ public class CategoryActivity extends AppCompatActivity {
 
     SearchView searchView;
 
+
+    ProductList productList = new ProductList();
+    List<ProductList> productLists;
+    String productName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category);
 
         colorChangeStatusBar();
-        init();
+        //init();
+
+        /*Intent intent = getIntent();
+        productName =  intent.getStringExtra("productName");
+*/
+        Toast.makeText(this, ""+productName, Toast.LENGTH_LONG).show();
 
     }
 
@@ -67,7 +83,7 @@ public class CategoryActivity extends AppCompatActivity {
         finish();
     }
 
-    private void init() {
+    /*private void init() {
         productImageIV  = findViewById(R.id.imageProduct);
         productNameTV = findViewById(R.id.productNameTV);
         productPriceTV = findViewById(R.id.productPriceTV);
@@ -106,5 +122,5 @@ public class CategoryActivity extends AppCompatActivity {
 
             }
         });
-    }
+    }*/
 }

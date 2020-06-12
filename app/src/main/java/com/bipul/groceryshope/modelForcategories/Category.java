@@ -1,10 +1,10 @@
 
-package com.bipul.groceryshope.modelForFeatureProduct;
+package com.bipul.groceryshope.modelForcategories;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class FeatureProduct {
+public class Category {
 
     @SerializedName("id")
     @Expose
@@ -12,9 +12,9 @@ public class FeatureProduct {
     @SerializedName("name")
     @Expose
     private String name;
-    @SerializedName("picture")
+    @SerializedName("is_show")
     @Expose
-    private String picture;
+    private Integer isShow;
 
     public Integer getId() {
         return id;
@@ -32,12 +32,12 @@ public class FeatureProduct {
         this.name = name;
     }
 
-    public String getPicture() {
-        return picture;
+    public Integer getIsShow() {
+        return isShow;
     }
 
-    public void setPicture(String picture) {
-        this.picture = picture;
+    public void setIsShow(Integer isShow) {
+        this.isShow = isShow;
     }
 
 }

@@ -85,54 +85,10 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <ScrollView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/categoryRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_gravity="center"
-                android:layout_marginTop="8dp"
-                android:layout_width="match_parent"
-                android:gravity="center"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <include
-                    layout="@layout/genaral_category_item_layout"/>
-                <include layout="@layout/genaral_category_item_layout2"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_marginTop="8dp"
-                android:gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <include layout="@layout/genaral_category_item_layout2"/>
-                <include layout="@layout/genaral_category_item_layout3"/>
-            </LinearLayout>
-            <LinearLayout
-                android:gravity="center"
-                android:layout_marginTop="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <include layout="@layout/genaral_category_item_layout"/>
-                <include layout="@layout/genaral_category_item_layout"/>
-            </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
-
-
-
-
+        android:layout_height="wrap_content"/>
 
 
 </LinearLayout>
