@@ -1,8 +1,12 @@
 package com.bipul.groceryshope.activity;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Build;
@@ -15,12 +19,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bipul.groceryshope.Adapter.SecondCategoryAdapter;
+import com.bipul.groceryshope.Adapter.ThirdCategoryAdapter;
 import com.bipul.groceryshope.R;
 import com.bipul.groceryshope.modelForProducts.Product;
 import com.bipul.groceryshope.modelForProducts.ProductList;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class CategoryActivity extends AppCompatActivity {
 
@@ -32,24 +39,38 @@ public class CategoryActivity extends AppCompatActivity {
 
     SearchView searchView;
 
+    private List<ProductList> productLists;
 
-    ProductList productList = new ProductList();
-    List<ProductList> productLists;
+    private RecyclerView categoryRecyclerView;
+    private ThirdCategoryAdapter thirdCategoryAdapter;
+
     String productName;
 
+    Product  product;
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category);
 
         colorChangeStatusBar();
-        //init();
+        init();
 
-        /*Intent intent = getIntent();
-        productName =  intent.getStringExtra("productName");
-*/
-        Toast.makeText(this, ""+productName, Toast.LENGTH_LONG).show();
+        Intent intent = getIntent();
+       // product = (Product) intent.getParcelableExtra("category");
+        //int size = product.getProductList().size();
+       // Toast.makeText(this, "what "+ product.s, Toast.LENGTH_LONG).show();
 
+       productLists =  intent.getParcelableArrayListExtra("productList");
+        thirdCategoryAdapter = new ThirdCategoryAdapter(this,productLists);
+        categoryRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        categoryRecyclerView.setAdapter(thirdCategoryAdapter);
+
+    }
+
+    private void init() {
+        categoryRecyclerView = findViewById(R.id.categoryRecyclerView);
     }
 
     @Override
@@ -59,7 +80,11 @@ public class CategoryActivity extends AppCompatActivity {
 
         return true;
     }
-
+    private void loadSecondCategory() {
+        thirdCategoryAdapter = new ThirdCategoryAdapter(this,productLists);
+        categoryRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        categoryRecyclerView.setAdapter(thirdCategoryAdapter);
+    }
 
 
     public void colorChangeStatusBar() {

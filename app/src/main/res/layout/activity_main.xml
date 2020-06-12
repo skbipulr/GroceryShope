@@ -24,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/toolbar"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="4dp">
 
 
             <LinearLayout
@@ -115,7 +115,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="7"
-                            android:text="Exclusive Offer"
+                            android:text="Available Products"
                             android:textColor="@android:color/black"
                             android:textSize="18dp" />
 

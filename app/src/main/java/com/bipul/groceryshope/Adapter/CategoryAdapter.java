@@ -2,6 +2,7 @@ package com.bipul.groceryshope.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,25 +17,20 @@ import com.bipul.groceryshope.R;
 import com.bipul.groceryshope.activity.CategoryActivity;
 import com.bipul.groceryshope.modelForProducts.Product;
 import com.bipul.groceryshope.modelForProducts.ProductList;
-import com.bipul.groceryshope.modelForcategories.Category;
 
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
 
     private Context context;
     private List<Product> categories;
-    private List<ProductList> productLists;
+    private List<ProductList> productLists = new ArrayList<>();
 
-    public CategoryAdapter(Context context, List<Product> categories, List<ProductList> productLists) {
+    public CategoryAdapter(Context context, List<Product> categories) {
         this.context = context;
         this.categories = categories;
-        this.productLists = productLists;
     }
 
     @NonNull
@@ -52,27 +48,28 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
 
         final Product category = categories.get(position);
-        // final ProductList productList = productLists.get(position);
-//       final ProductList productList =  productLists.get(position);
+
         holder.categoryName.setText(category.getCategoryName());
+
         if (category.getCategoryId() == null) {
             holder.itemView.setVisibility(View.GONE);
         }
 
-
-        //holder.categoryImage.setImageResource(category.getCategoryImage());
-
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Intent intent = new Intent(context, CategoryActivity.class);
-              //  intent.putExtra("productName", productList.getProductName());
-
+                Intent intent = new Intent(context,CategoryActivity.class);
+                intent.putExtra("category",category);
+                intent.putParcelableArrayListExtra("productList", (ArrayList<? extends Parcelable>) categories.get(position).getProductList());
                 context.startActivity(intent);
+                Toast.makeText(context, ""+categories.get(position).getProductList().size(), Toast.LENGTH_SHORT).show();
             }
         });
+
     }
+
+    //holder.categoryImage.setImageResource(category.getCategoryImage());
+
 
     @Override
     public int getItemCount() {

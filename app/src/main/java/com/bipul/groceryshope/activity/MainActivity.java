@@ -222,7 +222,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void init() {
-
        /* ExpandableListView navigationView = (ExpandableListView) findViewById(R.id.navList);
         //navigationView.setSelectionAfterHeaderView();
         navigationView.getHeaderViewsCount();
@@ -287,20 +286,11 @@ public class MainActivity extends AppCompatActivity
 
                 categoryRecyclerView = findViewById(R.id.categoryRecyclerView);
 
-                Data data = new Data(productsResponse.getData().getProducts());
-                categories = data.getProducts();
-               // productLists = categories.get(1).getProductList();
-              /*  for (Product product: categories) {
-                    productLists = categories.get().getProductList();
-                }*/
-               for (int i = 0; i<5; i++){
-                   productLists = categories.get(i).getProductList();
+                categories = productsResponse.getData().getProducts();
+                //Data data = new Data(productsResponse.getData().getProducts());
+                //categories = data.getProducts();
 
-                }
-
-
-
-                categoryAdapter = new CategoryAdapter(MainActivity.this, categories,productLists);
+                categoryAdapter = new CategoryAdapter(MainActivity.this, categories);
 
                 LinearLayoutManager layoutManager
                         = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);

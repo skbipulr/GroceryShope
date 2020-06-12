@@ -64,7 +64,7 @@ public class RelatedProductAdapter extends RecyclerView.Adapter<RelatedProductAd
 
             productImageIV  = itemView.findViewById(R.id.imageProduct);
             productNameTV = itemView.findViewById(R.id.productNameTV);
-            productPriceTV = itemView.findViewById(R.id.productPriceTV);
+            productPriceTV = itemView.findViewById(R.id.rateOfProductTV);
            // productQuantityTV = itemView.findViewById(R.id.productQuantityTV);
         }
     }

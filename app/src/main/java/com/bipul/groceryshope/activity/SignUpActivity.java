@@ -69,6 +69,7 @@ public class SignUpActivity extends AppCompatActivity {
                     if (response.code() == 200) {
                         RegistrationResponse meg = response.body();
 
+                        int id = meg.getData().getUserInfo().getId();
                         Common.currentUser = meg.getData().getUserInfo().getName();
                         Common.currentMobileNo = meg.getData().getUserInfo().getMobile();
 

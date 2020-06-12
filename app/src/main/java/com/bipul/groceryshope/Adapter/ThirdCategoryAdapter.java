@@ -14,16 +14,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bipul.groceryshope.R;
 import com.bipul.groceryshope.activity.ProductDetailsActivity;
 import com.bipul.groceryshope.model.SecondCategory;
+import com.bipul.groceryshope.modelForProducts.Product;
+import com.bipul.groceryshope.modelForProducts.ProductList;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class SecondCategoryAdapter extends RecyclerView.Adapter<SecondCategoryAdapter.ViewHolder> {
+public class ThirdCategoryAdapter extends RecyclerView.Adapter<ThirdCategoryAdapter.ViewHolder> {
 
     private Context context;
-    private List<SecondCategory>categoryList;
-    int count=0;
+    private List<ProductList> categoryList;
+    int count = 0;
 
-    public SecondCategoryAdapter(Context context, List<SecondCategory> categoryList) {
+    public ThirdCategoryAdapter(Context context, List<ProductList> categoryList) {
         this.context = context;
         this.categoryList = categoryList;
     }
@@ -31,23 +34,21 @@ public class SecondCategoryAdapter extends RecyclerView.Adapter<SecondCategoryAd
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.second_category_item_layout,parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.third_category_item_layout, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        SecondCategory secondCategory = categoryList.get(position);
-        holder.productNameTV.setText(secondCategory.getProductName());
-        holder.productPriceTV.setText(secondCategory.getProductPrice());
-        //holder.productQuantityTV.setText(secondCategory.getProductQuantity());
-        holder.productImageIV.setImageResource(secondCategory.getProductImage());
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                context.startActivity(new Intent(context, ProductDetailsActivity.class));
-            }
-        });
+        ProductList productList = categoryList.get(position);
+        holder.productNameTV.setText(productList.getProductName());
+        Picasso.get().load("http://gobazaar.com.bd/public/upload/product/" + productList.getPicture())
+                .into(holder.productImageIV);
+        int i = productList.getRate();
+        holder.productPriceTV.setText(String.valueOf(i));
+        holder.unitNameTV.setText(productList.getUnitName());
+        holder.upozilaNameTV.setText(productList.getUpazilaName());
+        holder.unionNameTV.setText(productList.getUnionName());
 
     }
 
@@ -57,15 +58,19 @@ public class SecondCategoryAdapter extends RecyclerView.Adapter<SecondCategoryAd
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView productImageIV,increaseQuantity,reduceQuantity;
-        TextView productNameTV, productQuantityTV,productPriceTV,itemQuantity,addtobag;
+        ImageView productImageIV, increaseQuantity, reduceQuantity;
+        TextView productNameTV, productQuantityTV, productPriceTV, itemQuantity, addtobag, upozilaNameTV, unionNameTV, unitNameTV;
+
         public ViewHolder(@NonNull final View itemView) {
             super(itemView);
 
-            productImageIV  = itemView.findViewById(R.id.imageProduct);
+            productImageIV = itemView.findViewById(R.id.imageProduct);
             productNameTV = itemView.findViewById(R.id.productNameTV);
             productPriceTV = itemView.findViewById(R.id.rateOfProductTV);
-            //productQuantityTV = itemView.findViewById(R.id.productQuantityTV);
+            unionNameTV = itemView.findViewById(R.id.unionName);
+            unitNameTV = itemView.findViewById(R.id.unitName);
+            upozilaNameTV = itemView.findViewById(R.id.upazilaName);
+            productQuantityTV = itemView.findViewById(R.id.productQuantityTV);
             increaseQuantity = itemView.findViewById(R.id.increaseQuantity);
             itemQuantity = itemView.findViewById(R.id.itemQuantity);
             reduceQuantity = itemView.findViewById(R.id.reduceQuantity);
@@ -89,7 +94,7 @@ public class SecondCategoryAdapter extends RecyclerView.Adapter<SecondCategoryAd
                 public void onClick(View v) {
                     count--;
                     itemQuantity.setText(String.valueOf(count));
-                    if (count==0){
+                    if (count == 0) {
                         addtobag.setVisibility(View.VISIBLE);
                         itemQuantity.setVisibility(View.GONE);
                         reduceQuantity.setVisibility(View.GONE);

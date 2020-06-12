@@ -11,10 +11,6 @@ public class Data {
     @Expose
     private List<Product> products = null;
 
-    public Data(List<Product> products) {
-        this.products = products;
-    }
-
     public List<Product> getProducts() {
         return products;
     }

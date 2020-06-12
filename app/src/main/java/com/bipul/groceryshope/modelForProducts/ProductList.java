@@ -1,10 +1,13 @@
 
 package com.bipul.groceryshope.modelForProducts;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ProductList {
+public class ProductList implements Parcelable {
 
     @SerializedName("id")
     @Expose
@@ -39,6 +42,56 @@ public class ProductList {
     @SerializedName("total_debit")
     @Expose
     private Integer totalDebit;
+
+    protected ProductList(Parcel in) {
+        if (in.readByte() == 0) {
+            id = null;
+        } else {
+            id = in.readInt();
+        }
+        if (in.readByte() == 0) {
+            productId = null;
+        } else {
+            productId = in.readInt();
+        }
+        if (in.readByte() == 0) {
+            rate = null;
+        } else {
+            rate = in.readInt();
+        }
+        productName = in.readString();
+        picture = in.readString();
+        if (in.readByte() == 0) {
+            categoryId = null;
+        } else {
+            categoryId = in.readInt();
+        }
+        unitName = in.readString();
+        upazilaName = in.readString();
+        unionName = in.readString();
+        if (in.readByte() == 0) {
+            totalCredit = null;
+        } else {
+            totalCredit = in.readInt();
+        }
+        if (in.readByte() == 0) {
+            totalDebit = null;
+        } else {
+            totalDebit = in.readInt();
+        }
+    }
+
+    public static final Creator<ProductList> CREATOR = new Creator<ProductList>() {
+        @Override
+        public ProductList createFromParcel(Parcel in) {
+            return new ProductList(in);
+        }
+
+        @Override
+        public ProductList[] newArray(int size) {
+            return new ProductList[size];
+        }
+    };
 
     public Integer getId() {
         return id;
@@ -128,4 +181,53 @@ public class ProductList {
         this.totalDebit = totalDebit;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        if (id == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeInt(id);
+        }
+        if (productId == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeInt(productId);
+        }
+        if (rate == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeInt(rate);
+        }
+        parcel.writeString(productName);
+        parcel.writeString(picture);
+        if (categoryId == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeInt(categoryId);
+        }
+        parcel.writeString(unitName);
+        parcel.writeString(upazilaName);
+        parcel.writeString(unionName);
+        if (totalCredit == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeInt(totalCredit);
+        }
+        if (totalDebit == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeInt(totalDebit);
+        }
+    }
 }

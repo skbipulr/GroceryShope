@@ -1,11 +1,14 @@
 
 package com.bipul.groceryshope.modelForProducts;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Product {
+public class Product implements Parcelable {
 
     @SerializedName("category_id")
     @Expose
@@ -17,9 +20,26 @@ public class Product {
     @Expose
     private List<ProductList> productList = null;
 
-    public Product(List<ProductList> productList) {
-        this.productList = productList;
+    public Product(Parcel in) {
+        if (in.readByte() == 0) {
+            categoryId = null;
+        } else {
+            categoryId = in.readInt();
+        }
+        categoryName = in.readString();
     }
+
+    public static final Creator<Product> CREATOR = new Creator<Product>() {
+        @Override
+        public Product createFromParcel(Parcel in) {
+            return new Product(in);
+        }
+
+        @Override
+        public Product[] newArray(int size) {
+            return new Product[size];
+        }
+    };
 
     public Integer getCategoryId() {
         return categoryId;
@@ -45,4 +65,19 @@ public class Product {
         this.productList = productList;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        if (categoryId == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeInt(categoryId);
+        }
+        parcel.writeString(categoryName);
+    }
 }
