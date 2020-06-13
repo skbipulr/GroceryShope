@@ -58,11 +58,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context,CategoryActivity.class);
-                intent.putExtra("category",category);
+                Intent intent = new Intent(context, CategoryActivity.class);
+                intent.putExtra("category", category);
                 intent.putParcelableArrayListExtra("productList", (ArrayList<? extends Parcelable>) categories.get(position).getProductList());
                 context.startActivity(intent);
-                Toast.makeText(context, ""+categories.get(position).getProductList().size(), Toast.LENGTH_SHORT).show();
             }
         });
 

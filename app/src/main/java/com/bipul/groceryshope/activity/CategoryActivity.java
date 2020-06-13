@@ -35,18 +35,14 @@ public class CategoryActivity extends AppCompatActivity {
     ImageView productImageIV,increaseQuantity,reduceQuantity;
     TextView productNameTV, productQuantityTV,productPriceTV,itemQuantity,addtobag;
 
-    Toolbar toolbar;
+   private Toolbar toolbar;
 
-    SearchView searchView;
+   private SearchView searchView;
 
     private List<ProductList> productLists;
 
     private RecyclerView categoryRecyclerView;
     private ThirdCategoryAdapter thirdCategoryAdapter;
-
-    String productName;
-
-    Product  product;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -71,21 +67,22 @@ public class CategoryActivity extends AppCompatActivity {
 
     private void init() {
         categoryRecyclerView = findViewById(R.id.categoryRecyclerView);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu_at_to_cart, menu);
-        searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
 
-        return true;
-    }
     private void loadSecondCategory() {
         thirdCategoryAdapter = new ThirdCategoryAdapter(this,productLists);
         categoryRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         categoryRecyclerView.setAdapter(thirdCategoryAdapter);
     }
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu_at_to_cart, menu);
+        searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        return true;
+    }
 
     public void colorChangeStatusBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -94,8 +91,6 @@ public class CategoryActivity extends AppCompatActivity {
             window.setStatusBarColor(getResources().getColor(R.color.main_color));
         }
     }
-
-
 
     public void goToCart(View view){
         Intent intent = new Intent(this,AddToCartActivity.class);
@@ -108,44 +103,5 @@ public class CategoryActivity extends AppCompatActivity {
         finish();
     }
 
-    /*private void init() {
-        productImageIV  = findViewById(R.id.imageProduct);
-        productNameTV = findViewById(R.id.productNameTV);
-        productPriceTV = findViewById(R.id.productPriceTV);
-        productQuantityTV = findViewById(R.id.productQuantityTV);
-        increaseQuantity = findViewById(R.id.increaseQuantity);
-        itemQuantity = findViewById(R.id.itemQuantity);
-        reduceQuantity = findViewById(R.id.reduceQuantity);
-        addtobag = findViewById(R.id.addtobag);
 
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        increaseQuantity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                count++;
-                itemQuantity.setVisibility(View.VISIBLE);
-                reduceQuantity.setVisibility(View.VISIBLE);
-                addtobag.setVisibility(View.GONE);
-                itemQuantity.setText(String.valueOf(count));
-
-            }
-        });
-
-        reduceQuantity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                count--;
-                itemQuantity.setText(String.valueOf(count));
-                if (count==0){
-                    addtobag.setVisibility(View.VISIBLE);
-                    itemQuantity.setVisibility(View.GONE);
-                    reduceQuantity.setVisibility(View.GONE);
-                }
-
-
-            }
-        });
-    }*/
 }

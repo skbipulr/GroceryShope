@@ -7,6 +7,7 @@ import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,6 +25,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.GridLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -63,8 +65,7 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity
         implements CustomExpandableListAdapter.OnExpandableListener,
-     NavigationView.OnNavigationItemSelectedListener
-{
+        NavigationView.OnNavigationItemSelectedListener {
 
 
     private DrawerLayout mDrawerLayout;
@@ -116,19 +117,14 @@ public class MainActivity extends AppCompatActivity
         initImageSlider();
         init();
         initItems();
+
         addDrawerItems();
         setupDrawer();
+
         colorChangeStatusBar();
-
         loadCategory();
-
-
-        loadSecondCategory();
-        getAllSecondCategory();
-
         loadGroceries();
         getAllFeatureProducts();
-
         getAllSlider();
 
 
@@ -179,32 +175,6 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    private void getAllSecondCategory() {
-        secondCategories.add(new SecondCategory(R.drawable.boiler_murgi, "Broiler Murgi",
-                "1 KG", "260"));
-        secondCategories.add(new SecondCategory(R.drawable.writing_drawing, "Writing & Drawing",
-                "1 pisces", "2050"));
-        secondCategories.add(new SecondCategory(R.drawable.lights_electrical, "Lights & Electrical",
-                "1 pisces", "2050"));
-        secondCategories.add(new SecondCategory(R.drawable.fruits_vegetables, "Fruits & Vegetables",
-                "1 pisces", "2050"));
-        secondCategories.add(new SecondCategory(R.drawable.frozen_canned, "Frozen Canned",
-                "1 pisces", "2050"));
-        secondCategories.add(new SecondCategory(R.drawable.cleaning_supplies, "Cleaning & Supplies",
-                "1 pisces", "2050"));
-        secondCategories.add(new SecondCategory(R.drawable.bread_bakery, "Cleaning & Supplies",
-                "1 pisces", "2050"));
-    }
-
-    private void loadSecondCategory() {
-        secondCategoryRecyclerView = findViewById(R.id.secondCategoryRecyclerView);
-        LinearLayoutManager layoutManager
-                = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        secondCategoryAdapter = new SecondCategoryAdapter(this, secondCategories);
-        secondCategoryRecyclerView.setLayoutManager(layoutManager);
-        secondCategoryRecyclerView.setAdapter(secondCategoryAdapter);
-    }
-
     public void initImageSlider() {
         sliderView = findViewById(R.id.imageSlider);
         /*sliderAdapterExample = new SliderAdapterExample(MainActivity.this,sliderProducts);
@@ -235,7 +205,6 @@ public class MainActivity extends AppCompatActivity
         mDrawerLayout.closeDrawers();
         mExpandableListView = (ExpandableListView) findViewById(R.id.navList);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-
         setSupportActionBar(toolbar);
 
 
@@ -287,6 +256,15 @@ public class MainActivity extends AppCompatActivity
                 categoryRecyclerView = findViewById(R.id.categoryRecyclerView);
 
                 categories = productsResponse.getData().getProducts();
+                List<ProductList> productLists;
+                for (int i = 0; i <=3; i++) {
+                    productLists = productsResponse.getData().getProducts().get(i).getProductList();
+//for second Category
+                    secondCategoryRecyclerView = findViewById(R.id.secondCategoryRecyclerView);
+                    secondCategoryRecyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
+                    secondCategoryAdapter = new SecondCategoryAdapter(MainActivity.this, productLists);
+                    secondCategoryRecyclerView.setAdapter(secondCategoryAdapter);
+                }
                 //Data data = new Data(productsResponse.getData().getProducts());
                 //categories = data.getProducts();
 
@@ -296,6 +274,8 @@ public class MainActivity extends AppCompatActivity
                         = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
                 categoryRecyclerView.setLayoutManager(layoutManager);
                 categoryRecyclerView.setAdapter(categoryAdapter);
+
+
             }
 
             @Override

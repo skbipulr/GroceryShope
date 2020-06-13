@@ -37,7 +37,6 @@ public class OrderListActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu_at_to_cart, menu);
         searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-
         return true;
     }
 

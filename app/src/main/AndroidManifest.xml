@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.bipul.groceryshope">
 
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -61,8 +62,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.MainActivity"
-            android:screenOrientation="fullSensor"
-            android:theme="@style/AppThe">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThe"
+            tools:ignore="LockedOrientationActivity">
 
         </activity>
     </application>

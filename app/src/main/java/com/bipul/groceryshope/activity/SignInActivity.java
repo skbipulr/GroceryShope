@@ -84,7 +84,7 @@ public class SignInActivity extends AppCompatActivity {
                         Common.client_id = meg.getData().getUserInfo().getId();
                         Common.assess_token = meg.getToken();
 
-                        Toast.makeText(SignInActivity.this, "client id"+meg.getData().getUserInfo().getId(), Toast.LENGTH_LONG).show();
+                       // Toast.makeText(SignInActivity.this, "client id"+meg.getData().getUserInfo().getId(), Toast.LENGTH_LONG).show();
                         SharedPreferences.Editor editor = sharedpreferences.edit();
                         editor.putString(ASSESS_TOKEN, assessToken);
                         editor.commit();
@@ -93,7 +93,7 @@ public class SignInActivity extends AppCompatActivity {
                                 Context.MODE_PRIVATE);
                        String userAssessToken =  sharedpreferences.getString(ASSESS_TOKEN, "");
 
-                        Toast.makeText(SignInActivity.this, ""+userAssessToken, Toast.LENGTH_LONG).show();
+                       // Toast.makeText(SignInActivity.this, ""+userAssessToken, Toast.LENGTH_LONG).show();
                         Toast.makeText(SignInActivity.this, "Congratulations!! "+meg.getMessage(), Toast.LENGTH_LONG).show();
 
                         mDialog.dismiss();

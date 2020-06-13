@@ -26,7 +26,6 @@
         android:paddingTop="@dimen/layout_padding_default"
         android:paddingBottom="@dimen/layout_padding_default"
         android:text="kicu akta"
-        android:textColor="@android:color/black"
         android:textSize="15sp" />
 
     <ImageView

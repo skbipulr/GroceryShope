@@ -17,17 +17,16 @@
         android:paddingRight="16dp"
         android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
         android:paddingTop="13dp"
-        android:textColor="#000"
+
         tools:ignore="MissingPrefix" />
 
     <ImageView
         android:id="@+id/addIV"
-        android:layout_marginRight="40dp"
+        android:layout_marginRight="20dp"
         android:layout_gravity="center_vertical"
         android:layout_width="wrap_content"
         android:text="+"
         android:textSize="16sp"
         android:textStyle="normal"
-        android:textColor="@android:color/black"
         android:layout_height="wrap_content"/>
 </LinearLayout>
