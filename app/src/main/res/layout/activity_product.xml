@@ -139,7 +139,7 @@ android:layout_below="@+id/toolbar"
                                 android:src="@drawable/ic_location_on_black_16dp"/>
                             <TextView
                                 android:textColor="@color/details_location_color"
-                                android:id="@+id/upazilaNameTV"
+                                android:id="@+id/unionNameTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="12dp"
@@ -155,7 +155,7 @@ android:layout_below="@+id/toolbar"
                             <TextView
                                 android:layout_marginLeft="3dp"
                                 android:textColor="@color/details_location_color"
-                                android:id="@+id/unionNameTV"
+                                android:id="@+id/upazilaNameTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="13dp"

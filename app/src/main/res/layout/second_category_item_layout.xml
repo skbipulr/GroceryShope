@@ -68,6 +68,7 @@
 
             </LinearLayout>
 
+
             <LinearLayout
                 android:layout_marginTop="2dp"
                 android:layout_width="match_parent"
@@ -75,35 +76,36 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_marginTop="2dp"
+                    android:layout_marginTop="3dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_location_on_black_16dp"/>
                 <TextView
-                    android:id="@+id/upazilaName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="10dp"
-                    android:text="dhaka"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_marginTop="2dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_location_on_black_16dp"/>
-                <TextView
+                    android:textColor="@color/details_location_color"
                     android:id="@+id/unionName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="12dp"
+                    android:text="union"/>
+
+                <TextView
+                    android:textColor="@color/details_location_color"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:textSize="10dp"
-                    android:text="dhaka"/>
+                    android:text=","/>
+
+                <TextView
+                    android:layout_marginLeft="3dp"
+                    android:textColor="@color/details_location_color"
+                    android:id="@+id/upazilaName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="13dp"
+                    android:text="upzila"/>
             </LinearLayout>
+
+
             <LinearLayout
                 android:layout_marginTop="2dp"
                 android:layout_weight="10"
