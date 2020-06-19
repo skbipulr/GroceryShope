@@ -55,5 +55,8 @@ dependencies {
     //flotting counter
     implementation 'com.github.andremion:counterfab:1.0.1'
 
+    //swiperefreshlayout
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
+
 
 }

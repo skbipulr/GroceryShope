@@ -93,7 +93,7 @@ public class SecondCategoryAdapter extends RecyclerView.Adapter<SecondCategoryAd
                             productList.getUnitName(),
                             productList.getCount());
 
-                   // Toast.makeText(context, "Add to cart ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Add to cart ", Toast.LENGTH_SHORT).show();
 
 
             }

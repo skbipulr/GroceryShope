@@ -10,12 +10,16 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 
 import android.view.Menu;
@@ -39,7 +43,11 @@ import com.bipul.groceryshope.Adapter.SecondCategoryAdapter;
 import com.bipul.groceryshope.Adapter.SliderAdapterExample;
 import com.bipul.groceryshope.R;
 import com.bipul.groceryshope.Utils.Common;
+import com.bipul.groceryshope.Utils.ConnectivityHelper;
+import com.bipul.groceryshope.Utils.CustomVisibility;
+import com.bipul.groceryshope.Utils.NetworkChangeReceiver;
 import com.bipul.groceryshope.datebase.DatabaseOpenHelper;
+import com.bipul.groceryshope.interfaces.OnNetworkStateChangeListener;
 import com.bipul.groceryshope.modelFodSlider.SliderResponse;
 import com.bipul.groceryshope.datasource.ExpandableListDataSource;
 import com.bipul.groceryshope.interfaces.ApiInterface;
@@ -70,7 +78,7 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity
         implements CustomExpandableListAdapter.OnExpandableListener,
-        NavigationView.OnNavigationItemSelectedListener {
+        NavigationView.OnNavigationItemSelectedListener,OnNetworkStateChangeListener {
 
     CounterFab fab;
 
@@ -110,6 +118,13 @@ public class MainActivity extends AppCompatActivity
     private int categoryId;
     private int productCategoryId;
 
+    //for internet--------------start----------------
+    private int networkStateChangeCount = 0;
+    private NetworkChangeReceiver mNetworkReceiver;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    TextView noInternetTVED;
+    //for internet--------------end------------------
+
     SearchView searchView;
     TextView textCartItemCount;
 
@@ -122,10 +137,11 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        initImageSlider();
+        initSwipeLayout();
         init();
+        initImageSlider();
         initItems();
+
 
         addDrawerItems();
         setupDrawer();
@@ -133,11 +149,116 @@ public class MainActivity extends AppCompatActivity
         colorChangeStatusBar();
         loadCategory();
         loadGroceries();
-        getAllFeatureProducts();
         getAllSlider();
+    }
 
+    private void initSwipeLayout() {
+        //view
+        swipeRefreshLayout = findViewById(R.id.mediaCoverageSwipeLayout);
+        swipeRefreshLayout.setColorSchemeResources(R.color.black,
+                android.R.color.holo_green_dark,
+                android.R.color.holo_orange_dark,
+                android.R.color.holo_blue_dark);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (Common.isConnectToInternet(getBaseContext())) {
+                    swipeRefreshLayout.setRefreshing(false);
+                } else {
+                    Toast.makeText(getBaseContext(), "Please check your connection!!", Toast.LENGTH_SHORT).show();
+                    swipeRefreshLayout.setRefreshing(false);
+                    return;
+                }
+            }
+        });
+
+
+        //Default, load for first time
+        swipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+
+                if (Common.isConnectToInternet(getBaseContext())) {
+                    loadCategory();
+                    loadGroceries();
+                    //  findViewById(R.id.NestedScrollView).setVisibility(View.VISIBLE);
+                    swipeRefreshLayout.setRefreshing(true);
+
+                } else {
+                    Toast.makeText(getBaseContext(), "Please check your connection!!", Toast.LENGTH_SHORT).show();
+                    swipeRefreshLayout.setRefreshing(false);
+                    return;
+                }
+            }
+
+        });
 
     }
+
+    //-------------for internet check------start---------
+    private void registerNetworkBroadcast() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            registerReceiver(mNetworkReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            registerReceiver(mNetworkReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        }
+    }
+
+    private void unregisterNetworkChanges() {
+        try {
+            unregisterReceiver(mNetworkReceiver);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterNetworkChanges();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (ConnectivityHelper.isConnected(this) == true) {
+            noInternetTVED.setVisibility(View.GONE);
+        } else {
+            noInternetTVED.setVisibility(View.VISIBLE);
+        }
+
+        fab.setCount(new DatabaseOpenHelper(this).getCountCart());
+        if (secondCategoryAdapter != null) {
+            secondCategoryAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void onChange(boolean isConnected) {
+        networkStateChangeCount++;
+        if (isConnected) {
+            noInternetTVED.setBackgroundColor(getResources().getColor(R.color.green));
+            noInternetTVED.setText(getResources().getString(R.string.back_online));
+
+            if (networkStateChangeCount >= 2) {
+                //  checkNextActivity();
+            }
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    CustomVisibility.collapse(noInternetTVED, 500);
+                }
+            }, 2000);
+        } else {
+            noInternetTVED.setBackgroundColor(getResources().getColor(R.color.red));
+            noInternetTVED.setText(getResources().getString(R.string.no_internet_connection));
+            CustomVisibility.expand(noInternetTVED, 500);
+        }
+    }
+    //-------------for internet check-------end-----------------
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -173,17 +294,10 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-
-
-
     public void CheckOut(View view) {
         Intent intent = new Intent(this, OrderListActivity.class);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         startActivity(intent);
-    }
-
-    private void getAllFeatureProducts() {
-
     }
 
     private void loadGroceries() {
@@ -200,6 +314,7 @@ public class MainActivity extends AppCompatActivity
                             = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
                     groceriesRecyclerView.setLayoutManager(layoutManager);
                     groceriesRecyclerView.setAdapter(featureProductAdapter);
+                    swipeRefreshLayout.setRefreshing(false);
                     featureProductAdapter.notifyDataSetChanged();
                 }
             }
@@ -229,20 +344,15 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void init() {
-       /* ExpandableListView navigationView = (ExpandableListView) findViewById(R.id.navList);
-        //navigationView.setSelectionAfterHeaderView();
-        navigationView.getHeaderViewsCount();
-
-        View headerView=navigationView.getRootView();
-        TextView nameTV = headerView.findViewById(R.id.nameTV);
-        nameTV.setText(Common.currentUser);
-*/
-
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerLayout.closeDrawers();
         mExpandableListView = (ExpandableListView) findViewById(R.id.navList);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        noInternetTVED = findViewById(R.id.noInternetTVE);
+        mNetworkReceiver = new NetworkChangeReceiver(this);
+        registerNetworkBroadcast();
 
 
         LayoutInflater inflater = getLayoutInflater();
@@ -280,20 +390,8 @@ public class MainActivity extends AppCompatActivity
         fab.setCount(new DatabaseOpenHelper(this).getCountCart());
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        fab.setCount(new DatabaseOpenHelper(this).getCountCart());
-        if (secondCategoryAdapter != null) {
-            secondCategoryAdapter.notifyDataSetChanged();
-        }
-    }
 
-
-    private void getAllSlider()
-
-
-    {
+    private void getAllSlider() {
 
         apiInterface.getSliderResponse("A1b1C2d32564kjhkjadu").enqueue(new Callback<SliderResponse>() {
             @Override
@@ -303,6 +401,7 @@ public class MainActivity extends AppCompatActivity
                 //Toast.makeText(MainActivity.this, "" + sliderProducts.size(), Toast.LENGTH_SHORT).show();
                 SliderAdapterExample adapter = new SliderAdapterExample(MainActivity.this, sliderProducts);
                 sliderView.setSliderAdapter(adapter);
+                swipeRefreshLayout.setRefreshing(false);
 
             }
 
@@ -337,6 +436,8 @@ public class MainActivity extends AppCompatActivity
                     secondCategoryRecyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
                     secondCategoryAdapter = new SecondCategoryAdapter(MainActivity.this, productLists);
                     secondCategoryRecyclerView.setAdapter(secondCategoryAdapter);
+                    swipeRefreshLayout.setRefreshing(false);
+                    secondCategoryAdapter.notifyDataSetChanged();
                 }
                 //Data data = new Data(productsResponse.getData().getProducts());
                 //categories = data.getProducts();
@@ -347,6 +448,7 @@ public class MainActivity extends AppCompatActivity
                         = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
                 categoryRecyclerView.setLayoutManager(layoutManager);
                 categoryRecyclerView.setAdapter(categoryAdapter);
+                swipeRefreshLayout.setRefreshing(false);
 
 
             }
@@ -360,7 +462,6 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-
     private void addDrawerItems() {
         mExpandableListAdapter = new CustomExpandableListAdapter(this, mExpandableListTitle, mExpandableListData, this);
         mExpandableListView.setAdapter(mExpandableListAdapter);
@@ -372,9 +473,14 @@ public class MainActivity extends AppCompatActivity
 
                 } else if (groupPosition == 6) {
                 } else if (groupPosition == 7) {
-                    infoShowLinearLayout.setVisibility(View.GONE);
-                    singInLinearLyout.setVisibility(View.VISIBLE);
-                    Toast.makeText(MainActivity.this, "Logout", Toast.LENGTH_SHORT).show();
+                    if (Common.assess_token!=null){
+                        infoShowLinearLayout.setVisibility(View.GONE);
+                        singInLinearLyout.setVisibility(View.VISIBLE);
+                        Toast.makeText(MainActivity.this, "Logout", Toast.LENGTH_SHORT).show();
+
+                    }else {
+                        Toast.makeText(MainActivity.this, "Please Login", Toast.LENGTH_SHORT).show();
+                    }
 
                 } else if (groupPosition == 8) {
 
@@ -412,7 +518,6 @@ public class MainActivity extends AppCompatActivity
     private void setupDrawer() {
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
 
-
             /** Called when a drawer has settled in a completely open state. */
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
@@ -446,7 +551,6 @@ public class MainActivity extends AppCompatActivity
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -464,92 +568,32 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-
     @Override
     public boolean onChildItemListener(int groupPosition, int childPosition) {
         // Toast.makeText(MainActivity.this, ""+position, Toast.LENGTH_SHORT).show();
         if (groupPosition == 0) {
-            switch (childPosition) {
-                case 0:
-                    //Toast.makeText(this,"1", Toast.LENGTH_SHORT).show();
-                    break;
-                case 1:
-                    Toast.makeText(this, "2", Toast.LENGTH_SHORT).show();
-                    break;
-                case 2:
-                    Toast.makeText(this, "3", Toast.LENGTH_SHORT).show();
-                    break;
-                case 3:
-                    Toast.makeText(this, "4", Toast.LENGTH_SHORT).show();
-                    break;
-                case 4:
-                    Toast.makeText(this, "5", Toast.LENGTH_SHORT).show();
-                    break;
-                default:
-                    return false;
-            }
+
 
         } else if (groupPosition == 1) {
 
-            switch (childPosition) {
-                case 0:
-                    Toast.makeText(this, "c1", Toast.LENGTH_SHORT).show();
-                    // startActivity(new Intent(MainActivity.this, Media.class));
-                    break;
-                case 1:
-                    Toast.makeText(this, "c2", Toast.LENGTH_SHORT).show();
-                    break;
-                case 2:
-                    break;
 
-                default:
-                    return false;
-            }
 
         } else if (groupPosition == 2) {
-            switch (childPosition) {
-                case 0:
-                    break;
-                case 1:
-                    break;
-                case 2:
-                    break;
-                case 3:
-                    break;
-                case 4:
-                    break;
-                case 5:
-                    break;
 
-            }
+
+
         } else if (groupPosition == 3) {
-            switch (childPosition) {
-                case 0:
-                    break;
-                case 1:
-                    break;
-                case 2:
-                    break;
 
-            }
+
+
         } else if (groupPosition == 4) {
-            switch (childPosition) {
-                case 0:
-                    Toast.makeText(this, "polti", Toast.LENGTH_SHORT).show();
-                    break;
-                case 1:
-                    break;
-            }
+
+
 
 
         }else if (groupPosition == 5) {
-            switch (childPosition) {
-                case 0:
-                   // Toast.makeText(this, "polti", Toast.LENGTH_SHORT).show();
-                    break;
-                case 1:
-                    break;
-            }
+
+
         }
 
         else if (groupPosition == 6) {
@@ -584,4 +628,6 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         return false;
     }
+
+
 }

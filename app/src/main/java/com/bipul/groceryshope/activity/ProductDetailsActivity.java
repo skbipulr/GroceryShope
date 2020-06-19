@@ -5,10 +5,14 @@ import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.View;
 import android.view.Window;
@@ -20,7 +24,12 @@ import android.widget.Toast;
 import com.bipul.groceryshope.Adapter.RelatedProductAdapter;
 import com.bipul.groceryshope.Adapter.SecondCategoryAdapter;
 import com.bipul.groceryshope.R;
+import com.bipul.groceryshope.Utils.Common;
+import com.bipul.groceryshope.Utils.ConnectivityHelper;
+import com.bipul.groceryshope.Utils.CustomVisibility;
+import com.bipul.groceryshope.Utils.NetworkChangeReceiver;
 import com.bipul.groceryshope.interfaces.ApiInterface;
+import com.bipul.groceryshope.interfaces.OnNetworkStateChangeListener;
 import com.bipul.groceryshope.model.RelatedProduct;
 import com.bipul.groceryshope.model.SecondCategory;
 import com.bipul.groceryshope.modelForProductDetails.Product;
@@ -34,7 +43,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ProductDetailsActivity extends AppCompatActivity {
+public class ProductDetailsActivity extends AppCompatActivity implements OnNetworkStateChangeListener {
 
     private RecyclerView secondCategoryRecyclerView;
     private ArrayList<RelatedProduct> relatedProducts = new ArrayList<>();
@@ -49,28 +58,139 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
     Toolbar toolbar;
     SearchView searchView;
+    String productId;
 
     private ApiInterface apiInterface;
+
+    //for internet--------------start----------------
+    private int networkStateChangeCount = 0;
+    private NetworkChangeReceiver mNetworkReceiver;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    TextView noInternetTVED;
+    //for internet--------------end------------------
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product);
         colorChangeStatusBar();
-        loadSecondCategory();
-        getAllSecondCategory();
+
+        initSwipeLayout();
 
         toolbar = findViewById(R.id.toolbar);
 
         init();
 
         Intent intent = getIntent();
-        String productId = intent.getStringExtra("productId");
-        Toast.makeText(this, ""+productId, Toast.LENGTH_SHORT).show();
-        fatchProcuctDetails(Integer.parseInt(productId));
+        productId = intent.getStringExtra("productId");
+
         //fatchProcuctDetails(4);
 
     }
+
+    private void initSwipeLayout() {
+        //view
+        swipeRefreshLayout = findViewById(R.id.mediaCoverageSwipeLayout);
+        swipeRefreshLayout.setColorSchemeResources(R.color.black,
+                android.R.color.holo_green_dark,
+                android.R.color.holo_orange_dark,
+                android.R.color.holo_blue_dark);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (Common.isConnectToInternet(getBaseContext())) {
+                    fatchProcuctDetails(Integer.parseInt(productId));
+                    swipeRefreshLayout.setRefreshing(true);
+                } else {
+                    Toast.makeText(getBaseContext(), "Please check your connection!!", Toast.LENGTH_SHORT).show();
+                    swipeRefreshLayout.setRefreshing(false);
+                    return;
+                }
+            }
+        });
+
+
+        //Default, load for first time
+        swipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+
+                if (Common.isConnectToInternet(getBaseContext())) {
+                    fatchProcuctDetails(Integer.parseInt(productId));
+                    //  findViewById(R.id.NestedScrollView).setVisibility(View.VISIBLE);
+                    swipeRefreshLayout.setRefreshing(false);
+
+                } else {
+                    Toast.makeText(getBaseContext(), "Please check your connection!!", Toast.LENGTH_SHORT).show();
+                    swipeRefreshLayout.setRefreshing(false);
+                    return;
+                }
+            }
+
+        });
+
+    }
+
+    //-------------for internet check------start---------
+    private void registerNetworkBroadcast() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            registerReceiver(mNetworkReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            registerReceiver(mNetworkReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        }
+    }
+
+    private void unregisterNetworkChanges() {
+        try {
+            unregisterReceiver(mNetworkReceiver);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterNetworkChanges();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (ConnectivityHelper.isConnected(this) == true) {
+            noInternetTVED.setVisibility(View.GONE);
+        } else {
+            noInternetTVED.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void onChange(boolean isConnected) {
+        networkStateChangeCount++;
+        if (isConnected) {
+            noInternetTVED.setBackgroundColor(getResources().getColor(R.color.green));
+            noInternetTVED.setText(getResources().getString(R.string.back_online));
+
+            if (networkStateChangeCount >= 2) {
+                //  checkNextActivity();
+            }
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    CustomVisibility.collapse(noInternetTVED, 500);
+                }
+            }, 2000);
+        } else {
+            noInternetTVED.setBackgroundColor(getResources().getColor(R.color.red));
+            noInternetTVED.setText(getResources().getString(R.string.no_internet_connection));
+            CustomVisibility.expand(noInternetTVED, 500);
+        }
+    }
+    //-------------for internet check-------end-----------------
+
 
     private void fatchProcuctDetails(int id) {
         apiInterface.getProductDetails("A1b1C2d32564kjhkjadu", id).enqueue(new Callback<ProductDetailsResponse>() {
@@ -95,6 +215,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 }else {
                     descriptionTV.setText(product.getDescription());
                 }
+
+                swipeRefreshLayout.setRefreshing(false);
 
             }
 
@@ -128,6 +250,11 @@ public class ProductDetailsActivity extends AppCompatActivity {
         storeNameTV = findViewById(R.id.storeNameTV);
         descriptionTV = findViewById(R.id.descriptionTV);
         descriptionText = findViewById(R.id.descriptionText);
+
+        noInternetTVED = findViewById(R.id.noInternetTVE);
+        mNetworkReceiver = new NetworkChangeReceiver(this);
+        registerNetworkBroadcast();
+
 
 
         //init retrofit
@@ -182,6 +309,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+/*
 
     private void getAllSecondCategory() {
         relatedProducts.add(new RelatedProduct(R.drawable.boiler_murgi, "Broiler Murgi",
@@ -208,6 +336,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         secondCategoryRecyclerView.setLayoutManager(layoutManager);
         secondCategoryRecyclerView.setAdapter(relatedProductAdapter);
     }
+*/
 
 
 }

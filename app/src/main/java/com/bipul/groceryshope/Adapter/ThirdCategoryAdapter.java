@@ -27,9 +27,7 @@ public class ThirdCategoryAdapter extends RecyclerView.Adapter<ThirdCategoryAdap
     private Context context;
     private List<ProductList> categoryList;
     int count = 0;
-
-
-
+    
     private DatabaseOpenHelper helper;
 
     public ThirdCategoryAdapter(Context context, List<ProductList> categoryList) {

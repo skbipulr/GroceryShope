@@ -14,5 +14,9 @@
     <color name="test">#ff000000</color>
     <color name="details_location_color">#808080</color>
 
+    <color name="red">#DB0101</color>
+    <color name="green">#016D63</color>
+
+
 
 </resources>
