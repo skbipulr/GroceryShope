@@ -8,10 +8,11 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
     tools:context=".activity.ProductDetailsActivity">
 
+
     <include layout="@layout/product_details_toolbar" />
 
     <ScrollView
-
+android:layout_below="@+id/toolbar"
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -31,10 +32,10 @@
                 android:orientation="vertical">
 
                 <ImageView
+                    android:id="@+id/productImageIV"
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
                     android:background="@color/white"
-
                     android:src="@drawable/murgi3" />
 
                 <LinearLayout
@@ -65,6 +66,7 @@
                                 android:textStyle="bold" />
 
                             <TextView
+                                android:id="@+id/productPriceTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="260"
@@ -74,50 +76,108 @@
                         </LinearLayout>
 
 
-                        <TextView
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
-                            android:maxLines="2"
-                            android:text="Premium Broiler chicken (Skinless)"
-                            android:textColor="#CB000000"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
                             android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/productNameTV"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Premium Broiler"
+                                android:textColor="@color/black"
+                                android:textSize="18sp"
+                                />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight=".6"
-                                android:text="[ 1.00KG ]"
-                                android:textColor="#CB000000"
-                                android:textSize="18sp" />
+                                android:text="("
+                                android:textSize="18sp"
+                                android:textColor="@color/black" />
+
+                            <TextView
+                                android:id="@+id/unitName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Piece"
+                                android:textColor="@color/black"
+                                android:textSize="18sp"
+                                android:visibility="visible" />
+
+                            <TextView
+                                android:textSize="18sp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=")"
+                                android:textColor="@color/black" />
 
 
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_marginTop="6dp"
+                            android:id="@+id/storeNameTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Premium Broiler"
+                            android:textColor="#CB000000"
+                            android:textSize="16sp"
+                            />
+
+                        <LinearLayout
+                            android:layout_marginTop="2dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_marginTop="3dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_location_on_black_16dp"/>
+                            <TextView
+                                android:textColor="@color/details_location_color"
+                                android:id="@+id/upazilaNameTV"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="12dp"
+                                android:text="dhaka"/>
+
+                            <TextView
+                                android:textColor="@color/details_location_color"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="10dp"
+                                android:text=","/>
+
+                            <TextView
+                                android:layout_marginLeft="3dp"
+                                android:textColor="@color/details_location_color"
+                                android:id="@+id/unionNameTV"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="13dp"
+                                android:text="dhaka"/>
                         </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
+                            android:layout_marginTop="6dp"
                             android:orientation="horizontal">
 
                             <TextView
+                                android:id="@+id/descriptionText"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="8dp"
                                 android:layout_weight=".9"
                                 android:text="Description"
-                                android:textColor="#CB000000"
+                                android:textColor="@color/black"
                                 android:textSize="18sp" />
 
                             <ImageView
-
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="7dp"
@@ -137,16 +197,15 @@
                         </LinearLayout>
 
                         <TextView
+                            android:id="@+id/descriptionTV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
+                            android:layout_marginTop="1dp"
                             android:layout_marginBottom="16dp"
                             android:layout_weight=".9"
-                            android:lineSpacingExtra="5dp"
-                            android:maxLines="4"
-                            android:text="In a period of just five short weeks, the chickens that are commonly known as broilers can weigh around 4-5 pounds and by the time they are 10 weeks old, they can easily reach 10 pounds."
-                            android:textColor="#CB000000"
-                            android:textSize="17sp" />
+                            android:lineSpacingExtra="3dp"
+                            android:textColor="@color/details_location_color"
+                            android:textSize="13sp" />
                     </LinearLayout>
 
                 </LinearLayout>

@@ -7,23 +7,36 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bipul.groceryshope.R;
+import com.bipul.groceryshope.Utils.Common;
 import com.bipul.groceryshope.activity.ProductDetailsActivity;
+
+import com.bipul.groceryshope.datebase.DatabaseOpenHelper;
+import com.bipul.groceryshope.model.Order;
 import com.bipul.groceryshope.model.SecondCategory;
 import com.bipul.groceryshope.modelForProducts.ProductList;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SecondCategoryAdapter extends RecyclerView.Adapter<SecondCategoryAdapter.ViewHolder> {
 
     private Context context;
-    private List<ProductList>productLists;
+    private List<ProductList> productLists;
     int count=0;
+
+    Order order;
+
+    private List<Order> orderList = new ArrayList<>();
+
+    private DatabaseOpenHelper helper;
 
     public SecondCategoryAdapter(Context context, List<ProductList> productLists) {
         this.context = context;
@@ -33,14 +46,16 @@ public class SecondCategoryAdapter extends RecyclerView.Adapter<SecondCategoryAd
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.second_category_item_layout,parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.second_category_item_layout, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
 
-        ProductList productList = productLists.get(position);
+        count = 0;
+
+        final ProductList productList = productLists.get(position);
         holder.productNameTV.setText(productList.getProductName());
         Picasso.get().load("http://gobazaar.com.bd/public/upload/product/" + productList.getPicture())
                 .into(holder.productImageIV);
@@ -50,6 +65,56 @@ public class SecondCategoryAdapter extends RecyclerView.Adapter<SecondCategoryAd
         holder.upozilaNameTV.setText(productList.getUpazilaName());
         holder.unionNameTV.setText(productList.getUnionName());
 
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context,ProductDetailsActivity.class);
+                intent.putExtra("productId",String.valueOf(productList.getProductId()));
+                context.startActivity(intent);
+            }
+        });
+
+        holder.increaseQuantity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                    holder.itemQuantity.setVisibility(View.VISIBLE);
+                    holder.reduceQuantity.setVisibility(View.VISIBLE);
+                    holder.addtobag.setVisibility(View.GONE);
+                    productList.setCount(productList.getCount()+1);
+                    Common.getCount = productList.getCount();
+                    holder.itemQuantity.setText(String.valueOf(productList.getCount()));
+
+                    helper = new DatabaseOpenHelper(context);
+                    helper.insert(productList.getProductId(),
+                            productList.getProductName(),
+                            productList.getPicture(),
+                            String.valueOf(productList.getRate()),
+                            productList.getUnitName(),
+                            productList.getCount());
+
+                   // Toast.makeText(context, "Add to cart ", Toast.LENGTH_SHORT).show();
+
+
+            }
+        });
+
+
+        holder.reduceQuantity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                productList.setCount(productList.getCount()-1);
+                holder.itemQuantity.setText(String.valueOf(productList.getCount()));
+                if (productList.getCount() == 0) {
+                    holder.addtobag.setVisibility(View.VISIBLE);
+                    holder.itemQuantity.setVisibility(View.GONE);
+                    holder.reduceQuantity.setVisibility(View.GONE);
+                }
+
+
+            }
+        });
     }
 
     @Override
@@ -60,6 +125,7 @@ public class SecondCategoryAdapter extends RecyclerView.Adapter<SecondCategoryAd
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView productImageIV, increaseQuantity, reduceQuantity;
         TextView productNameTV, productQuantityTV, productPriceTV, itemQuantity, addtobag, upozilaNameTV, unionNameTV, unitNameTV;
+        CardView rootCardView;
 
         public ViewHolder(@NonNull final View itemView) {
             super(itemView);
@@ -76,33 +142,9 @@ public class SecondCategoryAdapter extends RecyclerView.Adapter<SecondCategoryAd
             reduceQuantity = itemView.findViewById(R.id.reduceQuantity);
             addtobag = itemView.findViewById(R.id.addtobag);
 
-
-            increaseQuantity.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    count++;
-                    itemQuantity.setVisibility(View.VISIBLE);
-                    reduceQuantity.setVisibility(View.VISIBLE);
-                    addtobag.setVisibility(View.GONE);
-                    itemQuantity.setText(String.valueOf(count));
-
-                }
-            });
-
-            reduceQuantity.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    count--;
-                    itemQuantity.setText(String.valueOf(count));
-                    if (count==0){
-                        addtobag.setVisibility(View.VISIBLE);
-                        itemQuantity.setVisibility(View.GONE);
-                        reduceQuantity.setVisibility(View.GONE);
-                    }
+            rootCardView = itemView.findViewById(R.id.rootCartView);
 
 
-                }
-            });
 
         }
     }

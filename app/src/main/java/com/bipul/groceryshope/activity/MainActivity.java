@@ -26,10 +26,12 @@ import android.view.WindowManager;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.GridLayout;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.andremion.counterfab.CounterFab;
 import com.bipul.groceryshope.Adapter.CategoryAdapter;
 import com.bipul.groceryshope.Adapter.CustomExpandableListAdapter;
 import com.bipul.groceryshope.Adapter.FeatureProductAdapter;
@@ -37,6 +39,7 @@ import com.bipul.groceryshope.Adapter.SecondCategoryAdapter;
 import com.bipul.groceryshope.Adapter.SliderAdapterExample;
 import com.bipul.groceryshope.R;
 import com.bipul.groceryshope.Utils.Common;
+import com.bipul.groceryshope.datebase.DatabaseOpenHelper;
 import com.bipul.groceryshope.modelFodSlider.SliderResponse;
 import com.bipul.groceryshope.datasource.ExpandableListDataSource;
 import com.bipul.groceryshope.interfaces.ApiInterface;
@@ -55,6 +58,8 @@ import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -67,6 +72,7 @@ public class MainActivity extends AppCompatActivity
         implements CustomExpandableListAdapter.OnExpandableListener,
         NavigationView.OnNavigationItemSelectedListener {
 
+    CounterFab fab;
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -105,9 +111,12 @@ public class MainActivity extends AppCompatActivity
     private int productCategoryId;
 
     SearchView searchView;
+    TextView textCartItemCount;
 
     private ApiInterface apiInterface;
 
+    LinearLayout singInLinearLyout;
+    LinearLayout infoShowLinearLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,12 +141,40 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         getMenuInflater().inflate(R.menu.main_menu, menu);
 
+        final MenuItem menuItem = menu.findItem(R.id.cart_menu);
 
+        View actionView = menuItem.getActionView();
         searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        textCartItemCount = (TextView) actionView.findViewById(R.id.cart_badge);
+
+        setupBadge();
+
+        //textCartItemCount.setText(String.valueOf(Common.getCount+1));
+       // Toast.makeText(this, ""+Common.getCount, Toast.LENGTH_SHORT).show();
         return true;
     }
+
+    private void setupBadge() {
+
+        if (textCartItemCount != null) {
+            if (Common.getCount == 0) {
+                if (textCartItemCount.getVisibility() != View.GONE) {
+                    textCartItemCount.setVisibility(View.GONE);
+                }
+            } else {
+                textCartItemCount.setText(String.valueOf(Math.min(Common.getCount, 99)));
+                if (textCartItemCount.getVisibility() != View.VISIBLE) {
+                    textCartItemCount.setVisibility(View.VISIBLE);
+                }
+            }
+        }
+    }
+
+
+
 
     public void CheckOut(View view) {
         Intent intent = new Intent(this, OrderListActivity.class);
@@ -211,16 +248,52 @@ public class MainActivity extends AppCompatActivity
         LayoutInflater inflater = getLayoutInflater();
         View listHeaderView = inflater.inflate(R.layout.nav_header, null, false);
         mExpandableListView.addHeaderView(listHeaderView);
+         singInLinearLyout = listHeaderView.findViewById(R.id.signInLinearLayout);
+         infoShowLinearLayout = listHeaderView.findViewById(R.id.infoShowLinearLayout);
+
+        if (Common.assess_token != null ){
+            singInLinearLyout.setVisibility(View.GONE);
+            infoShowLinearLayout.setVisibility(View.VISIBLE);
+            TextView nameTV = listHeaderView.findViewById(R.id.nameTV);
+            TextView mobileNoTV = listHeaderView.findViewById(R.id.mobileTV);
+            nameTV.setText(Common.name);
+            mobileNoTV.setText(Common.mobile);
+            Toast.makeText(this, ""+Common.name, Toast.LENGTH_SHORT).show();
+        }
+
 
         mExpandableListData = ExpandableListDataSource.getData(this);
         mExpandableListTitle = new ArrayList(mExpandableListData.keySet());
         mExpandableTitle = new ArrayList(mExpandableListData.keySet());
 
         apiInterface = RetrofitClient.getRetrofit().create(ApiInterface.class);
+
+        fab = (CounterFab) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent cartIntent = new Intent(MainActivity.this, AddToCartActivity.class);
+                startActivity(cartIntent);
+            }
+        });
+
+        fab.setCount(new DatabaseOpenHelper(this).getCountCart());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fab.setCount(new DatabaseOpenHelper(this).getCountCart());
+        if (secondCategoryAdapter != null) {
+            secondCategoryAdapter.notifyDataSetChanged();
+        }
     }
 
 
-    private void getAllSlider() {
+    private void getAllSlider()
+
+
+    {
 
         apiInterface.getSliderResponse("A1b1C2d32564kjhkjadu").enqueue(new Callback<SliderResponse>() {
             @Override
@@ -256,10 +329,10 @@ public class MainActivity extends AppCompatActivity
                 categoryRecyclerView = findViewById(R.id.categoryRecyclerView);
 
                 categories = productsResponse.getData().getProducts();
-                List<ProductList> productLists;
+                List<ProductList> productLists = new ArrayList<>();
                 for (int i = 0; i <=3; i++) {
                     productLists = productsResponse.getData().getProducts().get(i).getProductList();
-//for second Category
+                    //for second Category
                     secondCategoryRecyclerView = findViewById(R.id.secondCategoryRecyclerView);
                     secondCategoryRecyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
                     secondCategoryAdapter = new SecondCategoryAdapter(MainActivity.this, productLists);
@@ -299,6 +372,9 @@ public class MainActivity extends AppCompatActivity
 
                 } else if (groupPosition == 6) {
                 } else if (groupPosition == 7) {
+                    infoShowLinearLayout.setVisibility(View.GONE);
+                    singInLinearLyout.setVisibility(View.VISIBLE);
+                    Toast.makeText(MainActivity.this, "Logout", Toast.LENGTH_SHORT).show();
 
                 } else if (groupPosition == 8) {
 
@@ -325,6 +401,12 @@ public class MainActivity extends AppCompatActivity
         });
 
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 
     private void setupDrawer() {
@@ -389,7 +471,7 @@ public class MainActivity extends AppCompatActivity
         if (groupPosition == 0) {
             switch (childPosition) {
                 case 0:
-                    Toast.makeText(this, "1", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(this,"1", Toast.LENGTH_SHORT).show();
                     break;
                 case 1:
                     Toast.makeText(this, "2", Toast.LENGTH_SHORT).show();
@@ -453,10 +535,26 @@ public class MainActivity extends AppCompatActivity
         } else if (groupPosition == 4) {
             switch (childPosition) {
                 case 0:
+                    Toast.makeText(this, "polti", Toast.LENGTH_SHORT).show();
                     break;
                 case 1:
                     break;
             }
+
+
+        }else if (groupPosition == 5) {
+            switch (childPosition) {
+                case 0:
+                   // Toast.makeText(this, "polti", Toast.LENGTH_SHORT).show();
+                    break;
+                case 1:
+                    break;
+            }
+        }
+
+        else if (groupPosition == 6) {
+
+
 
 
         }

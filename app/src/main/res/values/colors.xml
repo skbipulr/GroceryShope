@@ -12,6 +12,7 @@
     <color name="gray_white">#737373</color>
     <color name="background_color">#efeef3</color>
     <color name="test">#ff000000</color>
+    <color name="details_location_color">#808080</color>
 
 
 </resources>

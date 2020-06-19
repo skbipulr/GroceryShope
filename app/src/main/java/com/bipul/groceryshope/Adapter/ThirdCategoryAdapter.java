@@ -7,12 +7,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bipul.groceryshope.R;
 import com.bipul.groceryshope.activity.ProductDetailsActivity;
+import com.bipul.groceryshope.datebase.DatabaseOpenHelper;
 import com.bipul.groceryshope.model.SecondCategory;
 import com.bipul.groceryshope.modelForProducts.Product;
 import com.bipul.groceryshope.modelForProducts.ProductList;
@@ -25,6 +27,10 @@ public class ThirdCategoryAdapter extends RecyclerView.Adapter<ThirdCategoryAdap
     private Context context;
     private List<ProductList> categoryList;
     int count = 0;
+
+    ProductList productList;
+
+    private DatabaseOpenHelper helper;
 
     public ThirdCategoryAdapter(Context context, List<ProductList> categoryList) {
         this.context = context;
@@ -40,7 +46,7 @@ public class ThirdCategoryAdapter extends RecyclerView.Adapter<ThirdCategoryAdap
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ProductList productList = categoryList.get(position);
+        productList = categoryList.get(position);
         holder.productNameTV.setText(productList.getProductName());
         Picasso.get().load("http://gobazaar.com.bd/public/upload/product/" + productList.getPicture())
                 .into(holder.productImageIV);
@@ -49,6 +55,15 @@ public class ThirdCategoryAdapter extends RecyclerView.Adapter<ThirdCategoryAdap
         holder.unitNameTV.setText(productList.getUnitName());
         holder.upozilaNameTV.setText(productList.getUpazilaName());
         holder.unionNameTV.setText(productList.getUnionName());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context,ProductDetailsActivity.class);
+                intent.putExtra("productId",String.valueOf(productList.getProductId()));
+                context.startActivity(intent);
+            }
+        });
 
     }
 
@@ -85,6 +100,17 @@ public class ThirdCategoryAdapter extends RecyclerView.Adapter<ThirdCategoryAdap
                     reduceQuantity.setVisibility(View.VISIBLE);
                     addtobag.setVisibility(View.GONE);
                     itemQuantity.setText(String.valueOf(count));
+
+                    helper = new DatabaseOpenHelper(context);
+
+                 /*   long id = helper.insert(productList.getProductId(),
+                            productList.getProductName(),
+                            productList.getPicture(),
+                            String.valueOf(productList.getRate()),
+                            productList.getUnitName(),
+                           count);*/
+                   // Toast.makeText(context, "Add to cart "+productList.getProductId(), Toast.LENGTH_SHORT).show();
+
 
                 }
             });

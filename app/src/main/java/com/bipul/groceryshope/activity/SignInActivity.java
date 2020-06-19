@@ -34,6 +34,8 @@ public class SignInActivity extends AppCompatActivity {
     public static final String MyPREFERENCES = "MyPrefs";
     private SharedPreferences sharedpreferences;
     public static final String ASSESS_TOKEN = "assessToken";
+    public static final String Name = "nameKey";
+    public static final String Phone = "phoneKey";
 
     private ApiInterface apiInterface;
 
@@ -79,23 +81,34 @@ public class SignInActivity extends AppCompatActivity {
                     if (response.code() == 200) {
                         LoginResponse meg = response.body();
                         String assessToken = meg.getToken();
+                        String name = meg.getData().getUserInfo().getName();
+                        String mobile =  meg.getData().getUserInfo().getMobile();
+
 
 
                         Common.client_id = meg.getData().getUserInfo().getId();
-                        Common.assess_token = meg.getToken();
+                       // Common.assess_token = meg.getToken();
 
                        // Toast.makeText(SignInActivity.this, "client id"+meg.getData().getUserInfo().getId(), Toast.LENGTH_LONG).show();
                         SharedPreferences.Editor editor = sharedpreferences.edit();
                         editor.putString(ASSESS_TOKEN, assessToken);
+                        editor.putString(Name, name);
+                        editor.putString(Phone, mobile);
                         editor.commit();
 
                         sharedpreferences = getSharedPreferences(MyPREFERENCES,
                                 Context.MODE_PRIVATE);
                        String userAssessToken =  sharedpreferences.getString(ASSESS_TOKEN, "");
+                       String n =  sharedpreferences.getString(Name, "");
+                       String m =  sharedpreferences.getString(Phone,"");
+                       String token =  sharedpreferences.getString(ASSESS_TOKEN,"");
+
+                        Common.name =  n;
+                        Common.mobile = m;
+                        Common.assess_token = token;
 
                        // Toast.makeText(SignInActivity.this, ""+userAssessToken, Toast.LENGTH_LONG).show();
                         Toast.makeText(SignInActivity.this, "Congratulations!! "+meg.getMessage(), Toast.LENGTH_LONG).show();
-
                         mDialog.dismiss();
 
                         Intent intent = new Intent(SignInActivity.this, MainActivity.class);
@@ -103,8 +116,9 @@ public class SignInActivity extends AppCompatActivity {
                         startActivity(intent);
                         finish();
 
-                    } else if (response.code() == 404) {
-                        Toast.makeText(SignInActivity.this, "404" + response.message(), Toast.LENGTH_SHORT).show();
+                    } else if (response.code() == 401) {
+                        Toast.makeText(SignInActivity.this, "Sorry You are" + response.message(), Toast.LENGTH_SHORT).show();
+                        mDialog.dismiss();
                     }
 
                 }
@@ -113,6 +127,7 @@ public class SignInActivity extends AppCompatActivity {
                 public void onFailure(Call<LoginResponse> call, Throwable t) {
 
                     Toast.makeText(SignInActivity.this, "Failed "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                    mDialog.dismiss();
                 }
             });
         }

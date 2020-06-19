@@ -9,12 +9,14 @@ import retrofit2.http.GET;
 import com.bipul.groceryshope.modelFodSlider.SliderResponse;
 import com.bipul.groceryshope.modelForFeatureProduct.FeatureProductResponse;
 import com.bipul.groceryshope.modelForLogin.LoginResponse;
+import com.bipul.groceryshope.modelForProductDetails.ProductDetailsResponse;
 import com.bipul.groceryshope.modelForProducts.ProductsResponse;
 import com.bipul.groceryshope.registrationModel.RegistrationResponse;
 
 
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 public interface ApiInterface {
 
@@ -27,6 +29,8 @@ public interface ApiInterface {
     @GET("products")
     Call<ProductsResponse> getProducts(@Header("APP-KEY")String appKey);
 
+    @GET("product/{id}")
+    Call<ProductDetailsResponse> getProductDetails(@Header("APP-KEY")String appKey,@Path("id") int groupId);
 
     @FormUrlEncoded
     @POST("client_registration")

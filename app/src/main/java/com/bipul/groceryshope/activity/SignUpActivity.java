@@ -77,7 +77,7 @@ public class SignUpActivity extends AppCompatActivity {
 
                         mDialog.dismiss();
 
-                        Intent intent = new Intent(SignUpActivity.this,MainActivity.class);
+                        Intent intent = new Intent(SignUpActivity.this,SignInActivity.class);
                         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                         startActivity(intent);
                         finish();
@@ -130,9 +130,6 @@ public class SignUpActivity extends AppCompatActivity {
 
     public void btnSignUp(View view) {
         createUser();
-        /*Intent intent = new Intent(this, MainActivity.class);
-        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-        startActivity(intent);*/
     }
 
 

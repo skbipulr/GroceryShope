@@ -31,13 +31,13 @@ import java.util.Objects;
 
 public class CategoryActivity extends AppCompatActivity {
 
-    int count=0;
-    ImageView productImageIV,increaseQuantity,reduceQuantity;
-    TextView productNameTV, productQuantityTV,productPriceTV,itemQuantity,addtobag;
+    int count = 0;
+    ImageView productImageIV, increaseQuantity, reduceQuantity;
+    TextView productNameTV, productQuantityTV, productPriceTV, itemQuantity, addtobag;
 
-   private Toolbar toolbar;
+    private Toolbar toolbar;
 
-   private SearchView searchView;
+    private SearchView searchView;
 
     private List<ProductList> productLists;
 
@@ -54,12 +54,17 @@ public class CategoryActivity extends AppCompatActivity {
         init();
 
         Intent intent = getIntent();
-       // product = (Product) intent.getParcelableExtra("category");
+        // product = (Product) intent.getParcelableExtra("category");
         //int size = product.getProductList().size();
-       // Toast.makeText(this, "what "+ product.s, Toast.LENGTH_LONG).show();
+        // Toast.makeText(this, "what "+ product.s, Toast.LENGTH_LONG).show();
+       String pos = getIntent().getStringExtra("category");
+       TextView categoryName = findViewById(R.id.categoryName);
+       categoryName.setText(pos);
 
-       productLists =  intent.getParcelableArrayListExtra("productList");
-        thirdCategoryAdapter = new ThirdCategoryAdapter(this,productLists);
+
+        productLists = intent.getParcelableArrayListExtra("productList");
+
+        thirdCategoryAdapter = new ThirdCategoryAdapter(this, productLists);
         categoryRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         categoryRecyclerView.setAdapter(thirdCategoryAdapter);
 
@@ -73,10 +78,11 @@ public class CategoryActivity extends AppCompatActivity {
 
 
     private void loadSecondCategory() {
-        thirdCategoryAdapter = new ThirdCategoryAdapter(this,productLists);
+        thirdCategoryAdapter = new ThirdCategoryAdapter(this, productLists);
         categoryRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         categoryRecyclerView.setAdapter(thirdCategoryAdapter);
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu_at_to_cart, menu);
@@ -92,11 +98,12 @@ public class CategoryActivity extends AppCompatActivity {
         }
     }
 
-    public void goToCart(View view){
-        Intent intent = new Intent(this,AddToCartActivity.class);
+    public void goToCart(View view) {
+        Intent intent = new Intent(this, AddToCartActivity.class);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         startActivity(intent);
     }
+
     public void backBtn(View view) {
         onBackPressed();
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);

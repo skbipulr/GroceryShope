@@ -9,6 +9,8 @@ import com.google.gson.annotations.SerializedName;
 
 public class ProductList implements Parcelable {
 
+    private int count=0;
+
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -42,6 +44,8 @@ public class ProductList implements Parcelable {
     @SerializedName("total_debit")
     @Expose
     private Integer totalDebit;
+
+
 
     protected ProductList(Parcel in) {
         if (in.readByte() == 0) {
@@ -92,6 +96,14 @@ public class ProductList implements Parcelable {
             return new ProductList[size];
         }
     };
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
 
     public Integer getId() {
         return id;
