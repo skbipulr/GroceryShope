@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="160dp"
     android:padding="0dp"
+    android:id="@+id/rootCartView"
     android:layout_marginLeft="8dp"
-    android:layout_marginRight="8dp"
+    android:layout_marginRight="4dp"
     android:layout_marginBottom="8dp"
     app:cardCornerRadius="5dp"
     android:layout_height="wrap_content"
@@ -33,9 +35,14 @@
             android:orientation="vertical"
             >
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+            </LinearLayout>
             <TextView
                 android:lines="1"
-                android:layout_marginBottom="3dp"
                 android:id="@+id/productNameTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -43,28 +50,91 @@
                 android:textColor="@android:color/black"
                 android:text="2.3L large Capacity"
                 android:textSize="14sp" />
-            <TextView
-                android:layout_marginTop="4dp"
-                android:visibility="invisible"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=" [1.00EA]"/>
 
             <LinearLayout
-                android:layout_marginTop="3dp"
-                android:layout_weight="10"
+                android:layout_marginLeft="3dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="("/>
+                <TextView
+                    android:textSize="14sp"
+                    android:id="@+id/unitName"
+                    android:visibility="visible"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Piece"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=")"/>
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_marginTop="2dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:visibility="gone"
-                    android:id="@+id/productQuantityTV"
-                    android:layout_weight="8"
+                <ImageView
+                    android:layout_marginTop="3dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_location_on_black_16dp"/>
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/right"
-                    android:text="1 pices"/>
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:textColor="@color/details_location_color"
+                            android:id="@+id/unionName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="12dp"
+                            android:text="union"/>
+
+                        <TextView
+                            android:textColor="@color/details_location_color"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="10dp"
+                            android:text=","/>
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:textColor="@color/details_location_color"
+                        android:id="@+id/upazilaName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="12dp"
+                        android:text="upzila"/>
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_marginLeft="3dp"
+                android:layout_marginTop="2dp"
+                android:layout_weight="10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
                 <TextView
                     android:textSize="18dp"
@@ -72,14 +142,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="&#2547;"/>
-
                 <TextView
-                    android:id="@+id/productPriceTV"
-                    android:textSize="16dp"
+                    android:layout_marginLeft="3dp"
+                    android:id="@+id/rateOfProductTV"
+                    android:textSize="14dp"
                     android:textStyle="bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="850"/>
+                    android:text="250"/>
 
             </LinearLayout>
 
@@ -92,10 +162,12 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/addtobag"
                     android:visibility="visible"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="18dp"
+                    android:textStyle="bold"
                     android:layout_marginRight="20dp"
                     android:textColor="@color/main_color"
                     android:text="Add to bag"/>
@@ -118,7 +190,8 @@
                         app:layout_constraintBottom_toBottomOf="@id/increaseQuantity"
                         app:layout_constraintEnd_toStartOf="@id/itemQuantity"
                         app:layout_constraintTop_toTopOf="@id/increaseQuantity"
-                        app:srcCompat="@drawable/ic_remove_white_24dp" />
+                        app:srcCompat="@drawable/ic_remove_white_24dp"
+                        tools:ignore="VectorDrawableCompat" />
 
                     <TextView
                         android:visibility="gone"
@@ -129,7 +202,7 @@
                         android:layout_marginLeft="10dp"
                         android:gravity="center"
                         android:text="2"
-                        android:textSize="15sp" />
+                        android:textSize="20sp" />
 
 
 
