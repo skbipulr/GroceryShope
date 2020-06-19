@@ -28,7 +28,7 @@ public class ThirdCategoryAdapter extends RecyclerView.Adapter<ThirdCategoryAdap
     private List<ProductList> categoryList;
     int count = 0;
 
-    ProductList productList;
+
 
     private DatabaseOpenHelper helper;
 
@@ -46,6 +46,7 @@ public class ThirdCategoryAdapter extends RecyclerView.Adapter<ThirdCategoryAdap
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        final ProductList productList;
         productList = categoryList.get(position);
         holder.productNameTV.setText(productList.getProductName());
         Picasso.get().load("http://gobazaar.com.bd/public/upload/product/" + productList.getPicture())
