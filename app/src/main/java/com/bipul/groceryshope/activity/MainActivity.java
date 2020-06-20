@@ -14,12 +14,15 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 
 import android.view.Menu;
@@ -29,6 +32,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -47,6 +51,7 @@ import com.bipul.groceryshope.Utils.ConnectivityHelper;
 import com.bipul.groceryshope.Utils.CustomVisibility;
 import com.bipul.groceryshope.Utils.NetworkChangeReceiver;
 import com.bipul.groceryshope.datebase.DatabaseOpenHelper;
+import com.bipul.groceryshope.interfaces.OnCartListener;
 import com.bipul.groceryshope.interfaces.OnNetworkStateChangeListener;
 import com.bipul.groceryshope.modelFodSlider.SliderResponse;
 import com.bipul.groceryshope.datasource.ExpandableListDataSource;
@@ -62,6 +67,8 @@ import com.bipul.groceryshope.modelForProducts.ProductList;
 import com.bipul.groceryshope.modelForProducts.ProductsResponse;
 import com.bipul.groceryshope.webApi.RetrofitClient;
 import com.google.android.material.navigation.NavigationView;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
@@ -78,9 +85,11 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity
         implements CustomExpandableListAdapter.OnExpandableListener,
-        NavigationView.OnNavigationItemSelectedListener,OnNetworkStateChangeListener {
+        NavigationView.OnNavigationItemSelectedListener, OnNetworkStateChangeListener, OnCartListener {
 
     CounterFab fab;
+
+    FrameLayout rlCart;
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -104,7 +113,7 @@ public class MainActivity extends AppCompatActivity
     //Category
     private RecyclerView categoryRecyclerView;
     private List<Product> categories = new ArrayList<>();
-    private List<ProductList> productLists = new ArrayList<>();
+    private List<ProductList> productLists;
     private CategoryAdapter categoryAdapter;
 
     private RecyclerView secondCategoryRecyclerView;
@@ -133,6 +142,11 @@ public class MainActivity extends AppCompatActivity
     LinearLayout singInLinearLyout;
     LinearLayout infoShowLinearLayout;
 
+    private List<ProductList> cartProductLists;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -150,6 +164,32 @@ public class MainActivity extends AppCompatActivity
         loadCategory();
         loadGroceries();
         getAllSlider();
+    }
+
+    private void getCartProductList() {
+        cartProductLists = new ArrayList<>();
+        sharedPreferences = getSharedPreferences("CartPref", MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        String cartProducts = sharedPreferences.getString("cartProductLists", "");
+        if (!TextUtils.isEmpty(cartProducts)) {
+            cartProductLists = new Gson().fromJson(cartProducts, new TypeToken<List<ProductList>>() {
+            }.getType());
+            Log.d("BBBB", "" + cartProductLists.size());
+            fab.setCount(cartProductLists.size());
+            if (cartProductLists != null && cartProductLists.size() > 0) {
+                setupBadge(cartProductLists.size());
+            } else {
+                setupBadge(0);
+            }
+            if (productLists != null && productLists.size() > 0) {
+                matchCartAddedProduct(productLists);
+                secondCategoryAdapter.notifyDataSetChanged();
+            }
+        } else {
+            setupBadge(0);
+            fab.setCount(0);
+            Log.d("BBBB", "" + cartProductLists.size());
+        }
     }
 
     private void initSwipeLayout() {
@@ -227,11 +267,7 @@ public class MainActivity extends AppCompatActivity
         } else {
             noInternetTVED.setVisibility(View.VISIBLE);
         }
-
-        fab.setCount(new DatabaseOpenHelper(this).getCountCart());
-        if (secondCategoryAdapter != null) {
-            secondCategoryAdapter.notifyDataSetChanged();
-        }
+        getCartProductList();
     }
 
     @Override
@@ -270,26 +306,34 @@ public class MainActivity extends AppCompatActivity
         View actionView = menuItem.getActionView();
         searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         textCartItemCount = (TextView) actionView.findViewById(R.id.cart_badge);
-
-        setupBadge();
+        rlCart = actionView.findViewById(R.id.rlCart);
+        rlCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent cartIntent = new Intent(MainActivity.this, AddToCartActivity.class);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                startActivity(cartIntent);
+            }
+        });
 
         //textCartItemCount.setText(String.valueOf(Common.getCount+1));
-       // Toast.makeText(this, ""+Common.getCount, Toast.LENGTH_SHORT).show();
+        // Toast.makeText(this, ""+Common.getCount, Toast.LENGTH_SHORT).show();
+
+        if (cartProductLists != null && cartProductLists.size() > 0) {
+            setupBadge(cartProductLists.size());
+        } else {
+            setupBadge(0);
+        }
         return true;
     }
 
-    private void setupBadge() {
-
+    private void setupBadge(int count) {
         if (textCartItemCount != null) {
-            if (Common.getCount == 0) {
-                if (textCartItemCount.getVisibility() != View.GONE) {
-                    textCartItemCount.setVisibility(View.GONE);
-                }
+            if (count == 0) {
+                textCartItemCount.setVisibility(View.GONE);
             } else {
-                textCartItemCount.setText(String.valueOf(Math.min(Common.getCount, 99)));
-                if (textCartItemCount.getVisibility() != View.VISIBLE) {
-                    textCartItemCount.setVisibility(View.VISIBLE);
-                }
+                textCartItemCount.setText(String.valueOf(Math.min(count, 99)));
+                textCartItemCount.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -344,6 +388,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void init() {
+        productLists = new ArrayList<>();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerLayout.closeDrawers();
         mExpandableListView = (ExpandableListView) findViewById(R.id.navList);
@@ -358,17 +403,17 @@ public class MainActivity extends AppCompatActivity
         LayoutInflater inflater = getLayoutInflater();
         View listHeaderView = inflater.inflate(R.layout.nav_header, null, false);
         mExpandableListView.addHeaderView(listHeaderView);
-         singInLinearLyout = listHeaderView.findViewById(R.id.signInLinearLayout);
-         infoShowLinearLayout = listHeaderView.findViewById(R.id.infoShowLinearLayout);
+        singInLinearLyout = listHeaderView.findViewById(R.id.signInLinearLayout);
+        infoShowLinearLayout = listHeaderView.findViewById(R.id.infoShowLinearLayout);
 
-        if (Common.assess_token != null ){
+        if (Common.assess_token != null) {
             singInLinearLyout.setVisibility(View.GONE);
             infoShowLinearLayout.setVisibility(View.VISIBLE);
             TextView nameTV = listHeaderView.findViewById(R.id.nameTV);
             TextView mobileNoTV = listHeaderView.findViewById(R.id.mobileTV);
             nameTV.setText(Common.name);
             mobileNoTV.setText(Common.mobile);
-            Toast.makeText(this, ""+Common.name, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "" + Common.name, Toast.LENGTH_SHORT).show();
         }
 
 
@@ -387,7 +432,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        fab.setCount(new DatabaseOpenHelper(this).getCountCart());
+        //fab.setCount(new DatabaseOpenHelper(this).getCountCart());
     }
 
 
@@ -428,17 +473,17 @@ public class MainActivity extends AppCompatActivity
                 categoryRecyclerView = findViewById(R.id.categoryRecyclerView);
 
                 categories = productsResponse.getData().getProducts();
-                List<ProductList> productLists = new ArrayList<>();
-                for (int i = 0; i <=3; i++) {
-                    productLists = productsResponse.getData().getProducts().get(i).getProductList();
-                    //for second Category
-                    secondCategoryRecyclerView = findViewById(R.id.secondCategoryRecyclerView);
-                    secondCategoryRecyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
-                    secondCategoryAdapter = new SecondCategoryAdapter(MainActivity.this, productLists);
-                    secondCategoryRecyclerView.setAdapter(secondCategoryAdapter);
-                    swipeRefreshLayout.setRefreshing(false);
-                    secondCategoryAdapter.notifyDataSetChanged();
-                }
+
+                productLists.clear();
+                productLists.addAll(productsResponse.getData().getProducts().get(3).getProductList());
+                //for second Category
+                secondCategoryRecyclerView = findViewById(R.id.secondCategoryRecyclerView);
+                secondCategoryRecyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
+                secondCategoryAdapter = new SecondCategoryAdapter(MainActivity.this, matchCartAddedProduct(productLists), MainActivity.this);
+                secondCategoryRecyclerView.setAdapter(secondCategoryAdapter);
+                swipeRefreshLayout.setRefreshing(false);
+                secondCategoryAdapter.notifyDataSetChanged();
+
                 //Data data = new Data(productsResponse.getData().getProducts());
                 //categories = data.getProducts();
 
@@ -462,6 +507,25 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    private List<ProductList> matchCartAddedProduct(List<ProductList> productLists) {
+        if (cartProductLists != null && cartProductLists.size() > 0) {
+            for (ProductList product : productLists) {
+                for (ProductList cartProduct : cartProductLists) {
+                    if (product.getProductId() == cartProduct.getProductId()) {
+                        product.setCountForCart(cartProduct.getCountForCart());
+                        break;
+                    } else {
+                        product.setCountForCart(0);
+                    }
+                }
+            }
+
+            return productLists;
+        } else {
+            return productLists;
+        }
+    }
+
     private void addDrawerItems() {
         mExpandableListAdapter = new CustomExpandableListAdapter(this, mExpandableListTitle, mExpandableListData, this);
         mExpandableListView.setAdapter(mExpandableListAdapter);
@@ -473,12 +537,12 @@ public class MainActivity extends AppCompatActivity
 
                 } else if (groupPosition == 6) {
                 } else if (groupPosition == 7) {
-                    if (Common.assess_token!=null){
+                    if (Common.assess_token != null) {
                         infoShowLinearLayout.setVisibility(View.GONE);
                         singInLinearLyout.setVisibility(View.VISIBLE);
                         Toast.makeText(MainActivity.this, "Logout", Toast.LENGTH_SHORT).show();
 
-                    }else {
+                    } else {
                         Toast.makeText(MainActivity.this, "Please Login", Toast.LENGTH_SHORT).show();
                     }
 
@@ -577,28 +641,19 @@ public class MainActivity extends AppCompatActivity
         } else if (groupPosition == 1) {
 
 
-
         } else if (groupPosition == 2) {
-
 
 
         } else if (groupPosition == 3) {
 
 
-
         } else if (groupPosition == 4) {
 
 
+        } else if (groupPosition == 5) {
 
 
-        }else if (groupPosition == 5) {
-
-
-        }
-
-        else if (groupPosition == 6) {
-
-
+        } else if (groupPosition == 6) {
 
 
         }
@@ -630,4 +685,63 @@ public class MainActivity extends AppCompatActivity
     }
 
 
+    @Override
+    public void OnCartAdded(ProductList productList) {
+        if (cartProductLists.size() > 0) {
+            boolean isMatched = false;
+            for (ProductList cartProduct : cartProductLists) {
+                if (cartProduct.getProductId() == productList.getProductId()) {
+                    cartProduct.setCountForCart(cartProduct.getCountForCart() + 1);
+                    isMatched = true;
+                    break;
+                }
+            }
+            if (!isMatched) {
+                cartProductLists.add(productList);
+            }
+        } else {
+            cartProductLists.add(productList);
+        }
+        if (cartProductLists.size() > 0) {
+            setupBadge(cartProductLists.size());
+            fab.setCount(cartProductLists.size());
+        } else {
+            setupBadge(0);
+            fab.setCount(0);
+        }
+        Log.d("BBBB", "OnCartAdded: " + cartProductLists.size());
+        editor.putString("cartProductLists", new Gson().toJson(cartProductLists));
+        editor.apply();
+    }
+
+    @Override
+    public void onCartRemoved(ProductList productList) {
+        if (cartProductLists.size() > 0) {
+            for (ProductList cartProduct : cartProductLists) {
+                if (cartProduct.getProductId() == productList.getProductId()) {
+                    if (cartProduct.getCountForCart() > 1) {
+                        cartProduct.setCountForCart(cartProduct.getCountForCart() - 1);
+                    } else {
+                        cartProductLists.remove(cartProduct);
+                    }
+                    break;
+                }
+            }
+        }
+        Log.d("BBBB", "OnCartRemoved: " + cartProductLists.size());
+        if (cartProductLists.size() > 0) {
+            setupBadge(cartProductLists.size());
+            fab.setCount(cartProductLists.size());
+        } else {
+            setupBadge(0);
+            fab.setCount(0);
+        }
+        editor.putString("cartProductLists", new Gson().toJson(cartProductLists));
+        editor.apply();
+    }
+
+    @Override
+    public void onDeleteFromCart(ProductList productList) {
+
+    }
 }

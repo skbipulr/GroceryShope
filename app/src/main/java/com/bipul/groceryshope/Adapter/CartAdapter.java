@@ -6,31 +6,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bipul.groceryshope.R;
-import com.bipul.groceryshope.Utils.Common;
-import com.bipul.groceryshope.activity.AddToCartActivity;
-import com.bipul.groceryshope.datebase.DatabaseOpenHelper;
-import com.bipul.groceryshope.model.Order;
+import com.bipul.groceryshope.interfaces.OnCartListener;
+import com.bipul.groceryshope.modelForProducts.ProductList;
 import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
     private Context context;
-    private List<Order> listData = new ArrayList<>();
-    private DatabaseOpenHelper helper;
+    private List<ProductList> listData;
+    private OnCartListener onCartListener;
 
-    int count=0;
-
-    public CartAdapter(Context context, List<Order> listData) {
+    public CartAdapter(Context context, List<ProductList> listData, OnCartListener onCartListener) {
         this.context = context;
         this.listData = listData;
+        this.onCartListener = onCartListener;
     }
 
     @NonNull
@@ -44,69 +38,36 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull final CartViewHolder holder, final int position) {
-        final Order order = listData.get(position);
+        final ProductList productList = listData.get(position);
 
-        Common.orderId = listData.get(position).getId();
-        Common.po = position;
 
-        Picasso.get().load("http://gobazaar.com.bd/public/upload/product/" + order.getProductImage())
+        Picasso.get().load("http://gobazaar.com.bd/public/upload/product/" + productList.getPicture())
                 .into(holder.productImageIV);
 
-        holder.productNameTV.setText(order.getProductName());
-        holder.productPriceTV.setText(order.getProductPrice());
-        holder.unitNameTV.setText(order.getProductunit());
+        holder.productNameTV.setText(productList.getProductName());
+        holder.productPriceTV.setText(String.valueOf(productList.getRate()));
+        holder.unitNameTV.setText(productList.getUnitName());
+        holder.itemQuantity.setText(String.valueOf(productList.getCountForCart()));
 
 
         holder.deleteIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                helper = new DatabaseOpenHelper(context);
-                helper.deleteData(order.getId());
-                listData.remove(position);
-
-                notifyDataSetChanged();
+                onCartListener.onDeleteFromCart(productList);
             }
         });
 
         holder.increaseQuantity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                count++;
-
-
-
-                helper = new DatabaseOpenHelper(context);
-                holder.itemQuantity.setText(order.getProductQuantity());
-                    long id = helper.insert(order.getProductId(),
-                            order.getProductName(),
-                            order.getProductImage(),
-                            order.getProductPrice(),
-                            order.getProductunit(),
-                            order.getProductQuantity());
-                    Toast.makeText(context, "Add to cart ", Toast.LENGTH_SHORT).show();
-
-
-
+                onCartListener.OnCartAdded(productList);
             }
         });
 
         holder.reduceQuantity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                count--;
-                holder.itemQuantity.setText(String.valueOf(count));
-                if (count==-1){
-                   /* holder.addtobag.setVisibility(View.VISIBLE);
-                    holder.itemQuantity.setVisibility(View.GONE);
-                    holder.reduceQuantity.setVisibility(View.GONE);*/
-                    helper = new DatabaseOpenHelper(context);
-                    helper.deleteData(order.getId());
-                    listData.remove(position);
-                    notifyDataSetChanged();
-
-                }
-
-
+                onCartListener.onCartRemoved(productList);
             }
         });
     }
@@ -114,6 +75,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     @Override
     public int getItemCount() {
         return listData.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 
     public class CartViewHolder extends RecyclerView.ViewHolder {

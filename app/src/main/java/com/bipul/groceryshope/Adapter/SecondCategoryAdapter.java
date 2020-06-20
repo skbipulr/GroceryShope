@@ -18,6 +18,7 @@ import com.bipul.groceryshope.Utils.Common;
 import com.bipul.groceryshope.activity.ProductDetailsActivity;
 
 import com.bipul.groceryshope.datebase.DatabaseOpenHelper;
+import com.bipul.groceryshope.interfaces.OnCartListener;
 import com.bipul.groceryshope.model.Order;
 import com.bipul.groceryshope.model.SecondCategory;
 import com.bipul.groceryshope.modelForProducts.ProductList;
@@ -31,16 +32,16 @@ public class SecondCategoryAdapter extends RecyclerView.Adapter<SecondCategoryAd
     private Context context;
     private List<ProductList> productLists;
     int count=0;
-
+    private OnCartListener onCartListener;
     Order order;
-
     private List<Order> orderList = new ArrayList<>();
 
     private DatabaseOpenHelper helper;
 
-    public SecondCategoryAdapter(Context context, List<ProductList> productLists) {
+    public SecondCategoryAdapter(Context context, List<ProductList> productLists,OnCartListener onCartListener) {
         this.context = context;
         this.productLists = productLists;
+        this.onCartListener = onCartListener;
     }
 
     @NonNull
@@ -74,28 +75,36 @@ public class SecondCategoryAdapter extends RecyclerView.Adapter<SecondCategoryAd
             }
         });
 
+        if (productList.getCountForCart()>0){
+            holder.itemQuantity.setVisibility(View.VISIBLE);
+            holder.reduceQuantity.setVisibility(View.VISIBLE);
+            holder.addtobag.setVisibility(View.GONE);
+            holder.itemQuantity.setText(String.valueOf(productList.getCountForCart()));
+        }else {
+            holder.addtobag.setVisibility(View.VISIBLE);
+            holder.itemQuantity.setVisibility(View.GONE);
+            holder.reduceQuantity.setVisibility(View.GONE);
+        }
+
         holder.increaseQuantity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                    holder.itemQuantity.setVisibility(View.VISIBLE);
-                    holder.reduceQuantity.setVisibility(View.VISIBLE);
-                    holder.addtobag.setVisibility(View.GONE);
-                    productList.setCount(productList.getCount()+1);
-                    Common.getCount = productList.getCount();
-                    holder.itemQuantity.setText(String.valueOf(productList.getCount()));
-
+                holder.itemQuantity.setVisibility(View.VISIBLE);
+                holder.reduceQuantity.setVisibility(View.VISIBLE);
+                holder.addtobag.setVisibility(View.GONE);
+                productList.setCountForCart(productList.getCountForCart()+1);
+                //Common.getCount = productList.getCountForCart();
+                holder.itemQuantity.setText(String.valueOf(productList.getCountForCart()));
+                onCartListener.OnCartAdded(productList);
+/*
                     helper = new DatabaseOpenHelper(context);
                     helper.insert(productList.getProductId(),
                             productList.getProductName(),
                             productList.getPicture(),
                             String.valueOf(productList.getRate()),
                             productList.getUnitName(),
-                            productList.getCount());
-
-                    Toast.makeText(context, "Add to cart ", Toast.LENGTH_SHORT).show();
-
-
+                            productList.getCount());*/
+                Toast.makeText(context, "Add to cart ", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -103,16 +112,14 @@ public class SecondCategoryAdapter extends RecyclerView.Adapter<SecondCategoryAd
         holder.reduceQuantity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                productList.setCount(productList.getCount()-1);
-                holder.itemQuantity.setText(String.valueOf(productList.getCount()));
-                if (productList.getCount() == 0) {
+                onCartListener.onCartRemoved(productList);
+                productList.setCountForCart(productList.getCountForCart()-1);
+                holder.itemQuantity.setText(String.valueOf(productList.getCountForCart()));
+                if (productList.getCountForCart() == 0) {
                     holder.addtobag.setVisibility(View.VISIBLE);
                     holder.itemQuantity.setVisibility(View.GONE);
                     holder.reduceQuantity.setVisibility(View.GONE);
                 }
-
-
             }
         });
     }
@@ -120,6 +127,11 @@ public class SecondCategoryAdapter extends RecyclerView.Adapter<SecondCategoryAd
     @Override
     public int getItemCount() {
         return productLists.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -143,9 +155,6 @@ public class SecondCategoryAdapter extends RecyclerView.Adapter<SecondCategoryAd
             addtobag = itemView.findViewById(R.id.addtobag);
 
             rootCardView = itemView.findViewById(R.id.rootCartView);
-
-
-
         }
     }
 }

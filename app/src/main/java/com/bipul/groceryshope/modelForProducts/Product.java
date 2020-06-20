@@ -16,17 +16,22 @@ public class Product implements Parcelable {
     @SerializedName("category_name")
     @Expose
     private String categoryName;
+    @SerializedName("category_icon")
+    @Expose
+    private String categoryIcon;
     @SerializedName("product_list")
     @Expose
     private List<ProductList> productList = null;
 
-    public Product(Parcel in) {
+    protected Product(Parcel in) {
         if (in.readByte() == 0) {
             categoryId = null;
         } else {
             categoryId = in.readInt();
         }
         categoryName = in.readString();
+        categoryIcon = in.readString();
+        productList = in.createTypedArrayList(ProductList.CREATOR);
     }
 
     public static final Creator<Product> CREATOR = new Creator<Product>() {
@@ -57,6 +62,14 @@ public class Product implements Parcelable {
         this.categoryName = categoryName;
     }
 
+    public String getCategoryIcon() {
+        return categoryIcon;
+    }
+
+    public void setCategoryIcon(String categoryIcon) {
+        this.categoryIcon = categoryIcon;
+    }
+
     public List<ProductList> getProductList() {
         return productList;
     }
@@ -79,5 +92,7 @@ public class Product implements Parcelable {
             parcel.writeInt(categoryId);
         }
         parcel.writeString(categoryName);
+        parcel.writeString(categoryIcon);
+        parcel.writeTypedList(productList);
     }
 }

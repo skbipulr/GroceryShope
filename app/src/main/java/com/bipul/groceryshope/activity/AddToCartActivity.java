@@ -7,9 +7,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.database.Cursor;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.Window;
@@ -19,12 +21,16 @@ import android.widget.TextView;
 import com.bipul.groceryshope.Adapter.CartAdapter;
 import com.bipul.groceryshope.R;
 import com.bipul.groceryshope.datebase.DatabaseOpenHelper;
+import com.bipul.groceryshope.interfaces.OnCartListener;
 import com.bipul.groceryshope.model.Order;
+import com.bipul.groceryshope.modelForProducts.ProductList;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddToCartActivity extends AppCompatActivity {
+public class AddToCartActivity extends AppCompatActivity implements OnCartListener {
 
     Toolbar toolbar;
 
@@ -32,12 +38,15 @@ public class AddToCartActivity extends AppCompatActivity {
     public static TextView txtTotalPrice;
     public static TextView txtSubTotal;
 
-    public static List<Order> carts = new ArrayList<>();
     CartAdapter adapter;
 
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
     private DatabaseOpenHelper helper;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
+
+    private List<ProductList> cartProductLists;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,28 +54,25 @@ public class AddToCartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_to_cart);
 
         colorChangeStatusBar();
-
         init();
-
         showData();
-
-        //loadListFood();
-        calculatePrice();
-
-
     }
 
-    static public void calculatePrice(){
-        //Calculate total price
-        int total = 0;
-        for (Order order : carts)
-            total += (Integer.parseInt(order.getProductPrice())*order.getProductQuantity());
-        txtSubTotal.setText(String.valueOf(total));
-        txtTotalPrice.setText(String.valueOf(total));
-        //Toast.makeText(AddToCartActivity.this, ""+carts.get(0).getProductQuantity(), Toast.LENGTH_SHORT).show();
+    public void calculatePrice() {
+        if (cartProductLists!=null && cartProductLists.size()>0){
+            int total = 0;
+            for (ProductList productList : cartProductLists)
+                total += (productList.getRate()) * productList.getCountForCart();
+            txtSubTotal.setText(String.valueOf(total));
+            txtTotalPrice.setText(String.valueOf(total));
+        }else {
+            txtSubTotal.setText("0");
+            txtTotalPrice.setText("0");
+        }
     }
 
     private void init() {
+        cartProductLists = new ArrayList<>();
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -79,26 +85,26 @@ public class AddToCartActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         helper = new DatabaseOpenHelper(this);
-        adapter = new CartAdapter(this, carts);
+        adapter = new CartAdapter(this, cartProductLists,this);
         recyclerView.setAdapter(adapter);
-
 
     }
 
     private void showData() {
-        Cursor cursor = helper.getData();
+        sharedPreferences = getSharedPreferences("CartPref", MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        String cartProducts = sharedPreferences.getString("cartProductLists", "");
 
-        while (cursor.moveToNext()) {
-            int id = cursor.getInt(cursor.getColumnIndex(helper.COL_ID));
-            int productId = cursor.getInt(cursor.getColumnIndex(helper.COL_PRODUCT_ID));
-            String productName = cursor.getString(cursor.getColumnIndex(helper.COL_PRODUCT_NAME));
-            String productImage = cursor.getString(cursor.getColumnIndex(helper.COL_PRODUCT_IMAGE));
-            String productPrice = cursor.getString(cursor.getColumnIndex(helper.COL_PRODUCT_PRICE));
-            String productUnit = cursor.getString(cursor.getColumnIndex(helper.COL_PRODUCT_UNIT));
-            int productQuantity = cursor.getInt(cursor.getColumnIndex(helper.COL_PRODUCT_QUANTITY));
+        Log.d("BBBB", cartProducts);
+        if (!TextUtils.isEmpty(cartProducts)) {
+            List<ProductList> productLists = new Gson().fromJson(cartProducts, new TypeToken<List<ProductList>>() {
+            }.getType());
+            cartProductLists.addAll(productLists);
 
-            carts.add(new Order(id, productId, productName, productImage, productUnit, productPrice, productQuantity));
-            adapter.notifyDataSetChanged();
+            if (cartProductLists!=null && cartProductLists.size()>0){
+                adapter.notifyDataSetChanged();
+                calculatePrice();
+            }
         }
     }
 
@@ -144,5 +150,67 @@ public class AddToCartActivity extends AppCompatActivity {
         Intent intent = new Intent(this, PhoneLoginActivity.class);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         startActivity(intent);
+    }
+
+    @Override
+    public void OnCartAdded(ProductList productList) {
+        if (cartProductLists.size() > 0) {
+            boolean isMatched = false;
+            for (ProductList cartProduct : cartProductLists) {
+                if (cartProduct.getProductId() == productList.getProductId()) {
+                    cartProduct.setCountForCart(cartProduct.getCountForCart() + 1);
+                    isMatched = true;
+                    break;
+                }
+            }
+            if (!isMatched) {
+                cartProductLists.add(productList);
+            }
+        } else {
+            cartProductLists.add(productList);
+        }
+        calculatePrice();
+        adapter.notifyDataSetChanged();
+        Log.d("BBBB", "OnCartAdded: "+cartProductLists.size());
+        editor.putString("cartProductLists", new Gson().toJson(cartProductLists));
+        editor.apply();
+    }
+
+    @Override
+    public void onCartRemoved(ProductList productList) {
+        if (cartProductLists.size() > 0) {
+            for (ProductList cartProduct : cartProductLists) {
+                if (cartProduct.getProductId() == productList.getProductId()) {
+                    if (cartProduct.getCountForCart() > 1) {
+                        cartProduct.setCountForCart(cartProduct.getCountForCart() - 1);
+                    } else {
+                        cartProductLists.remove(cartProduct);
+                    }
+                    break;
+                }
+            }
+        }
+        Log.d("BBBB", "OnCartRemoved: "+cartProductLists.size());
+
+        calculatePrice();
+        adapter.notifyDataSetChanged();
+        editor.putString("cartProductLists", new Gson().toJson(cartProductLists));
+        editor.apply();
+    }
+
+    @Override
+    public void onDeleteFromCart(ProductList productList) {
+        if (cartProductLists.size() > 0) {
+            for (ProductList cartProduct : cartProductLists) {
+                if (cartProduct.getProductId() == productList.getProductId()) {
+                    cartProductLists.remove(cartProduct);
+                    break;
+                }
+            }
+        }
+        calculatePrice();
+        adapter.notifyDataSetChanged();
+        editor.putString("cartProductLists", new Gson().toJson(cartProductLists));
+        editor.apply();
     }
 }

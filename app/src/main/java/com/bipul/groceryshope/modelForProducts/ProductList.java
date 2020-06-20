@@ -9,7 +9,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class ProductList implements Parcelable {
 
-    private int count=0;
+    private int countForCart=0;
 
     @SerializedName("id")
     @Expose
@@ -46,8 +46,16 @@ public class ProductList implements Parcelable {
     private Integer totalDebit;
 
 
+    public int getCountForCart() {
+        return countForCart;
+    }
+
+    public void setCountForCart(int countForCart) {
+        this.countForCart = countForCart;
+    }
 
     protected ProductList(Parcel in) {
+        countForCart = in.readInt();
         if (in.readByte() == 0) {
             id = null;
         } else {
@@ -96,14 +104,6 @@ public class ProductList implements Parcelable {
             return new ProductList[size];
         }
     };
-
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
-    }
 
     public Integer getId() {
         return id;
@@ -200,6 +200,7 @@ public class ProductList implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(countForCart);
         if (id == null) {
             parcel.writeByte((byte) 0);
         } else {

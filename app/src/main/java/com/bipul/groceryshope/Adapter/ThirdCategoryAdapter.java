@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bipul.groceryshope.R;
 import com.bipul.groceryshope.activity.ProductDetailsActivity;
 import com.bipul.groceryshope.datebase.DatabaseOpenHelper;
+import com.bipul.groceryshope.interfaces.OnCartListener;
 import com.bipul.groceryshope.model.SecondCategory;
 import com.bipul.groceryshope.modelForProducts.Product;
 import com.bipul.groceryshope.modelForProducts.ProductList;
@@ -26,13 +27,17 @@ public class ThirdCategoryAdapter extends RecyclerView.Adapter<ThirdCategoryAdap
 
     private Context context;
     private List<ProductList> categoryList;
-    int count = 0;
+
+    private List<ProductList> productLists;
+    int count=0;
+    private OnCartListener onCartListener;
     
     private DatabaseOpenHelper helper;
 
-    public ThirdCategoryAdapter(Context context, List<ProductList> categoryList) {
+    public ThirdCategoryAdapter(Context context, List<ProductList> categoryList,OnCartListener onCartListener) {
         this.context = context;
         this.categoryList = categoryList;
+        this.onCartListener = onCartListener;
     }
 
     @NonNull
@@ -43,7 +48,7 @@ public class ThirdCategoryAdapter extends RecyclerView.Adapter<ThirdCategoryAdap
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         final ProductList productList;
         productList = categoryList.get(position);
         holder.productNameTV.setText(productList.getProductName());
@@ -63,6 +68,46 @@ public class ThirdCategoryAdapter extends RecyclerView.Adapter<ThirdCategoryAdap
                 context.startActivity(intent);
             }
         });
+
+
+
+        holder.increaseQuantity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                holder.itemQuantity.setVisibility(View.VISIBLE);
+                holder.reduceQuantity.setVisibility(View.VISIBLE);
+                holder.addtobag.setVisibility(View.GONE);
+                productList.setCountForCart(productList.getCountForCart()+1);
+                //Common.getCount = productList.getCountForCart();
+                holder.itemQuantity.setText(String.valueOf(productList.getCountForCart()));
+                onCartListener.OnCartAdded(productList);
+/*
+                    helper = new DatabaseOpenHelper(context);
+                    helper.insert(productList.getProductId(),
+                            productList.getProductName(),
+                            productList.getPicture(),
+                            String.valueOf(productList.getRate()),
+                            productList.getUnitName(),
+                            productList.getCount());*/
+                Toast.makeText(context, "Add to cart ", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+        holder.reduceQuantity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onCartListener.onCartRemoved(productList);
+                productList.setCountForCart(productList.getCountForCart()-1);
+                holder.itemQuantity.setText(String.valueOf(productList.getCountForCart()));
+                if (productList.getCountForCart() == 0) {
+                    holder.addtobag.setVisibility(View.VISIBLE);
+                    holder.itemQuantity.setVisibility(View.GONE);
+                    holder.reduceQuantity.setVisibility(View.GONE);
+                }
+            }
+        });
+
 
     }
 
@@ -91,43 +136,7 @@ public class ThirdCategoryAdapter extends RecyclerView.Adapter<ThirdCategoryAdap
             addtobag = itemView.findViewById(R.id.addtobag);
 
 
-            increaseQuantity.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    count++;
-                    itemQuantity.setVisibility(View.VISIBLE);
-                    reduceQuantity.setVisibility(View.VISIBLE);
-                    addtobag.setVisibility(View.GONE);
-                    itemQuantity.setText(String.valueOf(count));
 
-                    helper = new DatabaseOpenHelper(context);
-
-                 /*   long id = helper.insert(productList.getProductId(),
-                            productList.getProductName(),
-                            productList.getPicture(),
-                            String.valueOf(productList.getRate()),
-                            productList.getUnitName(),
-                           count);*/
-                   // Toast.makeText(context, "Add to cart "+productList.getProductId(), Toast.LENGTH_SHORT).show();
-
-
-                }
-            });
-
-            reduceQuantity.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    count--;
-                    itemQuantity.setText(String.valueOf(count));
-                    if (count == 0) {
-                        addtobag.setVisibility(View.VISIBLE);
-                        itemQuantity.setVisibility(View.GONE);
-                        reduceQuantity.setVisibility(View.GONE);
-                    }
-
-
-                }
-            });
 
         }
     }

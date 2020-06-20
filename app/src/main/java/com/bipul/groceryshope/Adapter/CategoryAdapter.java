@@ -17,6 +17,7 @@ import com.bipul.groceryshope.R;
 import com.bipul.groceryshope.activity.CategoryActivity;
 import com.bipul.groceryshope.modelForProducts.Product;
 import com.bipul.groceryshope.modelForProducts.ProductList;
+import com.squareup.picasso.Picasso;
 
 
 import java.util.ArrayList;
@@ -50,6 +51,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         final Product category = categories.get(position);
 
         holder.categoryName.setText(category.getCategoryName());
+        if (category.getCategoryIcon() == null) {
+            holder.categoryImageIV.setVisibility(View.GONE);
+        } else if (category.getCategoryIcon()!=null){
+            Picasso.get().load("http://gobazaar.com.bd/public/upload/category/" + category.getCategoryIcon())
+                    .into(holder.categoryImageIV);
+        }
 
         if (category.getCategoryId() == null) {
             holder.itemView.setVisibility(View.GONE);
@@ -76,13 +83,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView categoryImage;
+        ImageView categoryImageIV;
         TextView categoryName;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             categoryName = itemView.findViewById(R.id.categoryName);
-            // categoryImage = itemView.findViewById(R.id.categoryImage);
+            categoryImageIV = itemView.findViewById(R.id.categoryImageIV);
         }
     }
 }
