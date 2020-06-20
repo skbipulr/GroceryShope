@@ -23,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -63,7 +64,7 @@ public class CategoryActivity extends AppCompatActivity implements OnNetworkStat
     private SwipeRefreshLayout swipeRefreshLayout;
     TextView noInternetTVED;
     //for internet--------------end------------------
-
+    FrameLayout rlCart;
 
     private SearchView searchView;
     TextView textCartItemCount;
@@ -284,13 +285,16 @@ public class CategoryActivity extends AppCompatActivity implements OnNetworkStat
         View actionView = menuItem.getActionView();
         searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         textCartItemCount = (TextView) actionView.findViewById(R.id.cart_badge);
-
-        textCartItemCount.setOnClickListener(new View.OnClickListener() {
+        rlCart = actionView.findViewById(R.id.rlCart);
+        rlCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent cartIntent = new Intent(CategoryActivity.this, AddToCartActivity.class);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                startActivity(cartIntent);
             }
         });
+
 
 
         //textCartItemCount.setText(String.valueOf(Common.getCount+1));
