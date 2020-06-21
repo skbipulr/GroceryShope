@@ -9,7 +9,7 @@
     <ImageView
         android:id="@+id/iv_auto_image_slider"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="180dp"
         android:scaleType="fitXY"
         android:src="@drawable/go_bazer_logo"/>
 

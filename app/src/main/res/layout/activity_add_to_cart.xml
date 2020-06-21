@@ -174,7 +174,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="3dp"
                     android:layout_weight="1"
-                    android:text="0"
+                    android:text="0.0"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -247,7 +247,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="518"
+                    android:text="0.0"
                     android:textColor="@color/black"
                     android:textSize="16sp"
                     android:textStyle="bold" />

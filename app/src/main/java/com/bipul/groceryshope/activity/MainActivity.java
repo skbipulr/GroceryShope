@@ -164,6 +164,10 @@ public class MainActivity extends AppCompatActivity
         loadCategory();
         loadGroceries();
         getAllSlider();
+
+     /*   Toast.makeText(this, ""+Common.client_id, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, ""+Common.assess_token, Toast.LENGTH_SHORT).show();
+   */
     }
 
     private void getCartProductList() {

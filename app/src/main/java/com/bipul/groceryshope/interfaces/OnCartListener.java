@@ -6,4 +6,5 @@ public interface OnCartListener {
     void OnCartAdded(ProductList productList);
     void onCartRemoved(ProductList productList);
     void onDeleteFromCart(ProductList productList);
+
 }

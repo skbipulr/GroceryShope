@@ -9,14 +9,17 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,15 +32,18 @@ import com.bipul.groceryshope.Utils.ConnectivityHelper;
 import com.bipul.groceryshope.Utils.CustomVisibility;
 import com.bipul.groceryshope.Utils.NetworkChangeReceiver;
 import com.bipul.groceryshope.interfaces.ApiInterface;
+import com.bipul.groceryshope.interfaces.OnCartListener;
 import com.bipul.groceryshope.interfaces.OnNetworkStateChangeListener;
 import com.bipul.groceryshope.model.RelatedProduct;
 import com.bipul.groceryshope.model.SecondCategory;
 import com.bipul.groceryshope.modelForProductDetails.Product;
 import com.bipul.groceryshope.modelForProductDetails.ProductDetailsResponse;
+import com.bipul.groceryshope.modelForProducts.ProductList;
 import com.bipul.groceryshope.webApi.RetrofitClient;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -48,6 +54,16 @@ public class ProductDetailsActivity extends AppCompatActivity implements OnNetwo
     private RecyclerView secondCategoryRecyclerView;
     private ArrayList<RelatedProduct> relatedProducts = new ArrayList<>();
     private RelatedProductAdapter relatedProductAdapter;
+
+    private OnCartListener onCartListener;
+
+    private List<ProductList> cartProductLists;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
+    TextView textCartItemCount;
+    FrameLayout rlCart;
+
+
 
     ImageView productImageIV, increaseQuantity, reduceQuantity;
     TextView productNameTV, productQuantityTV, productPriceTV,
@@ -77,15 +93,47 @@ public class ProductDetailsActivity extends AppCompatActivity implements OnNetwo
         colorChangeStatusBar();
 
         initSwipeLayout();
-
-        toolbar = findViewById(R.id.toolbar);
-
         init();
-
         Intent intent = getIntent();
         productId = intent.getStringExtra("productId");
 
-        //fatchProcuctDetails(4);
+        addToCart();
+
+    }
+
+    private void addToCart() {
+
+
+        count++;
+       increaseQuantity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                itemQuantity.setVisibility(View.VISIBLE);
+                reduceQuantity.setVisibility(View.VISIBLE);
+                addtobag.setVisibility(View.GONE);
+
+                //Common.getCount = productList.getCountForCart();
+                itemQuantity.setText(String.valueOf(count++));
+
+
+                Toast.makeText(ProductDetailsActivity.this, "Add to cart ", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+        reduceQuantity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                count--;
+                itemQuantity.setText(String.valueOf(count--));
+                if (count == 0) {
+                    addtobag.setVisibility(View.VISIBLE);
+                    itemQuantity.setVisibility(View.GONE);
+                    reduceQuantity.setVisibility(View.GONE);
+                }
+            }
+        });
 
     }
 
@@ -229,13 +277,55 @@ public class ProductDetailsActivity extends AppCompatActivity implements OnNetwo
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu_at_to_cart, menu);
+     /*   getMenuInflater().inflate(R.menu.main_menu_at_to_cart, menu);
         searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        return true;*/
 
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+
+        final MenuItem menuItem = menu.findItem(R.id.cart_menu);
+
+        View actionView = menuItem.getActionView();
+        searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        textCartItemCount = (TextView) actionView.findViewById(R.id.cart_badge);
+        rlCart = actionView.findViewById(R.id.rlCart);
+        rlCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent cartIntent = new Intent(ProductDetailsActivity.this, AddToCartActivity.class);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                startActivity(cartIntent);
+            }
+        });
+
+
+
+        //textCartItemCount.setText(String.valueOf(Common.getCount+1));
+        // Toast.makeText(this, ""+Common.getCount, Toast.LENGTH_SHORT).show();
+
+        if (cartProductLists != null && cartProductLists.size() > 0) {
+            setupBadge(cartProductLists.size());
+        } else {
+            setupBadge(0);
+        }
         return true;
+
+    }
+
+    private void setupBadge(int count) {
+        if (textCartItemCount != null) {
+            if (count == 0) {
+                textCartItemCount.setVisibility(View.GONE);
+            } else {
+                textCartItemCount.setText(String.valueOf(Math.min(count, 99)));
+                textCartItemCount.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     private void init() {
+        toolbar = findViewById(R.id.toolbar);
+
         productImageIV = findViewById(R.id.productImageIV);
         productNameTV = findViewById(R.id.productNameTV);
         productPriceTV = findViewById(R.id.productPriceTV);
@@ -308,35 +398,5 @@ public class ProductDetailsActivity extends AppCompatActivity implements OnNetwo
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         startActivity(intent);
     }
-
-/*
-
-    private void getAllSecondCategory() {
-        relatedProducts.add(new RelatedProduct(R.drawable.boiler_murgi, "Broiler Murgi",
-                "1 KG", "260"));
-        relatedProducts.add(new RelatedProduct(R.drawable.murgi1, "Fresh Murgi",
-                "1 pisces", "2050"));
-        relatedProducts.add(new RelatedProduct(R.drawable.murgi3, "Lights & Electrical",
-                "1 pisces", "2050"));
-        relatedProducts.add(new RelatedProduct(R.drawable.boiler_murgi, "Fruits & Vegetables",
-                "1 pisces", "2050"));
-        relatedProducts.add(new RelatedProduct(R.drawable.frozen_canned, "Frozen Canned",
-                "1 pisces", "2050"));
-        relatedProducts.add(new RelatedProduct(R.drawable.cleaning_supplies, "Cleaning & Supplies",
-                "1 pisces", "2050"));
-        relatedProducts.add(new RelatedProduct(R.drawable.bread_bakery, "Cleaning & Supplies",
-                "1 pisces", "2050"));
-    }
-
-    private void loadSecondCategory() {
-        secondCategoryRecyclerView = findViewById(R.id.relatedProductRecyclerView);
-        LinearLayoutManager layoutManager
-                = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        relatedProductAdapter = new RelatedProductAdapter(this, relatedProducts);
-        secondCategoryRecyclerView.setLayoutManager(layoutManager);
-        secondCategoryRecyclerView.setAdapter(relatedProductAdapter);
-    }
-*/
-
 
 }

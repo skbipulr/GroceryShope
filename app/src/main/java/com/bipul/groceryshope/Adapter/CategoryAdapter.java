@@ -51,16 +51,14 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         final Product category = categories.get(position);
 
         holder.categoryName.setText(category.getCategoryName());
-        if (category.getCategoryIcon() == null) {
-            holder.categoryImageIV.setVisibility(View.GONE);
-        } else if (category.getCategoryIcon()!=null){
-            Picasso.get().load("http://gobazaar.com.bd/public/upload/category/" + category.getCategoryIcon())
-                    .into(holder.categoryImageIV);
-        }
 
-        if (category.getCategoryId() == null) {
+            Picasso.get().load("http://gobazaar.com.bd/public/upload/category/" + category.getCategoryIcon()).placeholder(R.drawable.ramjajj)
+                    .into(holder.categoryImageIV);
+
+
+       /* if (category.getCategoryId() == null) {
             holder.itemView.setVisibility(View.GONE);
-        }
+        }*/
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

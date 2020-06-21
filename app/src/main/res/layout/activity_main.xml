@@ -64,7 +64,7 @@
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="150dp"
+                            android:layout_height="180dp"
                             android:orientation="vertical">
 
                             <com.smarteist.autoimageslider.SliderView
@@ -77,10 +77,11 @@
                                 app:sliderCircularHandlerEnabled="true"
                                 app:sliderIndicatorAnimationDuration="600"
                                 app:sliderIndicatorGravity="center_horizontal|bottom"
-                                app:sliderIndicatorMargin="15dp"
+                                app:sliderIndicatorMargin="25dp"
                                 app:sliderIndicatorOrientation="horizontal"
                                 app:sliderIndicatorPadding="3dp"
                                 app:sliderIndicatorRadius="2dp"
+                                app:sliderIndicatorRtlMode="auto"
                                 app:sliderIndicatorSelectedColor="@color/main_color"
                                 app:sliderIndicatorUnselectedColor="@color/main_color"
                                 app:sliderScrollTimeInSec="1"
@@ -220,6 +221,7 @@
             tools:ignore="MissingPrefix" />
 
         <com.andremion.counterfab.CounterFab
+            android:visibility="invisible"
             android:id="@+id/fab"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"

@@ -27,7 +27,7 @@ public class Common {
     public static String currentMobileNo=null;
     public static String assess_token=null;
     public static String app_key="A1b1C2d32564kjhkjadu";
-    public static int client_id=0;
+    public static String client_id=null;
     public static List<Order> orderList = new ArrayList<>();
 
     public static int orderId=0;
@@ -59,15 +59,5 @@ public class Common {
    //--------------for-------end------------------
 
 
-    public static List<Order> carts = new ArrayList<>();
 
-    static public int  calculatePrice(){
-        //Calculate total price
-        int total = 0;
-        for (Order order : carts)
-            total += (Integer.parseInt(order.getProductPrice()));
-
-        return total;
-        //Toast.makeText(AddToCartActivity.this, ""+carts.get(0).getProductQuantity(), Toast.LENGTH_SHORT).show();
-    }
 }
