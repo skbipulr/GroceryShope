@@ -10,6 +10,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class Product implements Parcelable {
 
+
     @SerializedName("category_id")
     @Expose
     private Integer categoryId;

@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.bipul.groceryshope.R;
 import com.bipul.groceryshope.Utils.Common;
+import com.bipul.groceryshope.Utils.SessionManagement;
 import com.bipul.groceryshope.interfaces.ApiInterface;
 import com.bipul.groceryshope.modelForLogin.LoginResponse;
 import com.bipul.groceryshope.registrationModel.RegistrationResponse;
@@ -89,9 +90,9 @@ public class SignInActivity extends AppCompatActivity {
 
 
                         //Common.client_id = meg.getData().getUserInfo().getId();
-                       // Common.assess_token = meg.getToken();
+                        // Common.assess_token = meg.getToken();
 
-                       // Toast.makeText(SignInActivity.this, "client id"+meg.getData().getUserInfo().getId(), Toast.LENGTH_LONG).show();
+                        // Toast.makeText(SignInActivity.this, "client id"+meg.getData().getUserInfo().getId(), Toast.LENGTH_LONG).show();
                         SharedPreferences.Editor editor = sharedpreferences.edit();
                         editor.putString(ASSESS_TOKEN, assessToken);
                         editor.putString(Name, name);
@@ -101,17 +102,17 @@ public class SignInActivity extends AppCompatActivity {
 
                         sharedpreferences = getSharedPreferences(MyPREFERENCES,
                                 Context.MODE_PRIVATE);
-                       String userAssessToken =  sharedpreferences.getString(ASSESS_TOKEN, "");
-                       String n =  sharedpreferences.getString(Name, "");
-                       String m =  sharedpreferences.getString(Phone,"");
-                       String token =  sharedpreferences.getString(ASSESS_TOKEN,"");
+                        String userAssessToken =  sharedpreferences.getString(ASSESS_TOKEN, "");
+                        String n =  sharedpreferences.getString(Name, "");
+                        String m =  sharedpreferences.getString(Phone,"");
+                        String token =  sharedpreferences.getString(ASSESS_TOKEN,"");
                         String client_ID = sharedpreferences.getString(CLIENT_ID,"");
                         Common.name =  n;
                         Common.mobile = m;
                         Common.assess_token = token;
                         Common.client_id = client_ID;
 
-                       // Toast.makeText(SignInActivity.this, ""+userAssessToken, Toast.LENGTH_LONG).show();
+                        // Toast.makeText(SignInActivity.this, ""+userAssessToken, Toast.LENGTH_LONG).show();
                         Toast.makeText(SignInActivity.this, "Congratulations!! "+meg.getMessage(), Toast.LENGTH_LONG).show();
                         mDialog.dismiss();
 

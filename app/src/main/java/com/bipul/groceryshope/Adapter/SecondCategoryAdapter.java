@@ -55,7 +55,6 @@ public class SecondCategoryAdapter extends RecyclerView.Adapter<SecondCategoryAd
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
 
         count = 0;
-
         final ProductList productList = productLists.get(position);
         holder.productNameTV.setText(productList.getProductName());
         Picasso.get().load("http://gobazaar.com.bd/public/upload/product/" + productList.getPicture())

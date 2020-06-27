@@ -5,7 +5,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Product {
-
+    private int countForCart=0;
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -51,6 +51,14 @@ public class Product {
     @SerializedName("supplier_address")
     @Expose
     private String supplierAddress;
+
+    public int getCountForCart() {
+        return countForCart;
+    }
+
+    public void setCountForCart(int countForCart) {
+        this.countForCart = countForCart;
+    }
 
     public Integer getId() {
         return id;

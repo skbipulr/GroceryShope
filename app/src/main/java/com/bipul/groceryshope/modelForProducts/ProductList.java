@@ -45,6 +45,30 @@ public class ProductList implements Parcelable {
     @Expose
     private Integer totalDebit;
 
+    public ProductList(int countForCart, Integer id,  Integer rate, String productName, String picture, Integer categoryId, String unitName, String upazilaName, String unionName) {
+        this.countForCart = countForCart;
+        this.id = id;
+        this.rate = rate;
+        this.productName = productName;
+        this.picture = picture;
+        this.categoryId = categoryId;
+        this.unitName = unitName;
+        this.upazilaName = upazilaName;
+        this.unionName = unionName;
+    }
+
+    public ProductList(int countForCart, Integer id, Integer productId, Integer rate, String productName, String picture, Integer categoryId, String unitName, String upazilaName, String unionName) {
+        this.countForCart = countForCart;
+        this.id = id;
+        this.productId = productId;
+        this.rate = rate;
+        this.productName = productName;
+        this.picture = picture;
+        this.categoryId = categoryId;
+        this.unitName = unitName;
+        this.upazilaName = upazilaName;
+        this.unionName = unionName;
+    }
 
     public int getCountForCart() {
         return countForCart;

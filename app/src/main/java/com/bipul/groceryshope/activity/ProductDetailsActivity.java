@@ -3,7 +3,6 @@ package com.bipul.groceryshope.activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -14,6 +13,8 @@ import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,7 +26,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bipul.groceryshope.Adapter.RelatedProductAdapter;
-import com.bipul.groceryshope.Adapter.SecondCategoryAdapter;
 import com.bipul.groceryshope.R;
 import com.bipul.groceryshope.Utils.Common;
 import com.bipul.groceryshope.Utils.ConnectivityHelper;
@@ -35,11 +35,12 @@ import com.bipul.groceryshope.interfaces.ApiInterface;
 import com.bipul.groceryshope.interfaces.OnCartListener;
 import com.bipul.groceryshope.interfaces.OnNetworkStateChangeListener;
 import com.bipul.groceryshope.model.RelatedProduct;
-import com.bipul.groceryshope.model.SecondCategory;
 import com.bipul.groceryshope.modelForProductDetails.Product;
 import com.bipul.groceryshope.modelForProductDetails.ProductDetailsResponse;
 import com.bipul.groceryshope.modelForProducts.ProductList;
 import com.bipul.groceryshope.webApi.RetrofitClient;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -60,15 +61,18 @@ public class ProductDetailsActivity extends AppCompatActivity implements OnNetwo
     private List<ProductList> cartProductLists;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
+    private List<Product> products;
+
     TextView textCartItemCount;
     FrameLayout rlCart;
 
+    private Product product;
 
 
     ImageView productImageIV, increaseQuantity, reduceQuantity;
     TextView productNameTV, productQuantityTV, productPriceTV,
-            itemQuantity, addtobag,unitName,upozilaNameTV,unionNameTV,
-            storeNameTV,descriptionTV,descriptionText;
+            itemQuantity, addtobag, unitName, upozilaNameTV, unionNameTV,
+            storeNameTV, descriptionTV, descriptionText;
 
     int count = 0;
 
@@ -84,58 +88,162 @@ public class ProductDetailsActivity extends AppCompatActivity implements OnNetwo
     private SwipeRefreshLayout swipeRefreshLayout;
     TextView noInternetTVED;
     //for internet--------------end------------------
+    int pId;
+
+
+    private ProductList productList;
+    private int cartCount;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_product);
-        colorChangeStatusBar();
+        setContentView(R.layout.activity_product_details);
 
-        initSwipeLayout();
-        init();
         Intent intent = getIntent();
         productId = intent.getStringExtra("productId");
+        //fetchProductDetails(Integer.parseInt(productId));
+        init();
+        colorChangeStatusBar();
+        initSwipeLayout();
 
         addToCart();
-
     }
 
     private void addToCart() {
-
-
-        count++;
-       increaseQuantity.setOnClickListener(new View.OnClickListener() {
+        increaseQuantity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 itemQuantity.setVisibility(View.VISIBLE);
                 reduceQuantity.setVisibility(View.VISIBLE);
                 addtobag.setVisibility(View.GONE);
+                productList.setCountForCart(productList.getCountForCart()+1);
+                itemQuantity.setText(String.valueOf(productList.getCountForCart()));
 
-                //Common.getCount = productList.getCountForCart();
-                itemQuantity.setText(String.valueOf(count++));
-
-
+                OnCartAdded();
                 Toast.makeText(ProductDetailsActivity.this, "Add to cart ", Toast.LENGTH_SHORT).show();
             }
         });
 
-
         reduceQuantity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                count--;
-                itemQuantity.setText(String.valueOf(count--));
-                if (count == 0) {
+                onCartRemoved();
+                productList.setCountForCart(productList.getCountForCart()-1);
+                itemQuantity.setText(String.valueOf(productList.getCountForCart()));
+                if (productList.getCountForCart() == 0) {
                     addtobag.setVisibility(View.VISIBLE);
                     itemQuantity.setVisibility(View.GONE);
                     reduceQuantity.setVisibility(View.GONE);
                 }
             }
         });
-
     }
+
+    private void getCartProductList() {
+        cartProductLists = new ArrayList<>();
+        sharedPreferences = getSharedPreferences("CartPref", MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        String cartProducts = sharedPreferences.getString("cartProductLists", "");
+        if (!TextUtils.isEmpty(cartProducts)) {
+            cartProductLists = new Gson().fromJson(cartProducts, new TypeToken<List<ProductList>>() {
+            }.getType());
+            Log.d("BBBB", "" + cartProductLists.size());
+            if (cartProductLists != null && cartProductLists.size() > 0) {
+                setupBadge(cartProductLists.size());
+                matchCartAddedProduct();
+            } else {
+                setupBadge(0);
+            }
+        } else {
+            setupBadge(0);
+            Log.d("BBBB", "" + cartProductLists.size());
+        }
+    }
+
+    private void matchCartAddedProduct() {
+        boolean alreadyInCart = false;
+        cartCount = 0;
+        if (cartProductLists!=null && cartProductLists.size()>0){
+            for (ProductList productList: cartProductLists){
+                if (productList.getProductId()==Integer.parseInt(productId)){
+                    alreadyInCart = true;
+                    cartCount = productList.getCountForCart();
+                    break;
+                }
+            }
+            if (alreadyInCart){
+                itemQuantity.setVisibility(View.VISIBLE);
+                reduceQuantity.setVisibility(View.VISIBLE);
+                addtobag.setVisibility(View.GONE);
+                itemQuantity.setText(String.valueOf(cartCount));
+            }
+        }else {
+            addtobag.setVisibility(View.VISIBLE);
+            itemQuantity.setVisibility(View.GONE);
+            reduceQuantity.setVisibility(View.GONE);
+        }
+    }
+
+
+    public void OnCartAdded() {
+        if (cartProductLists!=null && cartProductLists.size() > 0) {
+            boolean isMatched = false;
+            for (ProductList cartProduct : cartProductLists) {
+                if (cartProduct.getProductId().equals(productList.getProductId())) {
+                    cartProduct.setCountForCart(cartProduct.getCountForCart() + 1);
+
+                    isMatched = true;
+                    break;
+                }
+            }
+            if (!isMatched) {
+                cartProductLists.add(productList);
+            }
+        } else {
+            cartProductLists.add(productList);
+        }
+
+        if (cartProductLists.size() > 0) {
+            setupBadge(cartProductLists.size());
+
+        } else {
+            setupBadge(0);
+
+        }
+
+        matchCartAddedProduct();
+        Log.d("BBBB", "OnCartAdded: "+cartProductLists.size());
+        editor.putString("cartProductLists", new Gson().toJson(cartProductLists));
+        editor.apply();
+    }
+
+    public void onCartRemoved() {
+        if (cartProductLists!=null && cartProductLists.size() > 0) {
+            for (ProductList cartProduct : cartProductLists) {
+                if (cartProduct.getProductId() == productList.getProductId()) {
+                    if (cartProduct.getCountForCart() > 1) {
+                        cartProduct.setCountForCart(cartProduct.getCountForCart() - 1);
+                    } else {
+                        cartProductLists.remove(cartProduct);
+                    }
+                    break;
+                }
+            }
+        }
+        Log.d("BBBB", "OnCartRemoved: "+cartProductLists.size());
+        if (cartProductLists.size() > 0) {
+            setupBadge(cartProductLists.size());
+
+        } else {
+            setupBadge(0);
+
+        }
+        matchCartAddedProduct();
+        editor.putString("cartProductLists", new Gson().toJson(cartProductLists));
+        editor.apply();
+    }
+
 
     private void initSwipeLayout() {
         //view
@@ -148,7 +256,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements OnNetwo
             @Override
             public void onRefresh() {
                 if (Common.isConnectToInternet(getBaseContext())) {
-                    fatchProcuctDetails(Integer.parseInt(productId));
+                    fetchProductDetails(Integer.parseInt(productId));
                     swipeRefreshLayout.setRefreshing(true);
                 } else {
                     Toast.makeText(getBaseContext(), "Please check your connection!!", Toast.LENGTH_SHORT).show();
@@ -165,7 +273,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements OnNetwo
             public void run() {
 
                 if (Common.isConnectToInternet(getBaseContext())) {
-                    fatchProcuctDetails(Integer.parseInt(productId));
+                    fetchProductDetails(Integer.parseInt(productId));
                     //  findViewById(R.id.NestedScrollView).setVisibility(View.VISIBLE);
                     swipeRefreshLayout.setRefreshing(false);
 
@@ -212,6 +320,8 @@ public class ProductDetailsActivity extends AppCompatActivity implements OnNetwo
         } else {
             noInternetTVED.setVisibility(View.VISIBLE);
         }
+
+        getCartProductList();
     }
 
     @Override
@@ -240,13 +350,16 @@ public class ProductDetailsActivity extends AppCompatActivity implements OnNetwo
     //-------------for internet check-------end-----------------
 
 
-    private void fatchProcuctDetails(int id) {
-        apiInterface.getProductDetails("A1b1C2d32564kjhkjadu", id).enqueue(new Callback<ProductDetailsResponse>() {
+    //-------------fetch data--------------------
+    private void fetchProductDetails(final int productId) {
+        apiInterface.getProductDetails("A1b1C2d32564kjhkjadu", productId).enqueue(new Callback<ProductDetailsResponse>() {
             @Override
             public void onResponse(Call<ProductDetailsResponse> call, Response<ProductDetailsResponse> response) {
 
                 ProductDetailsResponse responses = response.body();
-                Product product = responses.getData().getProduct();
+                product = responses.getData().getProduct();
+                productList = new ProductList(product.getCountForCart(),product.getId(),product.getProductId(),product.getRate(),product.getProductName(),product.getPicture(),product.getCategoryId(),product.getUnitName(),product.getUpazilaName(),product.getUnionName());
+                pId = product.getId();
                 Picasso.get().load("http://gobazaar.com.bd/public/upload/product/" + product.getPicture())
                         .into(productImageIV);
 
@@ -257,10 +370,10 @@ public class ProductDetailsActivity extends AppCompatActivity implements OnNetwo
                 upozilaNameTV.setText(product.getUpazilaName());
                 storeNameTV.setText(product.getShopName());
 
-                if (product.getDescription() == null){
+                if (product.getDescription() == null) {
                     descriptionText.setVisibility(View.GONE);
                     descriptionTV.setVisibility(View.GONE);
-                }else {
+                } else {
                     descriptionTV.setText(product.getDescription());
                 }
 
@@ -277,9 +390,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements OnNetwo
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-     /*   getMenuInflater().inflate(R.menu.main_menu_at_to_cart, menu);
-        searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-        return true;*/
 
         getMenuInflater().inflate(R.menu.main_menu, menu);
 
@@ -298,8 +408,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements OnNetwo
             }
         });
 
-
-
         //textCartItemCount.setText(String.valueOf(Common.getCount+1));
         // Toast.makeText(this, ""+Common.getCount, Toast.LENGTH_SHORT).show();
 
@@ -309,7 +417,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements OnNetwo
             setupBadge(0);
         }
         return true;
-
     }
 
     private void setupBadge(int count) {
@@ -323,8 +430,10 @@ public class ProductDetailsActivity extends AppCompatActivity implements OnNetwo
         }
     }
 
+
     private void init() {
-        toolbar = findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         productImageIV = findViewById(R.id.productImageIV);
         productNameTV = findViewById(R.id.productNameTV);
@@ -345,38 +454,9 @@ public class ProductDetailsActivity extends AppCompatActivity implements OnNetwo
         mNetworkReceiver = new NetworkChangeReceiver(this);
         registerNetworkBroadcast();
 
-
-
         //init retrofit
         apiInterface = RetrofitClient.getRetrofitWithoutHome().create(ApiInterface.class);
 
-
-        increaseQuantity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                count++;
-                itemQuantity.setVisibility(View.VISIBLE);
-                reduceQuantity.setVisibility(View.VISIBLE);
-                addtobag.setVisibility(View.GONE);
-                itemQuantity.setText(String.valueOf(count));
-
-            }
-        });
-
-        reduceQuantity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                count--;
-                itemQuantity.setText(String.valueOf(count));
-                if (count == 0) {
-                    addtobag.setVisibility(View.VISIBLE);
-                    itemQuantity.setVisibility(View.GONE);
-                    reduceQuantity.setVisibility(View.GONE);
-                }
-
-
-            }
-        });
     }
 
     public void colorChangeStatusBar() {
@@ -398,5 +478,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements OnNetwo
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         startActivity(intent);
     }
+
 
 }

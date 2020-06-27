@@ -23,6 +23,7 @@ import com.bipul.groceryshope.R;
 import com.bipul.groceryshope.datebase.DatabaseOpenHelper;
 import com.bipul.groceryshope.interfaces.OnCartListener;
 import com.bipul.groceryshope.model.Order;
+import com.bipul.groceryshope.modelForProductDetails.Product;
 import com.bipul.groceryshope.modelForProducts.ProductList;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -213,4 +214,16 @@ public class AddToCartActivity extends AppCompatActivity implements OnCartListen
         editor.putString("cartProductLists", new Gson().toJson(cartProductLists));
         editor.apply();
     }
+
+    @Override
+    public void OnCartAddedForDetails(Product product) {
+
+    }
+
+    @Override
+    public void onCartRemovedForDetails(Product product) {
+
+    }
+
+
 }

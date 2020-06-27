@@ -50,6 +50,7 @@ import com.bipul.groceryshope.Utils.Common;
 import com.bipul.groceryshope.Utils.ConnectivityHelper;
 import com.bipul.groceryshope.Utils.CustomVisibility;
 import com.bipul.groceryshope.Utils.NetworkChangeReceiver;
+import com.bipul.groceryshope.Utils.SessionManagement;
 import com.bipul.groceryshope.datebase.DatabaseOpenHelper;
 import com.bipul.groceryshope.interfaces.OnCartListener;
 import com.bipul.groceryshope.interfaces.OnNetworkStateChangeListener;
@@ -147,6 +148,8 @@ public class MainActivity extends AppCompatActivity
     private SharedPreferences.Editor editor;
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -165,9 +168,7 @@ public class MainActivity extends AppCompatActivity
         loadGroceries();
         getAllSlider();
 
-     /*   Toast.makeText(this, ""+Common.client_id, Toast.LENGTH_SHORT).show();
-        Toast.makeText(this, ""+Common.assess_token, Toast.LENGTH_SHORT).show();
-   */
+
     }
 
     private void getCartProductList() {
@@ -476,20 +477,29 @@ public class MainActivity extends AppCompatActivity
 
                 categoryRecyclerView = findViewById(R.id.categoryRecyclerView);
 
+
                 categories = productsResponse.getData().getProducts();
 
-                productLists.clear();
-                productLists.addAll(productsResponse.getData().getProducts().get(3).getProductList());
-                //for second Category
-                secondCategoryRecyclerView = findViewById(R.id.secondCategoryRecyclerView);
-                secondCategoryRecyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
-                secondCategoryAdapter = new SecondCategoryAdapter(MainActivity.this, matchCartAddedProduct(productLists), MainActivity.this);
-                secondCategoryRecyclerView.setAdapter(secondCategoryAdapter);
-                swipeRefreshLayout.setRefreshing(false);
-                secondCategoryAdapter.notifyDataSetChanged();
+                for (int i = 0; i < categories.size(); i++) {
+
+                    //productLists.clear();
+                    productLists = productsResponse.getData().getProducts().get(2).getProductList();
+
+                    for (int j = 0; j < 2; j++) {
+                        //for second Category
+                        secondCategoryRecyclerView = findViewById(R.id.secondCategoryRecyclerView);
+                        secondCategoryRecyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
+                        secondCategoryAdapter = new SecondCategoryAdapter(MainActivity.this, matchCartAddedProduct(productLists), MainActivity.this);
+                        secondCategoryRecyclerView.setAdapter(secondCategoryAdapter);
+                        swipeRefreshLayout.setRefreshing(false);
+                        secondCategoryAdapter.notifyDataSetChanged();
+                    }
+
+                }
 
                 //Data data = new Data(productsResponse.getData().getProducts());
                 //categories = data.getProducts();
+
 
                 categoryAdapter = new CategoryAdapter(MainActivity.this, categories);
 
@@ -498,6 +508,7 @@ public class MainActivity extends AppCompatActivity
                 categoryRecyclerView.setLayoutManager(layoutManager);
                 categoryRecyclerView.setAdapter(categoryAdapter);
                 swipeRefreshLayout.setRefreshing(false);
+                categoryAdapter.notifyDataSetChanged();
 
 
             }
@@ -574,7 +585,12 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+    }
 
+    private void moveToLogin() {
+        Intent intent = new Intent(MainActivity.this, SignInActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
     @Override
@@ -689,6 +705,7 @@ public class MainActivity extends AppCompatActivity
     }
 
 
+    //------------------addToCart--interface method implement----start----------
     @Override
     public void OnCartAdded(ProductList productList) {
         if (cartProductLists.size() > 0) {
@@ -748,4 +765,16 @@ public class MainActivity extends AppCompatActivity
     public void onDeleteFromCart(ProductList productList) {
 
     }
+
+    @Override
+    public void OnCartAddedForDetails(com.bipul.groceryshope.modelForProductDetails.Product product) {
+
+    }
+
+    @Override
+    public void onCartRemovedForDetails(com.bipul.groceryshope.modelForProductDetails.Product product) {
+
+    }
+//------------------addToCart--interface method implement----end----------
+
 }

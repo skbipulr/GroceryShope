@@ -37,7 +37,7 @@ import com.bipul.groceryshope.Utils.CustomVisibility;
 import com.bipul.groceryshope.Utils.NetworkChangeReceiver;
 import com.bipul.groceryshope.interfaces.OnCartListener;
 import com.bipul.groceryshope.interfaces.OnNetworkStateChangeListener;
-import com.bipul.groceryshope.modelForProducts.Product;
+import com.bipul.groceryshope.modelForProductDetails.Product;
 import com.bipul.groceryshope.modelForProducts.ProductList;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -135,9 +135,6 @@ public class CategoryActivity extends AppCompatActivity implements OnNetworkStat
         mNetworkReceiver = new NetworkChangeReceiver(this);
         registerNetworkBroadcast();
     }
-
-
-
 
 
 
@@ -400,6 +397,15 @@ public class CategoryActivity extends AppCompatActivity implements OnNetworkStat
 
     }
 
+    @Override
+    public void OnCartAddedForDetails(Product product) {
+
+    }
+
+    @Override
+    public void onCartRemovedForDetails(Product product) {
+
+    }
 
 
 }
