@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.bipul.groceryshope.Adapter.CartAdapter;
 import com.bipul.groceryshope.R;
+import com.bipul.groceryshope.Utils.Common;
 import com.bipul.groceryshope.datebase.DatabaseOpenHelper;
 import com.bipul.groceryshope.interfaces.OnCartListener;
 import com.bipul.groceryshope.model.Order;
@@ -148,9 +149,16 @@ public class AddToCartActivity extends AppCompatActivity implements OnCartListen
     }
 
     public void CheckOut(View view) {
-        Intent intent = new Intent(this, PhoneLoginActivity.class);
-        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-        startActivity(intent);
+        if (Common.assess_token != null) {
+            Intent intent = new Intent(this, PhoneLoginActivity.class);
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            startActivity(intent);
+        }else {
+            Intent intent = new Intent(this, SignInActivity.class);
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            startActivity(intent);
+        }
+
     }
 
     @Override
