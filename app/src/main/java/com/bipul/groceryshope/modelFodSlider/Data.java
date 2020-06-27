@@ -7,16 +7,15 @@ import com.google.gson.annotations.SerializedName;
 
 public class Data {
 
-    @SerializedName("slider_products")
+    @SerializedName("slider")
     @Expose
-    private List<SliderProduct> sliderProducts = null;
+    private List<Slider> slider = null;
 
-    public List<SliderProduct> getSliderProducts() {
-        return sliderProducts;
+    public List<Slider> getSlider() {
+        return slider;
     }
 
-    public void setSliderProducts(List<SliderProduct> sliderProducts) {
-        this.sliderProducts = sliderProducts;
+    public void setSlider(List<Slider> slider) {
+        this.slider = slider;
     }
-
 }

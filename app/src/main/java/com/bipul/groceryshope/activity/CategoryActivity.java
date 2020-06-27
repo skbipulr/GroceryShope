@@ -37,7 +37,7 @@ import com.bipul.groceryshope.Utils.CustomVisibility;
 import com.bipul.groceryshope.Utils.NetworkChangeReceiver;
 import com.bipul.groceryshope.interfaces.OnCartListener;
 import com.bipul.groceryshope.interfaces.OnNetworkStateChangeListener;
-import com.bipul.groceryshope.modelForProductDetails.Product;
+import com.bipul.groceryshope.modelForProducts.Product;
 import com.bipul.groceryshope.modelForProducts.ProductList;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -53,6 +53,7 @@ public class CategoryActivity extends AppCompatActivity implements OnNetworkStat
     TextView productNameTV, productQuantityTV, productPriceTV, itemQuantity, addtobag;
 
     private Toolbar toolbar;
+    private Product product;
 
     private List<ProductList> cartProductLists;
     private SharedPreferences sharedPreferences;
@@ -85,15 +86,18 @@ public class CategoryActivity extends AppCompatActivity implements OnNetworkStat
         initSwipeLayout();
 
         Intent intent = getIntent();
-        // product = (Product) intent.getParcelableExtra("category");
-        //int size = product.getProductList().size();
-        // Toast.makeText(this, "what "+ product.s, Toast.LENGTH_LONG).show();
         String pos = getIntent().getStringExtra("category");
         TextView categoryName = findViewById(R.id.categoryName);
         categoryName.setText(pos);
 
-
         productLists = intent.getParcelableArrayListExtra("productList");
+
+
+      /*  //Feature product
+        String position = intent.getStringExtra("position");
+        Toast.makeText(this, ""+Integer.parseInt(position), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, ""+pos, Toast.LENGTH_SHORT).show();
+*/
 
         loadSecondCategory();
 
@@ -397,15 +401,7 @@ public class CategoryActivity extends AppCompatActivity implements OnNetworkStat
 
     }
 
-    @Override
-    public void OnCartAddedForDetails(Product product) {
 
-    }
-
-    @Override
-    public void onCartRemovedForDetails(Product product) {
-
-    }
 
 
 }

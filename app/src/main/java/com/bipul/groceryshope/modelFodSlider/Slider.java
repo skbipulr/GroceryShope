@@ -4,25 +4,14 @@ package com.bipul.groceryshope.modelFodSlider;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class SliderProduct {
+public class Slider {
 
-    @SerializedName("id")
-    @Expose
-    private Integer id;
     @SerializedName("name")
     @Expose
     private String name;
     @SerializedName("picture")
     @Expose
     private String picture;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -39,5 +28,4 @@ public class SliderProduct {
     public void setPicture(String picture) {
         this.picture = picture;
     }
-
 }

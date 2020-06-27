@@ -215,15 +215,7 @@ public class AddToCartActivity extends AppCompatActivity implements OnCartListen
         editor.apply();
     }
 
-    @Override
-    public void OnCartAddedForDetails(Product product) {
 
-    }
-
-    @Override
-    public void onCartRemovedForDetails(Product product) {
-
-    }
 
 
 }

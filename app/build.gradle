@@ -56,7 +56,7 @@ dependencies {
     implementation 'com.github.andremion:counterfab:1.0.1'
 
     //swiperefreshlayout
-    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 
 
 }

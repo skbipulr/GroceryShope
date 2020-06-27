@@ -33,7 +33,6 @@ import android.view.WindowManager;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.FrameLayout;
-import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -50,19 +49,16 @@ import com.bipul.groceryshope.Utils.Common;
 import com.bipul.groceryshope.Utils.ConnectivityHelper;
 import com.bipul.groceryshope.Utils.CustomVisibility;
 import com.bipul.groceryshope.Utils.NetworkChangeReceiver;
-import com.bipul.groceryshope.Utils.SessionManagement;
-import com.bipul.groceryshope.datebase.DatabaseOpenHelper;
 import com.bipul.groceryshope.interfaces.OnCartListener;
 import com.bipul.groceryshope.interfaces.OnNetworkStateChangeListener;
-import com.bipul.groceryshope.modelFodSlider.SliderResponse;
 import com.bipul.groceryshope.datasource.ExpandableListDataSource;
 import com.bipul.groceryshope.interfaces.ApiInterface;
 
 import com.bipul.groceryshope.model.SecondCategory;
-import com.bipul.groceryshope.modelFodSlider.SliderProduct;
+import com.bipul.groceryshope.modelFodSlider.Slider;
+import com.bipul.groceryshope.modelFodSlider.SliderResponse;
 import com.bipul.groceryshope.modelForFeatureProduct.Category;
 import com.bipul.groceryshope.modelForFeatureProduct.FeatureProductResponse;
-import com.bipul.groceryshope.modelForProducts.Data;
 import com.bipul.groceryshope.modelForProducts.Product;
 import com.bipul.groceryshope.modelForProducts.ProductList;
 import com.bipul.groceryshope.modelForProducts.ProductsResponse;
@@ -73,8 +69,6 @@ import com.google.gson.reflect.TypeToken;
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,7 +103,7 @@ public class MainActivity extends AppCompatActivity
     // for image Slider
     private SliderView sliderView;
     private SliderAdapterExample sliderAdapterExample;
-    private List<SliderProduct> sliderProducts = new ArrayList<>();
+
 
     //Category
     private RecyclerView categoryRecyclerView;
@@ -148,8 +142,6 @@ public class MainActivity extends AppCompatActivity
     private SharedPreferences.Editor editor;
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -168,7 +160,9 @@ public class MainActivity extends AppCompatActivity
         loadGroceries();
         getAllSlider();
 
-
+     /*   Toast.makeText(this, ""+Common.client_id, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, ""+Common.assess_token, Toast.LENGTH_SHORT).show();
+   */
     }
 
     private void getCartProductList() {
@@ -385,6 +379,9 @@ public class MainActivity extends AppCompatActivity
         sliderView.setIndicatorAnimation(IndicatorAnimations.WORM); //set indicator animation by using SliderLayout.IndicatorAnimations. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!
         sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
         sliderView.setAutoCycleDirection(SliderView.AUTO_CYCLE_DIRECTION_BACK_AND_FORTH);
+
+        sliderView.startAutoCycle();
+
       /*  sliderView.setIndicatorSelectedColor(R.color.main_color);
         sliderView.setIndicatorUnselectedColor(R.color.main_color);*/
         sliderView.setScrollTimeInSec(3); //set scroll delay in seconds :
@@ -418,7 +415,7 @@ public class MainActivity extends AppCompatActivity
             TextView mobileNoTV = listHeaderView.findViewById(R.id.mobileTV);
             nameTV.setText(Common.name);
             mobileNoTV.setText(Common.mobile);
-            Toast.makeText(this, "" + Common.name, Toast.LENGTH_SHORT).show();
+           // Toast.makeText(this, "" + Common.name, Toast.LENGTH_SHORT).show();
         }
 
 
@@ -447,21 +444,20 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onResponse(Call<SliderResponse> call, Response<SliderResponse> response) {
                 SliderResponse sliderResponse = response.body();
-                sliderProducts = sliderResponse.getData().getSliderProducts();
-                //Toast.makeText(MainActivity.this, "" + sliderProducts.size(), Toast.LENGTH_SHORT).show();
+                List<Slider> sliderProducts = new ArrayList<>();
+                assert sliderResponse != null;
+                sliderProducts = sliderResponse.getData().getSlider();
+               // Toast.makeText(MainActivity.this, "" + sliderProducts.size(), Toast.LENGTH_SHORT).show();
                 SliderAdapterExample adapter = new SliderAdapterExample(MainActivity.this, sliderProducts);
                 sliderView.setSliderAdapter(adapter);
                 swipeRefreshLayout.setRefreshing(false);
-
             }
 
             @Override
             public void onFailure(Call<SliderResponse> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "failed" + t.getMessage(), Toast.LENGTH_SHORT).show();
 
             }
         });
-
     }
 
     private void initItems() {
@@ -477,29 +473,20 @@ public class MainActivity extends AppCompatActivity
 
                 categoryRecyclerView = findViewById(R.id.categoryRecyclerView);
 
-
                 categories = productsResponse.getData().getProducts();
 
-                for (int i = 0; i < categories.size(); i++) {
-
-                    //productLists.clear();
-                    productLists = productsResponse.getData().getProducts().get(2).getProductList();
-
-                    for (int j = 0; j < 2; j++) {
-                        //for second Category
-                        secondCategoryRecyclerView = findViewById(R.id.secondCategoryRecyclerView);
-                        secondCategoryRecyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
-                        secondCategoryAdapter = new SecondCategoryAdapter(MainActivity.this, matchCartAddedProduct(productLists), MainActivity.this);
-                        secondCategoryRecyclerView.setAdapter(secondCategoryAdapter);
-                        swipeRefreshLayout.setRefreshing(false);
-                        secondCategoryAdapter.notifyDataSetChanged();
-                    }
-
-                }
+                productLists.clear();
+                productLists.addAll(productsResponse.getData().getProducts().get(2).getProductList());
+                //for second Category
+                secondCategoryRecyclerView = findViewById(R.id.secondCategoryRecyclerView);
+                secondCategoryRecyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
+                secondCategoryAdapter = new SecondCategoryAdapter(MainActivity.this, matchCartAddedProduct(productLists), MainActivity.this);
+                secondCategoryRecyclerView.setAdapter(secondCategoryAdapter);
+                swipeRefreshLayout.setRefreshing(false);
+                secondCategoryAdapter.notifyDataSetChanged();
 
                 //Data data = new Data(productsResponse.getData().getProducts());
                 //categories = data.getProducts();
-
 
                 categoryAdapter = new CategoryAdapter(MainActivity.this, categories);
 
@@ -508,7 +495,6 @@ public class MainActivity extends AppCompatActivity
                 categoryRecyclerView.setLayoutManager(layoutManager);
                 categoryRecyclerView.setAdapter(categoryAdapter);
                 swipeRefreshLayout.setRefreshing(false);
-                categoryAdapter.notifyDataSetChanged();
 
 
             }
@@ -585,12 +571,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-    }
 
-    private void moveToLogin() {
-        Intent intent = new Intent(MainActivity.this, SignInActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
     }
 
     @Override
@@ -705,7 +686,6 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    //------------------addToCart--interface method implement----start----------
     @Override
     public void OnCartAdded(ProductList productList) {
         if (cartProductLists.size() > 0) {
@@ -765,16 +745,4 @@ public class MainActivity extends AppCompatActivity
     public void onDeleteFromCart(ProductList productList) {
 
     }
-
-    @Override
-    public void OnCartAddedForDetails(com.bipul.groceryshope.modelForProductDetails.Product product) {
-
-    }
-
-    @Override
-    public void onCartRemovedForDetails(com.bipul.groceryshope.modelForProductDetails.Product product) {
-
-    }
-//------------------addToCart--interface method implement----end----------
-
 }

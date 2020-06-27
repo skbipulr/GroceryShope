@@ -21,7 +21,7 @@ import retrofit2.http.Path;
 
 public interface ApiInterface {
 
-    @GET("slider_products")
+    @GET("slider")
     Call<SliderResponse> getSliderResponse(@Header("APP-KEY") String appKey);
 
     @GET("featured_products")

@@ -8,7 +8,4 @@ public interface OnCartListener {
     void onCartRemoved(ProductList productList);
     void onDeleteFromCart(ProductList productList);
 
-    void OnCartAddedForDetails(Product product);
-    void onCartRemovedForDetails(Product product);
-
 }

@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.bipul.groceryshope.R;
 
-import com.bipul.groceryshope.modelFodSlider.SliderProduct;
+import com.bipul.groceryshope.modelFodSlider.Slider;
 import com.smarteist.autoimageslider.SliderViewAdapter;
 import com.squareup.picasso.Picasso;
 
@@ -18,9 +18,9 @@ import java.util.List;
 public class SliderAdapterExample extends SliderViewAdapter<SliderAdapterExample.SliderAdapterVH> {
 
     private Context context;
-    private List<SliderProduct> sliderList;
+    private List<Slider> sliderList;
 
-    public SliderAdapterExample(Context context, List<SliderProduct> sliderList) {
+    public SliderAdapterExample(Context context, List<Slider> sliderList) {
         this.context = context;
         this.sliderList = sliderList;
     }
@@ -51,9 +51,11 @@ public class SliderAdapterExample extends SliderViewAdapter<SliderAdapterExample
         }*/
 
 
-        SliderProduct slider = sliderList.get(position);
-        Picasso.get().load("http://gobazaar.com.bd/public/upload/product/"+slider.getPicture())
+        Slider slider = sliderList.get(position);
+        Picasso.get().load("http://gobazaar.com.bd/public/web/img/slider/"+slider.getPicture())
                 .into(viewHolder.imageViewBackground);
+
+
 
     }
 
