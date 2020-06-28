@@ -476,7 +476,7 @@ public class MainActivity extends AppCompatActivity
                 categories = productsResponse.getData().getProducts();
 
                 productLists.clear();
-                productLists.addAll(productsResponse.getData().getProducts().get(2).getProductList());
+                productLists.addAll(productsResponse.getData().getProducts().get(1).getProductList());
                 //for second Category
                 secondCategoryRecyclerView = findViewById(R.id.secondCategoryRecyclerView);
                 secondCategoryRecyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
@@ -507,6 +507,8 @@ public class MainActivity extends AppCompatActivity
 
 
     }
+
+
 
     private List<ProductList> matchCartAddedProduct(List<ProductList> productLists) {
         if (cartProductLists != null && cartProductLists.size() > 0) {

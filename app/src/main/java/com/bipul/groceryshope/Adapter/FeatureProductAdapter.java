@@ -39,7 +39,7 @@ public class FeatureProductAdapter extends RecyclerView.Adapter<FeatureProductAd
         Category featureProduct = featureProducts.get(position);
         holder.groceriesTitleTV.setText(featureProduct.getName());
 
-        Picasso.get().load("http://gobazaar.com.bd/public/upload/product/"+featureProduct.getPicture())
+        Picasso.get().load("http://narsingdi.gobazaar.com.bd/public/upload/product/"+featureProduct.getPicture())
                 .into(holder.groceriesImage);
     }
 

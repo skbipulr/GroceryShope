@@ -52,7 +52,7 @@ public class SliderAdapterExample extends SliderViewAdapter<SliderAdapterExample
 
 
         Slider slider = sliderList.get(position);
-        Picasso.get().load("http://gobazaar.com.bd/public/web/img/slider/"+slider.getPicture())
+        Picasso.get().load("http://narsingdi.gobazaar.com.bd/public/web/img/slider/"+slider.getPicture())
                 .into(viewHolder.imageViewBackground);
 
 

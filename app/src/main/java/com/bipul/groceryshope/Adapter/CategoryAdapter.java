@@ -52,7 +52,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
         holder.categoryName.setText(category.getCategoryName());
 
-            Picasso.get().load("http://gobazaar.com.bd/public/upload/category/" + category.getCategoryIcon()).placeholder(R.drawable.ic_image_gray_24dp)
+            Picasso.get().load("http://narsingdi.gobazaar.com.bd/upload/category/" + category.getCategoryIcon()).placeholder(R.drawable.ic_image_gray_24dp)
                     .into(holder.categoryImageIV);
 
 

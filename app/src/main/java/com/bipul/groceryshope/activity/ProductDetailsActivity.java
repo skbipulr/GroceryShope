@@ -360,7 +360,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements OnNetwo
                 product = responses.getData().getProduct();
                 productList = new ProductList(product.getCountForCart(),product.getId(),product.getProductId(),product.getRate(),product.getProductName(),product.getPicture(),product.getCategoryId(),product.getUnitName(),product.getUpazilaName(),product.getUnionName());
                 pId = product.getId();
-                Picasso.get().load("http://gobazaar.com.bd/public/upload/product/" + product.getPicture())
+                Picasso.get().load("http://narsingdi.gobazaar.com.bd/public/upload/product/" + product.getPicture())
                         .into(productImageIV);
 
                 productPriceTV.setText(String.valueOf(product.getRate()));

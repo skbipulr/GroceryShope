@@ -57,7 +57,7 @@ public class SecondCategoryAdapter extends RecyclerView.Adapter<SecondCategoryAd
         count = 0;
         final ProductList productList = productLists.get(position);
         holder.productNameTV.setText(productList.getProductName());
-        Picasso.get().load("http://gobazaar.com.bd/public/upload/product/" + productList.getPicture())
+        Picasso.get().load("http://narsingdi.gobazaar.com.bd/public/upload/product/" + productList.getPicture())
                 .into(holder.productImageIV);
         int i = productList.getRate();
         holder.productPriceTV.setText(String.valueOf(i));

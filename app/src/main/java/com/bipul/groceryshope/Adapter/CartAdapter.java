@@ -41,7 +41,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         final ProductList productList = listData.get(position);
 
 
-        Picasso.get().load("http://gobazaar.com.bd/public/upload/product/" + productList.getPicture())
+        Picasso.get().load("http://narsingdi.gobazaar.com.bd/public/upload/product/" + productList.getPicture())
                 .into(holder.productImageIV);
 
         holder.productNameTV.setText(productList.getProductName());

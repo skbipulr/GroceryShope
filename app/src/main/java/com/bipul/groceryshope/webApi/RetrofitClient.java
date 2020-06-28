@@ -7,8 +7,8 @@ public class RetrofitClient {
 
     private static Retrofit retrofit = null;
 
-    private static final  String BASE_URL_WITH_HOME ="http://gobazaar.com.bd/api/home/";
-    private static final  String BASE_URL_WITHOUT_HOME ="http://gobazaar.com.bd/api/";
+    private static final  String BASE_URL_WITH_HOME ="http://narsingdi.gobazaar.com.bd/api/home/";
+    private static final  String BASE_URL_WITHOUT_HOME ="http://narsingdi.gobazaar.com.bd/api/";
     public static Retrofit getRetrofit(){
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL_WITH_HOME)
