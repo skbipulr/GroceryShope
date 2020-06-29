@@ -29,6 +29,8 @@ public interface ApiInterface {
 
     @GET("products")
     Call<ProductsResponse> getProducts(@Header("APP-KEY") String appKey);
+    @GET("products")
+    Call<ProductsResponse> getProducts2(@Header("APP-KEY") String appKey);
 
     @GET("product/{id}")
     Call<ProductDetailsResponse> getProductDetails(@Header("APP-KEY") String appKey, @Path("id") int groupId);

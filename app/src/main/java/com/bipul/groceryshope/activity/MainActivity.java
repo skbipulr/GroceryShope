@@ -7,7 +7,6 @@ import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -107,13 +106,21 @@ public class MainActivity extends AppCompatActivity
 
     //Category
     private RecyclerView categoryRecyclerView;
-    private List<Product> categories = new ArrayList<>();
-    private List<ProductList> productLists;
+
+    private List<ProductList> productLists0;
+    private List<ProductList> productLists1;
+    private List<ProductList> productLists2;
+    private List<ProductList> productLists3;
+    private List<ProductList> productLists4;
+    private List<ProductList> productLists5;
+    private List<ProductList> productLists6;
+
     private CategoryAdapter categoryAdapter;
 
-    private RecyclerView secondCategoryRecyclerView;
+
     private ArrayList<SecondCategory> secondCategories = new ArrayList<>();
     private SecondCategoryAdapter secondCategoryAdapter;
+
 
     private RecyclerView groceriesRecyclerView;
     private List<Category> featureProducts = new ArrayList<>();
@@ -156,7 +163,15 @@ public class MainActivity extends AppCompatActivity
         setupDrawer();
 
         colorChangeStatusBar();
-        loadCategory();
+
+        loadCategory0();
+        loadCategory1();
+        loadCategory2();
+        loadCategory3();
+        loadCategory4();
+        loadCategory5();
+        loadCategory6();
+
         loadGroceries();
         getAllSlider();
 
@@ -180,8 +195,8 @@ public class MainActivity extends AppCompatActivity
             } else {
                 setupBadge(0);
             }
-            if (productLists != null && productLists.size() > 0) {
-                matchCartAddedProduct(productLists);
+            if (productLists1 != null && productLists1.size() > 0) {
+                matchCartAddedProduct(productLists1);
                 secondCategoryAdapter.notifyDataSetChanged();
             }
         } else {
@@ -218,7 +233,7 @@ public class MainActivity extends AppCompatActivity
             public void run() {
 
                 if (Common.isConnectToInternet(getBaseContext())) {
-                    loadCategory();
+                    loadCategory1();
                     loadGroceries();
                     //  findViewById(R.id.NestedScrollView).setVisibility(View.VISIBLE);
                     swipeRefreshLayout.setRefreshing(true);
@@ -365,6 +380,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onFailure(Call<FeatureProductResponse> call, Throwable t) {
 
+                Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -390,7 +406,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void init() {
-        productLists = new ArrayList<>();
+        productLists1 = new ArrayList<>();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerLayout.closeDrawers();
         mExpandableListView = (ExpandableListView) findViewById(R.id.navList);
@@ -415,7 +431,7 @@ public class MainActivity extends AppCompatActivity
             TextView mobileNoTV = listHeaderView.findViewById(R.id.mobileTV);
             nameTV.setText(Common.name);
             mobileNoTV.setText(Common.mobile);
-           // Toast.makeText(this, "" + Common.name, Toast.LENGTH_SHORT).show();
+            // Toast.makeText(this, "" + Common.name, Toast.LENGTH_SHORT).show();
         }
 
 
@@ -447,7 +463,7 @@ public class MainActivity extends AppCompatActivity
                 List<Slider> sliderProducts = new ArrayList<>();
                 assert sliderResponse != null;
                 sliderProducts = sliderResponse.getData().getSlider();
-               // Toast.makeText(MainActivity.this, "" + sliderProducts.size(), Toast.LENGTH_SHORT).show();
+                // Toast.makeText(MainActivity.this, "" + sliderProducts.size(), Toast.LENGTH_SHORT).show();
                 SliderAdapterExample adapter = new SliderAdapterExample(MainActivity.this, sliderProducts);
                 sliderView.setSliderAdapter(adapter);
                 swipeRefreshLayout.setRefreshing(false);
@@ -465,37 +481,73 @@ public class MainActivity extends AppCompatActivity
         mujibItem = getResources().getStringArray(R.array.mujib);
     }
 
-    private void loadCategory() {
+    /*category wise product---------- start------------*/
+    private void loadCategory0() {
         apiInterface.getProducts("A1b1C2d32564kjhkjadu").enqueue(new Callback<ProductsResponse>() {
             @Override
             public void onResponse(Call<ProductsResponse> call, Response<ProductsResponse> response) {
                 ProductsResponse productsResponse = response.body();
 
+                if (response.code() == 200) {
+                    RecyclerView secondCategoryRecyclerView0 = findViewById(R.id.secondCategoryRecyclerView0);
+                    // sisuKhadoRecyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
+                    LinearLayoutManager secondLayoutManager
+                            = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
+                    secondCategoryRecyclerView0.setLayoutManager(secondLayoutManager);
+                    productLists0 = productsResponse.getData().getProducts().get(0).getProductList();
+                    secondCategoryAdapter = new SecondCategoryAdapter(MainActivity.this, matchCartAddedProduct(productLists0), MainActivity.this);
+                    secondCategoryRecyclerView0.setAdapter(secondCategoryAdapter);
+                    swipeRefreshLayout.setRefreshing(false);
+                    secondCategoryAdapter.notifyDataSetChanged();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<ProductsResponse> call, Throwable t) {
+
+                Toast.makeText(MainActivity.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+    }
+
+    private void loadCategory1() {
+        apiInterface.getProducts("A1b1C2d32564kjhkjadu").enqueue(new Callback<ProductsResponse>() {
+            @Override
+            public void onResponse(Call<ProductsResponse> call, Response<ProductsResponse> response) {
+                ProductsResponse productsResponse = response.body();
+                List<Product> categories = new ArrayList<>();
                 categoryRecyclerView = findViewById(R.id.categoryRecyclerView);
 
                 categories = productsResponse.getData().getProducts();
-
-                productLists.clear();
-                productLists.addAll(productsResponse.getData().getProducts().get(1).getProductList());
+                // Toast.makeText(MainActivity.this, "" + categories.size(), Toast.LENGTH_SHORT).show();
+                RecyclerView secondCategoryRecyclerView1;
+                productLists1 = productsResponse.getData().getProducts().get(1).getProductList();
                 //for second Category
-                secondCategoryRecyclerView = findViewById(R.id.secondCategoryRecyclerView);
-                secondCategoryRecyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
-                secondCategoryAdapter = new SecondCategoryAdapter(MainActivity.this, matchCartAddedProduct(productLists), MainActivity.this);
-                secondCategoryRecyclerView.setAdapter(secondCategoryAdapter);
+                secondCategoryRecyclerView1 = findViewById(R.id.secondCategoryRecyclerView1);
+                // secondCategoryRecyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
+                LinearLayoutManager secondLayoutManager
+                        = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
+                secondCategoryRecyclerView1.setLayoutManager(secondLayoutManager);
+                secondCategoryAdapter = new SecondCategoryAdapter(MainActivity.this, matchCartAddedProduct(productLists1), MainActivity.this);
+                secondCategoryRecyclerView1.setAdapter(secondCategoryAdapter);
                 swipeRefreshLayout.setRefreshing(false);
                 secondCategoryAdapter.notifyDataSetChanged();
+
 
                 //Data data = new Data(productsResponse.getData().getProducts());
                 //categories = data.getProducts();
 
+                //for Category
                 categoryAdapter = new CategoryAdapter(MainActivity.this, categories);
-
                 LinearLayoutManager layoutManager
                         = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
                 categoryRecyclerView.setLayoutManager(layoutManager);
                 categoryRecyclerView.setAdapter(categoryAdapter);
                 swipeRefreshLayout.setRefreshing(false);
-
 
             }
 
@@ -508,6 +560,165 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    private void loadCategory2() {
+        apiInterface.getProducts("A1b1C2d32564kjhkjadu").enqueue(new Callback<ProductsResponse>() {
+            @Override
+            public void onResponse(Call<ProductsResponse> call, Response<ProductsResponse> response) {
+                ProductsResponse productsResponse = response.body();
+
+                if (response.code() == 200) {
+                    RecyclerView secondCategoryRecyclerView2 = findViewById(R.id.secondCategoryRecyclerView2);
+                    // sisuKhadoRecyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
+                    LinearLayoutManager secondLayoutManager
+                            = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
+                    secondCategoryRecyclerView2.setLayoutManager(secondLayoutManager);
+                    productLists2 = productsResponse.getData().getProducts().get(2).getProductList();
+                    secondCategoryAdapter = new SecondCategoryAdapter(MainActivity.this, matchCartAddedProduct(productLists2), MainActivity.this);
+                    secondCategoryRecyclerView2.setAdapter(secondCategoryAdapter);
+                    swipeRefreshLayout.setRefreshing(false);
+                    secondCategoryAdapter.notifyDataSetChanged();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<ProductsResponse> call, Throwable t) {
+
+                Toast.makeText(MainActivity.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+    }
+
+    private void loadCategory3() {
+        apiInterface.getProducts("A1b1C2d32564kjhkjadu").enqueue(new Callback<ProductsResponse>() {
+            @Override
+            public void onResponse(Call<ProductsResponse> call, Response<ProductsResponse> response) {
+                ProductsResponse productsResponse = response.body();
+
+                if (response.code() == 200) {
+                    RecyclerView secondCategoryRecyclerView3 = findViewById(R.id.secondCategoryRecyclerView3);
+                    LinearLayoutManager secondLayoutManager
+                            = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
+                    secondCategoryRecyclerView3.setLayoutManager(secondLayoutManager);
+                    productLists3 = productsResponse.getData().getProducts().get(3).getProductList();
+                    secondCategoryAdapter = new SecondCategoryAdapter(MainActivity.this, matchCartAddedProduct(productLists3), MainActivity.this);
+                    secondCategoryRecyclerView3.setAdapter(secondCategoryAdapter);
+                    swipeRefreshLayout.setRefreshing(false);
+                    secondCategoryAdapter.notifyDataSetChanged();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<ProductsResponse> call, Throwable t) {
+
+                Toast.makeText(MainActivity.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+    }
+
+    private void loadCategory4() {
+        apiInterface.getProducts("A1b1C2d32564kjhkjadu").enqueue(new Callback<ProductsResponse>() {
+            @Override
+            public void onResponse(Call<ProductsResponse> call, Response<ProductsResponse> response) {
+                ProductsResponse productsResponse = response.body();
+
+                if (response.code() == 200) {
+                    RecyclerView secondCategoryRecyclerView4 = findViewById(R.id.secondCategoryRecyclerView4);
+                    // sisuKhadoRecyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
+                    LinearLayoutManager secondLayoutManager
+                            = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
+                    secondCategoryRecyclerView4.setLayoutManager(secondLayoutManager);
+                    productLists4 = productsResponse.getData().getProducts().get(4).getProductList();
+                    secondCategoryAdapter = new SecondCategoryAdapter(MainActivity.this, matchCartAddedProduct(productLists4), MainActivity.this);
+                    secondCategoryRecyclerView4.setAdapter(secondCategoryAdapter);
+                    swipeRefreshLayout.setRefreshing(false);
+                    secondCategoryAdapter.notifyDataSetChanged();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<ProductsResponse> call, Throwable t) {
+
+                Toast.makeText(MainActivity.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+    }
+
+    private void loadCategory5() {
+        apiInterface.getProducts("A1b1C2d32564kjhkjadu").enqueue(new Callback<ProductsResponse>() {
+            @Override
+            public void onResponse(Call<ProductsResponse> call, Response<ProductsResponse> response) {
+                ProductsResponse productsResponse = response.body();
+
+                if (response.code() == 200) {
+                    RecyclerView secondCategoryRecyclerView5 = findViewById(R.id.secondCategoryRecyclerView5);
+                    // sisuKhadoRecyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
+                    LinearLayoutManager secondLayoutManager
+                            = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
+                    secondCategoryRecyclerView5.setLayoutManager(secondLayoutManager);
+                    productLists5 = productsResponse.getData().getProducts().get(5).getProductList();
+                    secondCategoryAdapter = new SecondCategoryAdapter(MainActivity.this, matchCartAddedProduct(productLists5), MainActivity.this);
+                    secondCategoryRecyclerView5.setAdapter(secondCategoryAdapter);
+                    swipeRefreshLayout.setRefreshing(false);
+                    secondCategoryAdapter.notifyDataSetChanged();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<ProductsResponse> call, Throwable t) {
+
+                Toast.makeText(MainActivity.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+    }
+
+    private void loadCategory6() {
+        apiInterface.getProducts("A1b1C2d32564kjhkjadu").enqueue(new Callback<ProductsResponse>() {
+            @Override
+            public void onResponse(Call<ProductsResponse> call, Response<ProductsResponse> response) {
+                ProductsResponse productsResponse = response.body();
+
+                if (response.code() == 200) {
+                    RecyclerView secondCategoryRecyclerView5 = findViewById(R.id.secondCategoryRecyclerView6);
+                    // sisuKhadoRecyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
+                    LinearLayoutManager secondLayoutManager
+                            = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
+                    secondCategoryRecyclerView5.setLayoutManager(secondLayoutManager);
+                    productLists6 = productsResponse.getData().getProducts().get(6).getProductList();
+                    secondCategoryAdapter = new SecondCategoryAdapter(MainActivity.this, matchCartAddedProduct(productLists6), MainActivity.this);
+                    secondCategoryRecyclerView5.setAdapter(secondCategoryAdapter);
+                    swipeRefreshLayout.setRefreshing(false);
+                    secondCategoryAdapter.notifyDataSetChanged();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<ProductsResponse> call, Throwable t) {
+
+                Toast.makeText(MainActivity.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+    }
+    /*category wise product---------- end------------*/
 
 
     private List<ProductList> matchCartAddedProduct(List<ProductList> productLists) {
