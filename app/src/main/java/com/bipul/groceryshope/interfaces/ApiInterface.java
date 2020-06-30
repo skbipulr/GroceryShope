@@ -8,6 +8,7 @@ import retrofit2.http.GET;
 
 import com.bipul.groceryshope.modelFodSlider.SliderResponse;
 import com.bipul.groceryshope.modelForFeatureProduct.FeatureProductResponse;
+import com.bipul.groceryshope.modelForLatestProduct.LatestProductResponse;
 import com.bipul.groceryshope.modelForLogin.LoginResponse;
 import com.bipul.groceryshope.modelForOTP.OTPResponse;
 import com.bipul.groceryshope.modelForProductDetails.ProductDetailsResponse;
@@ -29,8 +30,9 @@ public interface ApiInterface {
 
     @GET("products")
     Call<ProductsResponse> getProducts(@Header("APP-KEY") String appKey);
-    @GET("products")
-    Call<ProductsResponse> getProducts2(@Header("APP-KEY") String appKey);
+
+    @GET("latest/product")
+    Call<LatestProductResponse> getLatestProducts(@Header("APP-KEY") String appKey);
 
     @GET("product/{id}")
     Call<ProductDetailsResponse> getProductDetails(@Header("APP-KEY") String appKey, @Path("id") int groupId);

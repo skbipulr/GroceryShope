@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -37,6 +38,7 @@ import com.bipul.groceryshope.Utils.CustomVisibility;
 import com.bipul.groceryshope.Utils.NetworkChangeReceiver;
 import com.bipul.groceryshope.interfaces.OnCartListener;
 import com.bipul.groceryshope.interfaces.OnNetworkStateChangeListener;
+import com.bipul.groceryshope.modelForLatestProduct.Datum;
 import com.bipul.groceryshope.modelForProducts.Product;
 import com.bipul.groceryshope.modelForProducts.ProductList;
 import com.google.gson.Gson;
@@ -100,9 +102,11 @@ public class CategoryActivity extends AppCompatActivity implements OnNetworkStat
 */
 
         loadSecondCategory();
+        swipeRefreshLayout.setRefreshing(false);
 
     }
 
+    @SuppressLint("CommitPrefEdits")
     private void getCartProductList() {
         cartProductLists = new ArrayList<>();
         sharedPreferences = getSharedPreferences("CartPref", MODE_PRIVATE);
@@ -171,7 +175,7 @@ public class CategoryActivity extends AppCompatActivity implements OnNetworkStat
                 if (Common.isConnectToInternet(getBaseContext())) {
                    loadSecondCategory();
                     //  findViewById(R.id.NestedScrollView).setVisibility(View.VISIBLE);
-                    swipeRefreshLayout.setRefreshing(false);
+                   // swipeRefreshLayout.setRefreshing(true);
 
                 } else {
                     Toast.makeText(getBaseContext(), "Please check your connection!!", Toast.LENGTH_SHORT).show();
@@ -255,6 +259,7 @@ public class CategoryActivity extends AppCompatActivity implements OnNetworkStat
         categoryRecyclerView.setAdapter(thirdCategoryAdapter);
         swipeRefreshLayout.setRefreshing(false);
         thirdCategoryAdapter.notifyDataSetChanged();
+
     }
 
     private List<ProductList> matchCartAddedProduct(List<ProductList> productLists) {
@@ -401,7 +406,15 @@ public class CategoryActivity extends AppCompatActivity implements OnNetworkStat
 
     }
 
+    @Override
+    public void OnCartAddedForLatest(Datum productList) {
 
+    }
+
+    @Override
+    public void onCartRemovedForLatest(Datum productList) {
+
+    }
 
 
 }

@@ -24,6 +24,7 @@ import com.bipul.groceryshope.Utils.Common;
 import com.bipul.groceryshope.datebase.DatabaseOpenHelper;
 import com.bipul.groceryshope.interfaces.OnCartListener;
 import com.bipul.groceryshope.model.Order;
+import com.bipul.groceryshope.modelForLatestProduct.Datum;
 import com.bipul.groceryshope.modelForProductDetails.Product;
 import com.bipul.groceryshope.modelForProducts.ProductList;
 import com.google.gson.Gson;
@@ -39,6 +40,7 @@ public class AddToCartActivity extends AppCompatActivity implements OnCartListen
     SearchView searchView;
     public static TextView txtTotalPrice;
     public static TextView txtSubTotal;
+    TextView textCartItemCount;
 
     CartAdapter adapter;
 
@@ -80,6 +82,7 @@ public class AddToCartActivity extends AppCompatActivity implements OnCartListen
 
         txtTotalPrice = findViewById(R.id.totalTV);
         txtSubTotal = findViewById(R.id.SubtotalTV);
+        textCartItemCount = findViewById(R.id.cart_badge);
 
         //Init
         recyclerView = findViewById(R.id.listCart);
@@ -201,10 +204,28 @@ public class AddToCartActivity extends AppCompatActivity implements OnCartListen
         }
         Log.d("BBBB", "OnCartRemoved: "+cartProductLists.size());
 
+        if (cartProductLists.size() > 0) {
+            setupBadge(cartProductLists.size());
+
+        } else {
+            setupBadge(0);
+
+        }
         calculatePrice();
         adapter.notifyDataSetChanged();
         editor.putString("cartProductLists", new Gson().toJson(cartProductLists));
         editor.apply();
+    }
+
+    private void setupBadge(int count) {
+        if (textCartItemCount != null) {
+            if (count == 0) {
+                textCartItemCount.setVisibility(View.GONE);
+            } else {
+                textCartItemCount.setText(String.valueOf(Math.min(count, 99)));
+                textCartItemCount.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     @Override
@@ -223,7 +244,15 @@ public class AddToCartActivity extends AppCompatActivity implements OnCartListen
         editor.apply();
     }
 
+    @Override
+    public void OnCartAddedForLatest(Datum productList) {
 
+    }
+
+    @Override
+    public void onCartRemovedForLatest(Datum productList) {
+
+    }
 
 
 }

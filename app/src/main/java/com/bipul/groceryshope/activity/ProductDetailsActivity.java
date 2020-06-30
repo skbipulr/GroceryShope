@@ -22,6 +22,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,6 +69,8 @@ public class ProductDetailsActivity extends AppCompatActivity implements OnNetwo
 
     private Product product;
 
+    private LinearLayout status;
+
 
     ImageView productImageIV, increaseQuantity, reduceQuantity;
     TextView productNameTV, productQuantityTV, productPriceTV,
@@ -100,14 +103,22 @@ public class ProductDetailsActivity extends AppCompatActivity implements OnNetwo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_details);
 
+
         Intent intent = getIntent();
-        productId = intent.getStringExtra("productId");
+        if (intent != null){
+            productId = intent.getStringExtra("productId");
+        }else {
+            Toast.makeText(this, "Sorry, This product is not available!!", Toast.LENGTH_SHORT).show();
+        }
+
         //fetchProductDetails(Integer.parseInt(productId));
         init();
         colorChangeStatusBar();
         initSwipeLayout();
 
         addToCart();
+
+        swipeRefreshLayout.setRefreshing(true);
     }
 
     private void addToCart() {
@@ -257,7 +268,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements OnNetwo
             public void onRefresh() {
                 if (Common.isConnectToInternet(getBaseContext())) {
                     fetchProductDetails(Integer.parseInt(productId));
-                    swipeRefreshLayout.setRefreshing(true);
+                    swipeRefreshLayout.setRefreshing(false);
                 } else {
                     Toast.makeText(getBaseContext(), "Please check your connection!!", Toast.LENGTH_SHORT).show();
                     swipeRefreshLayout.setRefreshing(false);
@@ -275,7 +286,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements OnNetwo
                 if (Common.isConnectToInternet(getBaseContext())) {
                     fetchProductDetails(Integer.parseInt(productId));
                     //  findViewById(R.id.NestedScrollView).setVisibility(View.VISIBLE);
-                    swipeRefreshLayout.setRefreshing(false);
+                    swipeRefreshLayout.setRefreshing(true);
 
                 } else {
                     Toast.makeText(getBaseContext(), "Please check your connection!!", Toast.LENGTH_SHORT).show();
@@ -356,28 +367,36 @@ public class ProductDetailsActivity extends AppCompatActivity implements OnNetwo
             @Override
             public void onResponse(Call<ProductDetailsResponse> call, Response<ProductDetailsResponse> response) {
 
-                ProductDetailsResponse responses = response.body();
-                product = responses.getData().getProduct();
-                productList = new ProductList(product.getCountForCart(),product.getId(),product.getProductId(),product.getRate(),product.getProductName(),product.getPicture(),product.getCategoryId(),product.getUnitName(),product.getUpazilaName(),product.getUnionName());
-                pId = product.getId();
-                Picasso.get().load("http://narsingdi.gobazaar.com.bd/public/upload/product/" + product.getPicture())
-                        .into(productImageIV);
+                if (response.code() ==200){
+                    ProductDetailsResponse responses = response.body();
+                    product = responses.getData().getProduct();
+                    productList = new ProductList(product.getCountForCart(),product.getId(),product.getProductId(),product.getRate(),product.getProductName(),product.getPicture(),product.getCategoryId(),product.getUnitName(),product.getUpazilaName(),product.getUnionName());
+                    pId = product.getId();
+                    Picasso.get().load("http://narsingdi.gobazaar.com.bd/public/upload/product/" + product.getPicture())
+                            .into(productImageIV);
 
-                productPriceTV.setText(String.valueOf(product.getRate()));
-                productNameTV.setText(product.getProductName());
-                unitName.setText(product.getUnitName());
-                unionNameTV.setText(product.getUnionName());
-                upozilaNameTV.setText(product.getUpazilaName());
-                storeNameTV.setText(product.getShopName());
+                    productPriceTV.setText(String.valueOf(product.getRate()));
+                    productNameTV.setText(product.getProductName());
+                    unitName.setText(product.getUnitName());
+                    unionNameTV.setText(product.getUnionName());
+                    upozilaNameTV.setText(product.getUpazilaName());
+                    storeNameTV.setText(product.getShopName());
 
-                if (product.getDescription() == null) {
-                    descriptionText.setVisibility(View.GONE);
-                    descriptionTV.setVisibility(View.GONE);
-                } else {
-                    descriptionTV.setText(product.getDescription());
+                    if (product.getDescription() == null) {
+                        descriptionText.setVisibility(View.GONE);
+                        descriptionTV.setVisibility(View.GONE);
+                    } else {
+                        descriptionTV.setText(product.getDescription());
+                    }
+
+                    swipeRefreshLayout.setRefreshing(false);
+                }else {
+                    Toast.makeText(ProductDetailsActivity.this, "Sorry, This product is not available!!", Toast.LENGTH_SHORT).show();
+
+                    findViewById(R.id.status).setVisibility(View.INVISIBLE);
+                    swipeRefreshLayout.setRefreshing(false);
                 }
 
-                swipeRefreshLayout.setRefreshing(false);
 
             }
 

@@ -127,7 +127,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="7"
-                                    android:text="কোরবানির হাট"
+                                    android:text="গার্মেন্টস সামগ্রী"
                                     android:textColor="@android:color/black"
                                     android:textSize="18dp" />
 
@@ -174,7 +174,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="7"
-                                    android:text="কোভিড-১৯ সুরক্ষা"
+                                    android:text="কোরবানির হাট"
                                     android:textColor="@android:color/black"
                                     android:textSize="18dp" />
 
@@ -221,7 +221,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="7"
-                                    android:text="শিশুদের জিনিস"
+                                    android:text="কোভিড-১৯ সুরক্ষা"
                                     android:textColor="@android:color/black"
                                     android:textSize="18dp" />
 
@@ -268,7 +268,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="7"
-                                    android:text="খাবার সামগ্রী"
+                                    android:text="শিশুদের জিনিস"
                                     android:textColor="@android:color/black"
                                     android:textSize="18dp" />
 
@@ -315,7 +315,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="7"
-                                    android:text="অফিস পণ্য"
+                                    android:text="খাবার সামগ্রী"
                                     android:textColor="@android:color/black"
                                     android:textSize="18dp" />
 
@@ -362,7 +362,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="7"
-                                    android:text="গৃহস্থালি জিনিসপত্র "
+                                    android:text="অফিস পণ্য "
                                     android:textColor="@android:color/black"
                                     android:textSize="18dp" />
 
@@ -409,7 +409,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="7"
-                                    android:text="টুলস ও হার্ডওয়্যার"
+                                    android:text="গৃহস্থালি জিনিসপত্র"
                                     android:textColor="@android:color/black"
                                     android:textSize="18dp" />
 
@@ -503,7 +503,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="7"
-                                    android:text="মুদি"
+                                    android:text="টুলস ও হার্ডওয়্যার"
                                     android:textColor="@android:color/black"
                                     android:textSize="18dp" />
 
@@ -529,6 +529,51 @@
 
                         </LinearLayout>
 
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginRight="8dp"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="16dp"
+                                android:layout_weight="10"
+                                android:gravity="center"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="7"
+                                    android:text="Latest Products"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="18dp" />
+
+                                <TextView
+                                    android:visibility="invisible"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/see_all_shape"
+                                    android:paddingLeft="7dp"
+                                    android:paddingTop="2dp"
+                                    android:paddingRight="7dp"
+                                    android:paddingBottom="2dp"
+                                    android:text="see all"
+                                    android:textColor="@color/main_color" />
+
+                            </LinearLayout>
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/latestProductRecyclerView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="16dp" />
+
+                        </LinearLayout>
 
                        <!-- latest product-->
                         <LinearLayout
