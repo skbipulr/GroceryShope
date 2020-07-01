@@ -13,6 +13,7 @@ import com.bipul.groceryshope.modelForLogin.LoginResponse;
 import com.bipul.groceryshope.modelForOTP.OTPResponse;
 import com.bipul.groceryshope.modelForProductDetails.ProductDetailsResponse;
 import com.bipul.groceryshope.modelForProducts.ProductsResponse;
+import com.bipul.groceryshope.modelForProfile.ProfileResponse;
 import com.bipul.groceryshope.registrationModel.RegistrationResponse;
 
 
@@ -26,20 +27,24 @@ public interface ApiInterface {
     Call<SliderResponse> getSliderResponse(@Header("APP-KEY") String appKey);
 
     @GET("featured_products")
-    Call<FeatureProductResponse> getFeatureProduct(@Header("APP-KEY") String appKey);
+    Call<FeatureProductResponse> getFeatureProduct(
+                                                    @Header("APP-KEY") String appKey);
 
     @GET("products")
-    Call<ProductsResponse> getProducts(@Header("APP-KEY") String appKey);
+    Call<ProductsResponse> getProducts(
+                                        @Header("APP-KEY") String appKey);
 
     @GET("latest/product")
-    Call<LatestProductResponse> getLatestProducts(@Header("APP-KEY") String appKey);
+    Call<LatestProductResponse> getLatestProducts(
+                                                @Header("APP-KEY") String appKey);
 
     @GET("product/{id}")
     Call<ProductDetailsResponse> getProductDetails(@Header("APP-KEY") String appKey, @Path("id") int groupId);
 
     @FormUrlEncoded
     @POST("client_registration")
-    Call<RegistrationResponse> setUserInfo(@Field("name") String name,
+    Call<RegistrationResponse> setUserInfo(
+                                           @Field("name") String name,
                                            @Field("mobile") String mobile,
                                            @Field("password") String password,
                                            @Field("confirm_password") String confirm_password,
@@ -58,6 +63,15 @@ public interface ApiInterface {
                                         @Header("APP-KEY") String appKey,
                                         @Header("ACCESS-TOKEN") String token,
                                         @Header("CLIENT-ID") String clientId);
+
+    @GET("client/profile")
+    Call<ProfileResponse> getProfileInfo(
+                                        @Header("APP-KEY") String appKey,
+                                        @Header("ACCESS-TOKEN") String token,
+                                        @Header("CLIENT-ID") String clientId);
+
+
+
 
 
 }

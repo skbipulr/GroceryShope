@@ -11,11 +11,24 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import com.bipul.groceryshope.R;
+import com.bipul.groceryshope.Utils.Common;
+import com.bipul.groceryshope.interfaces.ApiInterface;
+import com.bipul.groceryshope.modelForOTP.OTPResponse;
+import com.bipul.groceryshope.modelForProfile.ClientData;
+import com.bipul.groceryshope.modelForProfile.ProfileResponse;
+import com.bipul.groceryshope.webApi.RetrofitClient;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AccountActivity extends AppCompatActivity {
 
+    private TextView userNameTV,userPhoneNo;
+    private ApiInterface apiInterface;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,6 +37,42 @@ public class AccountActivity extends AppCompatActivity {
         colorChangeStatusBar();
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        init();
+
+        getUserInfo();
+    }
+
+    private void getUserInfo() {
+        Call<ProfileResponse> call = apiInterface.getProfileInfo(
+                                                                Common.app_key,
+                                                                Common.assess_token, Common.client_id);
+
+        call.enqueue(new Callback<ProfileResponse>() {
+            @Override
+            public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response) {
+                if (response.code()==200){
+                   ClientData clientData =  response.body().getData().getClientData();
+
+                   userNameTV.setText(clientData.getName());
+                   userPhoneNo.setText(clientData.getMobile());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ProfileResponse> call, Throwable t) {
+
+            }
+        });
+    }
+
+
+    private void init() {
+        userNameTV = findViewById(R.id.userNameTV);
+        userPhoneNo = findViewById(R.id.userPhoneNo);
+
+        apiInterface = RetrofitClient.getRetrofitWithoutHome().create(ApiInterface.class);
+
     }
 
   /*  @Override

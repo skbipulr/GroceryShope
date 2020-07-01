@@ -191,6 +191,8 @@ public class MainActivity extends AppCompatActivity
         loadGroceries();
         getAllSlider();
 
+
+
     }
 
 
@@ -503,6 +505,15 @@ public class MainActivity extends AppCompatActivity
             TextView mobileNoTV = listHeaderView.findViewById(R.id.mobileTV);
             nameTV.setText(Common.name);
             mobileNoTV.setText(Common.mobile);
+
+            infoShowLinearLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(MainActivity.this, AccountActivity.class);
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                    startActivity(intent);
+                }
+            });
             // Toast.makeText(this, "" + Common.name, Toast.LENGTH_SHORT).show();
         }
 
@@ -609,6 +620,7 @@ public class MainActivity extends AppCompatActivity
                 secondCategoryRecyclerView1.setAdapter(secondCategoryAdapter);
                 swipeRefreshLayout.setRefreshing(false);
                 secondCategoryAdapter.notifyDataSetChanged();
+
 
 
                 //Data data = new Data(productsResponse.getData().getProducts());
