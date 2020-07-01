@@ -127,7 +127,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="7"
-                                    android:text="গার্মেন্টস সামগ্রী"
+                                    android:text="কোরবানির হাট"
                                     android:textColor="@android:color/black"
                                     android:textSize="18dp" />
 
@@ -174,7 +174,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="7"
-                                    android:text="কোরবানির হাট"
+                                    android:text="কোভিড-১৯ সুরক্ষা"
                                     android:textColor="@android:color/black"
                                     android:textSize="18dp" />
 
@@ -200,7 +200,7 @@
 
                         </LinearLayout>
 
-                        <!-- িশুদের জিনিস-->
+                        <!--জেন্টস-কর্নার-->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -221,7 +221,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="7"
-                                    android:text="কোভিড-১৯ সুরক্ষা"
+                                    android:text="জেন্টস-কর্নার"
                                     android:textColor="@android:color/black"
                                     android:textSize="18dp" />
 
@@ -247,7 +247,7 @@
 
                         </LinearLayout>
 
-                        <!--খাবার সামগ্রী-->
+                        <!--বেবি কর্নার-->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -268,7 +268,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="7"
-                                    android:text="শিশুদের জিনিস"
+                                    android:text="বেবি কর্নার"
                                     android:textColor="@android:color/black"
                                     android:textSize="18dp" />
 
@@ -294,7 +294,7 @@
 
                         </LinearLayout>
 
-                        <!--অফিস পণ্য-->
+                        <!--লেডিস কর্নার-->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -315,7 +315,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="7"
-                                    android:text="খাবার সামগ্রী"
+                                    android:text="লেডিস কর্নার"
                                     android:textColor="@android:color/black"
                                     android:textSize="18dp" />
 
@@ -343,6 +343,7 @@
 
                         <!--গৃহস্থালি জিনিসপত্র-->
                         <LinearLayout
+                            android:visibility="gone"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="8dp"
@@ -390,6 +391,7 @@
 
                        <!-- টুলস ও হার্ডওয়্যার-->
                         <LinearLayout
+                            android:visibility="gone"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="8dp"
@@ -437,6 +439,7 @@
 
                         <!-- ইলেকট্রিক সামগ্রি-->
                         <LinearLayout
+                            android:visibility="gone"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="8dp"
@@ -484,6 +487,7 @@
 
                         <!--মুদি-->
                         <LinearLayout
+                            android:visibility="gone"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="8dp"
@@ -529,6 +533,7 @@
 
                         </LinearLayout>
 
+                        <!-- latest product-->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -577,6 +582,7 @@
 
                        <!-- latest product-->
                         <LinearLayout
+                            android:visibility="gone"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="8dp"

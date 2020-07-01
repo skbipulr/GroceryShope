@@ -388,12 +388,10 @@ public class ProductDetailsActivity extends AppCompatActivity implements OnNetwo
                     } else {
                         descriptionTV.setText(product.getDescription());
                     }
-
+                    findViewById(R.id.status).setVisibility(View.VISIBLE);
                     swipeRefreshLayout.setRefreshing(false);
                 }else {
-                    Toast.makeText(ProductDetailsActivity.this, "Sorry, This product is not available!!", Toast.LENGTH_SHORT).show();
-
-                    findViewById(R.id.status).setVisibility(View.INVISIBLE);
+                    Toast.makeText(ProductDetailsActivity.this, "Sorry, This product details is not available!!", Toast.LENGTH_SHORT).show();
                     swipeRefreshLayout.setRefreshing(false);
                 }
 

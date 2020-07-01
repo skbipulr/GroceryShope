@@ -181,10 +181,10 @@ public class MainActivity extends AppCompatActivity
         loadCategory2();
         loadCategory3();
         loadCategory4();
-        loadCategory5();
-        loadCategory6();
-        loadCategory7();
-        loadCategory8();
+       // loadCategory5();
+        //loadCategory6();
+        /*loadCategory7();
+        loadCategory8();*/
 
         loadLatestProduct();
 

@@ -272,6 +272,7 @@
 
 
     <LinearLayout
+        android:visibility="invisible"
         android:id="@+id/status"
         android:layout_width="match_parent"
         android:layout_height="60dp"
