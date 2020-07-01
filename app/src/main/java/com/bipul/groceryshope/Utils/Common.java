@@ -21,6 +21,7 @@ public class Common {
     public static final String Name = "nameKey";
     public static final String Phone = "phoneKey";
 
+
     SharedPreferences sharedpreferences;
 
     public static String currentUser=null;
@@ -28,6 +29,7 @@ public class Common {
     public static String assess_token=null;
     public static String app_key="A1b1C2d32564kjhkjadu";
     public static String client_id=null;
+    public static String user_id=null;
     public static List<Order> orderList = new ArrayList<>();
 
     public static int orderId=0;

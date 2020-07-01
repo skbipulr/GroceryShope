@@ -11,6 +11,7 @@ import com.bipul.groceryshope.modelForFeatureProduct.FeatureProductResponse;
 import com.bipul.groceryshope.modelForLatestProduct.LatestProductResponse;
 import com.bipul.groceryshope.modelForLogin.LoginResponse;
 import com.bipul.groceryshope.modelForOTP.OTPResponse;
+import com.bipul.groceryshope.modelForPasswordChange.PasswordChangeResponse;
 import com.bipul.groceryshope.modelForProductDetails.ProductDetailsResponse;
 import com.bipul.groceryshope.modelForProducts.ProductsResponse;
 import com.bipul.groceryshope.modelForProfile.ProfileResponse;
@@ -70,6 +71,16 @@ public interface ApiInterface {
                                         @Header("ACCESS-TOKEN") String token,
                                         @Header("CLIENT-ID") String clientId);
 
+    @FormUrlEncoded
+    @POST("client/password_change")
+    Call<PasswordChangeResponse> setPasswordChange(
+                                        @Field("user_id") int userId,
+                                        @Field("old_password") String oldPassword,
+                                        @Field("password") String password,
+                                        @Field("confirm_password") String confirmPassword,
+                                        @Header("APP-KEY") String appKey,
+                                        @Header("ACCESS-TOKEN") String token,
+                                        @Header("CLIENT-ID") String clientId);
 
 
 

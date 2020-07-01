@@ -38,6 +38,7 @@ public class SignInActivity extends AppCompatActivity {
     public static final String Name = "nameKey";
     public static final String Phone = "phoneKey";
     public static final String CLIENT_ID = "CLIENT_ID";
+    public static final String USER_ID = "USER_ID";
 
     private ApiInterface apiInterface;
 
@@ -86,6 +87,8 @@ public class SignInActivity extends AppCompatActivity {
                         String name = meg.getData().getUserInfo().getName();
                         String mobile =  meg.getData().getUserInfo().getMobile();
                         int clientId = meg.getData().getUserInfo().getRecordId();
+                        int userId = meg.getData().getUserInfo().getId();
+
 
 
 
@@ -98,6 +101,7 @@ public class SignInActivity extends AppCompatActivity {
                         editor.putString(Name, name);
                         editor.putString(Phone, mobile);
                         editor.putString(CLIENT_ID, String.valueOf(clientId));
+                        editor.putString(USER_ID, String.valueOf(userId));
                         editor.commit();
 
                         sharedpreferences = getSharedPreferences(MyPREFERENCES,
@@ -107,10 +111,13 @@ public class SignInActivity extends AppCompatActivity {
                         String m =  sharedpreferences.getString(Phone,"");
                         String token =  sharedpreferences.getString(ASSESS_TOKEN,"");
                         String client_ID = sharedpreferences.getString(CLIENT_ID,"");
+                        String user_ID = sharedpreferences.getString(USER_ID,"");
                         Common.name =  n;
                         Common.mobile = m;
                         Common.assess_token = token;
                         Common.client_id = client_ID;
+                        Common.user_id = user_ID;
+
 
                         // Toast.makeText(SignInActivity.this, ""+userAssessToken, Toast.LENGTH_LONG).show();
                         Toast.makeText(SignInActivity.this, "Congratulations!! "+meg.getMessage(), Toast.LENGTH_LONG).show();
